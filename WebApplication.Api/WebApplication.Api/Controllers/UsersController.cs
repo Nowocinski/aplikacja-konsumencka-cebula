@@ -1,12 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 using WebApplication.Infrastructure.Commands;
 using WebApplication.Infrastructure.Services.User;
 
 namespace WebApplication.Api.Controllers
 {
-    [Route("api/[controller]")]
-    public class UsersController : Controller
+    public class UsersController : ApiControllerBase
     {
         private readonly IUserService _userService;
 
@@ -28,5 +29,31 @@ namespace WebApplication.Api.Controllers
         [HttpPost("login")]
         public async Task<ActionResult> Login([FromBody] Login command)
             => Json(await _userService.LoginAsync(command.Email, command.Password));
+
+        // PUT: api/users/id - Aktualizacja użytkownika
+        [HttpPut("{Id}")]
+        [Authorize]
+        public async Task<ActionResult> PutEvent(Guid Id, [FromBody] UpdateUser commend)
+        {
+            if (UserId != Id)
+                return Forbid();
+
+            await _userService.UpdateAsync(Id, commend);
+
+            return NoContent();
+        }
+
+        // DELETE: api/users/id - Usuwanie użytkownika
+        [HttpDelete("{Id}")]
+        [Authorize]
+        public async Task<ActionResult> DeleteAsync(Guid Id)
+        {
+            if(UserId != Id)
+                return Forbid();
+
+            await _userService.DeleteAsync(Id);
+
+            return NoContent();
+        }
     }
 }

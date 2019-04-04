@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using WebApplication.Core.Repositories;
+using WebApplication.Infrastructure.Commands;
 using WebApplication.Infrastructure.DTO;
 using WebApplication.Infrastructure.Services.User.JwtToken;
 
@@ -51,6 +52,39 @@ namespace WebApplication.Infrastructure.Services.User
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber
             };
+        }
+
+        public async Task DeleteAsync(Guid Id)
+        {
+            var user = await _userRepository.GetAsync(Id);
+            if (user == null)
+                throw new Exception($"Exception id: '{Id}' does not exists");
+
+            await _userRepository.DeleteAsync(user);
+        }
+
+        public async Task UpdateAsync(Guid Id, UpdateUser command)
+        {
+            var user = await _userRepository.GetAsync(command.Email);
+
+            if (user != null)
+                throw new Exception($"Exception with e-mail: '{command.Email}' already exists");
+
+            user = await _userRepository.GetByPhoneAsync(command.PhoneNumber);
+            if (user != null)
+                throw new Exception($"Exception with this phone number: '{command.PhoneNumber}' already exists");
+
+            user = await _userRepository.GetAsync(Id);
+            if (user == null)
+                throw new Exception($"Exception with id: '{Id}' does not exists");
+
+            user.SetFirstName(command.FirstName);
+            user.SetLastName(command.LastName);
+            user.SetPhoneNumber(command.PhoneNumber);
+            user.SetEmail(command.Email);
+            user.SetPassword(command.Password);
+
+            await _userRepository.UpdateAsync(user);
         }
     }
 }
