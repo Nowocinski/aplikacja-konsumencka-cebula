@@ -12,6 +12,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WebApplication.Core.Domain.Context;
+using WebApplication.Core.Repositories;
+using WebApplication.Infrastructure.Repositories;
 
 namespace WebApplication.Api
 {
@@ -28,6 +30,9 @@ namespace WebApplication.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            // Wstrzykiwanie zależności
+            services.AddScoped<IUserRepository, UserRepository>();
 
             // Łączenie się z bazą danych MS SQL
             services.AddDbContext<DataBaseContext>(options =>
