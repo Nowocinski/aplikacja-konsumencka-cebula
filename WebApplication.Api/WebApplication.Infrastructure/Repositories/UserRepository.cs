@@ -28,6 +28,12 @@ namespace WebApplication.Infrastructure.Repositories
             return await Task.FromResult(user);
         }
 
+        public async Task<User> GetByPhoneAsync(string Phone)
+        {
+            var user = await _context.Users.SingleOrDefaultAsync(x => x.PhoneNumber == Phone);
+            return await Task.FromResult(user);
+        }
+
         public async Task AddAsync(User User)
         {
             _context.Users.Add(User);
@@ -44,7 +50,7 @@ namespace WebApplication.Infrastructure.Repositories
 
         public async Task DeleteAsync(User User)
         {
-            _context.Accounts.Remove(User);
+            _context.Users.Remove(User);
             await _context.SaveChangesAsync();
             await Task.CompletedTask;
         }

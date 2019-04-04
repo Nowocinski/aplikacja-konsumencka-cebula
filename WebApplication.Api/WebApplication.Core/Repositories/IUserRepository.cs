@@ -8,6 +8,7 @@ namespace WebApplication.Core.Repositories
     {
         Task<User> GetAsync(Guid Id);
         Task<User> GetAsync(string Email);
+        Task<User> GetByPhoneAsync(string Phone);
         Task AddAsync(User User);
         Task UpdateAsync(User User);
         Task DeleteAsync(User User);
