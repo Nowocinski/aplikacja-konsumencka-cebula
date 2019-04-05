@@ -7,9 +7,9 @@ namespace WebApplication.Infrastructure.Services.User
 {
     public interface IUserService
     {
-        //Task<AccountDTO> GetAccountAsync(Guid UserId);
+        Task<AccountDTO> GetAsync(Guid Id);
         Task RegisterAsync(string FirstName, string LastName, string PhoneNumber, string Email, string Password);
-        Task<AccountDTO> LoginAsync(string Email, string Password);
+        Task<LoginDTO> LoginAsync(string Email, string Password);
         Task DeleteAsync(Guid Id);
         Task UpdateAsync(Guid Id, UpdateUser User);
     }

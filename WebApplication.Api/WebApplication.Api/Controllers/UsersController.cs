@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using WebApplication.Infrastructure.Commands;
+using WebApplication.Infrastructure.DTO;
 using WebApplication.Infrastructure.Services.User;
 
 namespace WebApplication.Api.Controllers
@@ -16,6 +17,11 @@ namespace WebApplication.Api.Controllers
             _userService = userService;
         }
 
+        // GET: api/users/{id} - Pobranie danych konta
+        [HttpGet("{Id}")]
+        public async Task<ActionResult> GetAccount(Guid Id)
+            => Json(await _userService.GetAsync(Id));
+
         // POST: api/users/registration - Rejestracja
         [HttpPost("registration")]
         public async Task<ActionResult> Register([FromBody] Register command)
@@ -27,7 +33,7 @@ namespace WebApplication.Api.Controllers
 
         // POST: api/users/login - Logowanie
         [HttpPost("login")]
-        public async Task<ActionResult> Login([FromBody] Login command)
+        public async Task<ActionResult<LoginDTO>> Login([FromBody] Login command)
             => Json(await _userService.LoginAsync(command.Email, command.Password));
 
         // PUT: api/users/id - Aktualizacja użytkownika
