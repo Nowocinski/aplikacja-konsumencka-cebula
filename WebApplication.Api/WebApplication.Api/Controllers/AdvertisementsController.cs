@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebApplication.Infrastructure.DTO;
 using WebApplication.Infrastructure.Services.User;
@@ -23,7 +24,12 @@ namespace WebApplication.Api.Controllers
 
         // GET: api/advertisments/- Pobranie danych wszystkich ogłoszeń
         [HttpGet]
-        public async Task<ActionResult<AdvertisementDetailsDTO>> GetAdvertisement()
+        public async Task<ActionResult<IEnumerable<AdvertismentDTO>>> GetAdvertisement()
             => Json(await _userService.GetAllAdvertismentsAsync());
+
+        // GET: api/advertisments/- Sortowanie ogłoszeń
+        [HttpGet("{parameter}/{type}:{page}")]
+        public async Task<ActionResult<IEnumerable<AdvertismentDTO>>> GetAdvertisement(string parameter, string type, int page)
+            => Json(await _userService.GetSortAdvertismentsAsync(parameter, type, page));
     }
 }

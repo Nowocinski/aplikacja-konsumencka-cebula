@@ -20,5 +20,6 @@ namespace WebApplication.Infrastructure.Services.User
         Task AddAdvertisementAsync(Advertisement Advertisement);
         Task UpdateAdvertisementAsync(Advertisement Advertisement);
         Task DeleteAdvertisementAsync(Advertisement Advertisement);
+        Task<IEnumerable<AdvertismentDTO>> GetSortAdvertismentsAsync(string parameter, string type, int page);
     }
 }

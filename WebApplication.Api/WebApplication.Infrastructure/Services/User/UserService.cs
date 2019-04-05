@@ -107,6 +107,9 @@ namespace WebApplication.Infrastructure.Services.User
             var advertisement = await _userRepository.GetAdvertisementAsync(Id);
             var advDitDTO = _mapper.Map<AdvertisementDetailsDTO>(advertisement);
 
+            if (advDitDTO == null)
+                throw new Exception($"Id '{Id}' advertisement dose not exist.");
+
             advDitDTO.City = await _voivodeshipRepository.GetNameCity(advertisement.City);
 
             var user = await _userRepository.GetAsync(advertisement.UserId);
@@ -124,16 +127,6 @@ namespace WebApplication.Infrastructure.Services.User
             foreach(var a in advsDTO)
                 a.City = await _voivodeshipRepository.GetNameCity(int.Parse(a.City));
 
-            /*var DTO = new List<AdvertismentDTO>();
-
-            foreach(var adv in advs)
-            {
-                DTO.Add(new AdvertismentDTO {
-                    Id = adv.Id,
-                    Image = _mapper.Map<ImageDTO>(adv.Images.FirstOrDefault())
-            });
-            }*/
-
             return advsDTO;
         }
 
@@ -150,6 +143,48 @@ namespace WebApplication.Infrastructure.Services.User
         public async Task DeleteAdvertisementAsync(Advertisement Advertisement)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<AdvertismentDTO>> GetSortAdvertismentsAsync(string parameter, string type, int page)
+        {
+            parameter = parameter.ToLower();
+            type = type.ToLower();
+
+            var parameters = new string[]{"price","city","size","category","date","title"};
+            var types = new string[] { "desc", "asc" };
+
+            if (page <= 0)
+                throw new Exception("Number page must be greater than zero");
+            if (!types.Contains(type))
+                throw new Exception($"Type sort '{type}' do not exist.");
+            if (!types.Contains(type))
+                throw new Exception($"Type sort '{type}' do not exist.");
+
+            var adv = await GetAllAdvertismentsAsync();
+
+            if(type == "asc")
+                switch (parameter)
+                {
+                    case "price":    adv = adv.OrderBy(x => x.Price).ToList();    break;
+                    case "city":     adv = adv.OrderBy(x => x.City).ToList();     break;
+                    case "size":     adv = adv.OrderBy(x => x.Size).ToList();     break;
+                    case "category": adv = adv.OrderBy(x => x.Category).ToList(); break;
+                    case "date":     adv = adv.OrderBy(x => x.Date).ToList();     break;
+                    case "title":    adv = adv.OrderBy(x => x.Title).ToList();    break;
+                }
+
+            else
+                switch (parameter)
+                {
+                    case "price":    adv = adv.OrderByDescending(x => x.Price).ToList();    break;
+                    case "city":     adv = adv.OrderByDescending(x => x.City).ToList();     break;
+                    case "size":     adv = adv.OrderByDescending(x => x.Size).ToList();     break;
+                    case "category": adv = adv.OrderByDescending(x => x.Category).ToList(); break;
+                    case "date":     adv = adv.OrderByDescending(x => x.Date).ToList();     break;
+                    case "title":    adv = adv.OrderByDescending(x => x.Title).ToList();    break;
+                }
+
+            return adv.Skip(page * 10 - 10).Take(10);
         }
     }
 }
