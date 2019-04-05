@@ -54,5 +54,32 @@ namespace WebApplication.Infrastructure.Repositories
             await _context.SaveChangesAsync();
             await Task.CompletedTask;
         }
+
+        public async Task<Advertisement> GetAdvertisementAsync(Guid Id)
+        {
+            var user = await _context.Advertisements.SingleOrDefaultAsync(x => x.Id == Id);
+            return await Task.FromResult(user);
+        }
+
+        public async Task AddAdvertisementAsync(Advertisement Advertisement)
+        {
+            _context.Advertisements.Add(Advertisement);
+            await _context.SaveChangesAsync();
+            await Task.CompletedTask;
+        }
+
+        public async Task UpdateAdvertisementAsync(Advertisement Advertisement)
+        {
+            _context.Advertisements.Update(Advertisement);
+            await _context.SaveChangesAsync();
+            await Task.CompletedTask;
+        }
+
+        public async Task DeleteAdvertisementAsync(Advertisement Advertisement)
+        {
+            _context.Advertisements.Remove(Advertisement);
+            await _context.SaveChangesAsync();
+            await Task.CompletedTask;
+        }
     }
 }

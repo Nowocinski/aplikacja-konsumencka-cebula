@@ -12,5 +12,10 @@ namespace WebApplication.Core.Repositories
         Task AddAsync(User User);
         Task UpdateAsync(User User);
         Task DeleteAsync(User User);
+
+        Task<Advertisement> GetAdvertisementAsync(Guid Id);
+        Task AddAdvertisementAsync(Advertisement Advertisement);
+        Task UpdateAdvertisementAsync(Advertisement Advertisement);
+        Task DeleteAdvertisementAsync(Advertisement Advertisement);
     }
 }
