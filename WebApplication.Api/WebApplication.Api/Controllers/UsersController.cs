@@ -49,7 +49,7 @@ namespace WebApplication.Api.Controllers
             return NoContent();
         }
 
-        // DELETE: api/users/id - Usuwanie użytkownika
+        // DELETE: api/users/{id} - Usuwanie użytkownika
         [HttpDelete("{Id}")]
         [Authorize]
         public async Task<ActionResult> DeleteAsync(Guid Id)

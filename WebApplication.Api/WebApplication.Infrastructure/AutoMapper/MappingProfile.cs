@@ -9,6 +9,8 @@ namespace WebApplication.Infrastructure.AutoMapper
         public MappingProfile()
         {
             CreateMap<User, AccountDTO>();
+            CreateMap<Voivodeship, VoivodeshipDTO>();
+            CreateMap<City, CityDTO>();
         }
     }
 }

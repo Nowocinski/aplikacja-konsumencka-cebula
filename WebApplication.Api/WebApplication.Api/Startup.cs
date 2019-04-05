@@ -14,6 +14,7 @@ using WebApplication.Infrastructure.AutoMapper;
 using WebApplication.Infrastructure.Repositories;
 using WebApplication.Infrastructure.Services.User;
 using WebApplication.Infrastructure.Services.User.JwtToken;
+using WebApplication.Infrastructure.Services.Voivodeship;
 using WebApplication.Infrastructure.Settings;
 
 namespace WebApplication.Api
@@ -36,6 +37,8 @@ namespace WebApplication.Api
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IJwtHandler, JwtHandler>();
+            services.AddScoped<IVoivodeshipRepository, VoivodeshipRepository>();
+            services.AddScoped<IVoivodeshipService, VoivodeshipService>();
 
             // Łączenie się z bazą danych MS SQL
             services.AddDbContext<DataBaseContext>(options =>
