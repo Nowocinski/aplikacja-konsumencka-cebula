@@ -70,5 +70,10 @@ namespace WebApplication.Core.Domain
             foreach (AdvertisementImage i in Images)
                 _images.Add(i);
         }
+
+        public void LoadImages(AdvertisementImage Image)
+        {
+                _images.Add(Image);
+        }
     }
 }

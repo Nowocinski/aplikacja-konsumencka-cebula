@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebApplication.Core.Domain;
 
@@ -14,6 +15,7 @@ namespace WebApplication.Core.Repositories
         Task DeleteAsync(User User);
 
         Task<Advertisement> GetAdvertisementAsync(Guid Id);
+        Task<IEnumerable<Advertisement>> GetAllAdvertismentsAsync();
         Task AddAdvertisementAsync(Advertisement Advertisement);
         Task UpdateAdvertisementAsync(Advertisement Advertisement);
         Task DeleteAdvertisementAsync(Advertisement Advertisement);

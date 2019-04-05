@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using WebApplication.Core.Domain;
 using WebApplication.Core.Repositories;
@@ -112,6 +114,27 @@ namespace WebApplication.Infrastructure.Services.User
             advDitDTO = _mapper.Map(user, advDitDTO);
 
             return advDitDTO;
+        }
+
+        public async Task<IEnumerable<AdvertismentDTO>> GetAllAdvertismentsAsync()
+        {
+            var advs = await _userRepository.GetAllAdvertismentsAsync();
+            var advsDTO = _mapper.Map<IEnumerable<AdvertismentDTO>>(advs);
+
+            foreach(var a in advsDTO)
+                a.City = await _voivodeshipRepository.GetNameCity(int.Parse(a.City));
+
+            /*var DTO = new List<AdvertismentDTO>();
+
+            foreach(var adv in advs)
+            {
+                DTO.Add(new AdvertismentDTO {
+                    Id = adv.Id,
+                    Image = _mapper.Map<ImageDTO>(adv.Images.FirstOrDefault())
+            });
+            }*/
+
+            return advsDTO;
         }
 
         public async Task AddAdvertisementAsync(Advertisement Advertisement)
