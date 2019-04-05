@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using System;
 using System.Threading.Tasks;
+using WebApplication.Core.Domain;
 using WebApplication.Core.Repositories;
 using WebApplication.Infrastructure.Commands;
 using WebApplication.Infrastructure.DTO;
@@ -14,12 +15,14 @@ namespace WebApplication.Infrastructure.Services.User
         private readonly IUserRepository _userRepository;
         private readonly IJwtHandler _jwtHandler;
         private readonly IMapper _mapper;
+        private readonly IVoivodeshipRepository _voivodeshipRepository;
 
-        public UserService(IUserRepository userRepository, IJwtHandler jwtHandler, IMapper mapper)
+        public UserService(IUserRepository userRepository, IJwtHandler jwtHandler, IMapper mapper, IVoivodeshipRepository voivodeshipRepository)
         {
             _userRepository = userRepository;
             _jwtHandler = jwtHandler;
             _mapper = mapper;
+            _voivodeshipRepository = voivodeshipRepository;
         }
 
         public async Task<AccountDTO> GetAsync(Guid Id)
@@ -95,6 +98,35 @@ namespace WebApplication.Infrastructure.Services.User
             user.SetPassword(command.Password.Hash());
 
             await _userRepository.UpdateAsync(user);
+        }
+
+        public async Task<AdvertisementDetailsDTO> GetAdvertisementAsync(Guid Id)
+        {
+            var advertisement = await _userRepository.GetAdvertisementAsync(Id);
+            var advDitDTO = _mapper.Map<AdvertisementDetailsDTO>(advertisement);
+
+            advDitDTO.City = await _voivodeshipRepository.GetNameCity(advertisement.City);
+
+            var user = await _userRepository.GetAsync(advertisement.UserId);
+
+            advDitDTO = _mapper.Map(user, advDitDTO);
+
+            return advDitDTO;
+        }
+
+        public async Task AddAdvertisementAsync(Advertisement Advertisement)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task UpdateAdvertisementAsync(Advertisement Advertisement)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task DeleteAdvertisementAsync(Advertisement Advertisement)
+        {
+            throw new NotImplementedException();
         }
     }
 }

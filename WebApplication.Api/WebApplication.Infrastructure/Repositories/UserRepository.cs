@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using WebApplication.Core.Domain;
 using WebApplication.Core.Domain.Context;
@@ -57,8 +58,14 @@ namespace WebApplication.Infrastructure.Repositories
 
         public async Task<Advertisement> GetAdvertisementAsync(Guid Id)
         {
-            var user = await _context.Advertisements.SingleOrDefaultAsync(x => x.Id == Id);
-            return await Task.FromResult(user);
+            var adv = await _context.Advertisements.SingleOrDefaultAsync(x => x.Id == Id);
+            if (adv != null)
+            {
+                var images = await _context.AdvertisementImages.Where(x => x.Advertisement == adv.Id).ToListAsync();
+                adv.LoadImages(images);
+            }
+
+            return await Task.FromResult(adv);
         }
 
         public async Task AddAdvertisementAsync(Advertisement Advertisement)

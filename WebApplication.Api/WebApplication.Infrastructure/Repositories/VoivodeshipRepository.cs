@@ -53,5 +53,11 @@ namespace WebApplication.Infrastructure.Repositories
             var voivodeship = await _context.Voivodeships.SingleOrDefaultAsync(x => x.Id == city.Voivodeship);
             return await Task.FromResult(voivodeship.Name);
         }
+
+        public async Task<string> GetNameCity(int Id)
+        {
+            var city = await _context.Cities.SingleOrDefaultAsync(x => x.Id == Id);
+            return await Task.FromResult(city.Name);
+        }
     }
 }

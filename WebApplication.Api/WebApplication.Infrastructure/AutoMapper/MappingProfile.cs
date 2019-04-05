@@ -11,6 +11,9 @@ namespace WebApplication.Infrastructure.AutoMapper
             CreateMap<User, AccountDTO>();
             CreateMap<Voivodeship, VoivodeshipDTO>();
             CreateMap<City, CityDTO>();
+            CreateMap<Advertisement, AdvertisementDetailsDTO>();
+            CreateMap<User, AdvertisementDetailsDTO>();
+            CreateMap<AdvertisementImage, ImageDTO>();
         }
     }
 }

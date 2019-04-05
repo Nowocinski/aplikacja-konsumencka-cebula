@@ -63,5 +63,12 @@ namespace WebApplication.Core.Domain
             this.Category = Category;
             this.Floor = Floor;
         }
+
+        // Metody
+        public void LoadImages(List<AdvertisementImage> Images)
+        {
+            foreach (AdvertisementImage i in Images)
+                _images.Add(i);
+        }
     }
 }

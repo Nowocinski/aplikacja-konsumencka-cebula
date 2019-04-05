@@ -12,6 +12,7 @@ namespace WebApplication.Core.Repositories
         Task<IEnumerable<City>> GetAllCitiesAsync();
         Task<IEnumerable<City>> GetCitiesInVoivodeship(int Id);
 
-        Task<string> GetNameVoivodeship(int Id);            // Pobieranie nazwy województwa dla wybranego miasta
+        Task<string> GetNameVoivodeship(int Id);  // Pobieranie nazwy województwa dla wybranego miasta
+        Task<string> GetNameCity(int Id);         // Pobranie nazwy miasta po jego id
     }
 }
