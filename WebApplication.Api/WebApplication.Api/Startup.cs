@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using WebApplication.Core.Domain.Context;
 using WebApplication.Core.Repositories;
+using WebApplication.Infrastructure.AutoMapper;
 using WebApplication.Infrastructure.Repositories;
 using WebApplication.Infrastructure.Services.User;
 using WebApplication.Infrastructure.Services.User.JwtToken;
@@ -60,6 +62,15 @@ namespace WebApplication.Api
                     ValidateAudience = false    // Strony mogące kożystać z serwisu. UWAGA: ValidateAudience != ValidAudience
                 };
             });
+
+            // Konfiguracja AutoMappera
+            var mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+
+            IMapper mapper = mappingConfig.CreateMapper();
+            services.AddSingleton(mapper);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
