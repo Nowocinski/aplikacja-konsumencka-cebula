@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using WebApplication.Core.Repositories;
 using WebApplication.Infrastructure.Commands;
 using WebApplication.Infrastructure.DTO;
+using WebApplication.Infrastructure.Extensions;
 using WebApplication.Infrastructure.Services.User.JwtToken;
 
 namespace WebApplication.Infrastructure.Services.User
@@ -37,7 +38,7 @@ namespace WebApplication.Infrastructure.Services.User
             if (user != null)
                 throw new Exception($"User phone number: '{PhoneNumber}' already exists.");
 
-            user = new Core.Domain.User(FirstName, LastName, PhoneNumber, Email, Password);
+            user = new Core.Domain.User(FirstName, LastName, PhoneNumber, Email, Password.Hash());
             await _userRepository.AddAsync(user);
         }
 
@@ -47,7 +48,7 @@ namespace WebApplication.Infrastructure.Services.User
             if (user == null)
                 throw new Exception("Invalid credentials.");
 
-            if (user.Password != Password)
+            if (user.Password != Password.Hash())
                 throw new Exception("Invalid credentials.");
 
             var token = _jwtHandler.CreateToken(user.Id);
@@ -91,7 +92,7 @@ namespace WebApplication.Infrastructure.Services.User
             user.SetLastName(command.LastName);
             user.SetPhoneNumber(command.PhoneNumber);
             user.SetEmail(command.Email);
-            user.SetPassword(command.Password);
+            user.SetPassword(command.Password.Hash());
 
             await _userRepository.UpdateAsync(user);
         }
