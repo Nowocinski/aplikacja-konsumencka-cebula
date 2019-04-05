@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Threading.Tasks;
 using WebApplication.Core.Repositories;
 using WebApplication.Infrastructure.Commands;
@@ -11,11 +12,19 @@ namespace WebApplication.Infrastructure.Services.User
     {
         private readonly IUserRepository _userRepository;
         private readonly IJwtHandler _jwtHandler;
+        private readonly IMapper _mapper;
 
-        public UserService(IUserRepository userRepository, IJwtHandler jwtHandler)
+        public UserService(IUserRepository userRepository, IJwtHandler jwtHandler, IMapper mapper)
         {
             _userRepository = userRepository;
             _jwtHandler = jwtHandler;
+            _mapper = mapper;
+        }
+
+        public async Task<AccountDTO> GetAsync(Guid Id)
+        {
+            var user = await _userRepository.GetAsync(Id);
+            return _mapper.Map<AccountDTO>(user);
         }
 
         public async Task RegisterAsync(string FirstName, string LastName, string PhoneNumber, string Email, string Password)
@@ -32,7 +41,7 @@ namespace WebApplication.Infrastructure.Services.User
             await _userRepository.AddAsync(user);
         }
 
-        public async Task<AccountDTO> LoginAsync(string Email, string Password)
+        public async Task<LoginDTO> LoginAsync(string Email, string Password)
         {
             var user = await _userRepository.GetAsync(Email);
             if (user == null)
@@ -43,7 +52,7 @@ namespace WebApplication.Infrastructure.Services.User
 
             var token = _jwtHandler.CreateToken(user.Id);
 
-            return new AccountDTO
+            return new LoginDTO
             {
                 Token = token,
                 Id = user.Id,
