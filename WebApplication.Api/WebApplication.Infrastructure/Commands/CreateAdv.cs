@@ -13,6 +13,6 @@ namespace WebApplication.Infrastructure.Commands
         public string Category { get; set; }
         public int? Floor { get; set; }
 
-        public IEnumerable<ImageToAdv> Images { get; set; }
+        public ISet<ImageToAdv> Images { get; set; }
     }
 }

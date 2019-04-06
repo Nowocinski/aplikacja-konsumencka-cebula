@@ -49,8 +49,10 @@ namespace WebApplication.Core.Domain
         public IEnumerable<AdvertisementImage> Images => _images;
 
         // Konstruktory
+        protected Advertisement() { }
+
         public Advertisement(Guid Id, Guid UserId, string Title, string Description, float Price,
-            int City, string Street, float Size, string Category, int? Floor=null)
+            int City, string Street, float Size, string Category, ISet<AdvertisementImage> Images, int? Floor)
         {
             this.Id = Id;
             this.UserId = UserId;
@@ -63,6 +65,7 @@ namespace WebApplication.Core.Domain
             this.Category = Category;
             this.Floor = Floor;
             Date = DateTime.UtcNow;
+            AddImages(Images, Id);
         }
 
         // Metody
@@ -75,6 +78,12 @@ namespace WebApplication.Core.Domain
         public void LoadImages(AdvertisementImage Image)
         {
                 _images.Add(Image);
+        }
+
+        private void AddImages(ISet<AdvertisementImage> Imgs, Guid Id)
+        {
+            foreach (var I in Imgs)
+                _images.Add(new AdvertisementImage(Id, I.Image, I.Name, I.Description));
         }
     }
 }
