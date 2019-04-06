@@ -17,9 +17,9 @@ namespace WebApplication.Infrastructure.Services.User
 
         Task<AdvertisementDetailsDTO> GetAdvertisementAsync(Guid Id);
         Task<IEnumerable<AdvertismentDTO>> GetAllAdvertismentsAsync();
-        Task AddAdvertisementAsync(Advertisement Advertisement);
+        Task AddAdvertisementAsync(CreateAdv Command, Guid UserId);
         Task UpdateAdvertisementAsync(Advertisement Advertisement);
         Task DeleteAdvertisementAsync(Advertisement Advertisement);
-        Task<IEnumerable<AdvertismentDTO>> GetSortAdvertismentsAsync(string parameter, string type, int page);
+        Task<AdvertisementsWithPageToEndDTO> GetSortAdvertismentsAsync(string parameter, string type, int page);
     }
 }

@@ -130,9 +130,12 @@ namespace WebApplication.Infrastructure.Services.User
             return advsDTO;
         }
 
-        public async Task AddAdvertisementAsync(Advertisement Advertisement)
+        public async Task AddAdvertisementAsync(CreateAdv Command, Guid UserId)
         {
-            throw new NotImplementedException();
+            var advertisement = new Advertisement(UserId, Command.Title, Command.Description, Command.Price,
+                Command.City, Command.Street, Command.Size, Command.Category, Command.Floor);
+
+            await _userRepository.AddAdvertisementAsync(advertisement);
         }
 
         public async Task UpdateAdvertisementAsync(Advertisement Advertisement)
@@ -145,7 +148,7 @@ namespace WebApplication.Infrastructure.Services.User
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<AdvertismentDTO>> GetSortAdvertismentsAsync(string parameter, string type, int page)
+        public async Task<AdvertisementsWithPageToEndDTO> GetSortAdvertismentsAsync(string parameter, string type, int page)
         {
             parameter = parameter.ToLower();
             type = type.ToLower();
@@ -184,7 +187,17 @@ namespace WebApplication.Infrastructure.Services.User
                     case "title":    adv = adv.OrderByDescending(x => x.Title).ToList();    break;
                 }
 
-            return adv.Skip(page * 10 - 10).Take(10);
+            int pagesToEnd = adv.Count();
+            if (pagesToEnd % 10 == 0)
+                pagesToEnd = pagesToEnd / 10 - page;
+            else
+                pagesToEnd = pagesToEnd / 10 - page + 1;
+
+            return new AdvertisementsWithPageToEndDTO
+            {
+                Advertisement = adv.Skip(page * 10 - 10).Take(10),
+                PageToEnd = pagesToEnd
+            };
         }
     }
 }

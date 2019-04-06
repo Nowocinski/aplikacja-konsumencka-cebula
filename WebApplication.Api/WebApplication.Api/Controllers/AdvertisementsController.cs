@@ -1,14 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using WebApplication.Infrastructure.Commands;
 using WebApplication.Infrastructure.DTO;
 using WebApplication.Infrastructure.Services.User;
 
 namespace WebApplication.Api.Controllers
 {
-    [Route("api/[controller]")]
-    public class AdvertisementsController : Controller
+    public class AdvertisementsController : ApiControllerBase
     {
         private readonly IUserService _userService;
 
@@ -27,9 +28,19 @@ namespace WebApplication.Api.Controllers
         public async Task<ActionResult<IEnumerable<AdvertismentDTO>>> GetAdvertisement()
             => Json(await _userService.GetAllAdvertismentsAsync());
 
-        // GET: api/advertisments/- Sortowanie ogłoszeń
+        // GET: api/advertisments/{parameter}/{type}:{page}- Sortowanie ogłoszeń
         [HttpGet("{parameter}/{type}:{page}")]
         public async Task<ActionResult<IEnumerable<AdvertismentDTO>>> GetAdvertisement(string parameter, string type, int page)
             => Json(await _userService.GetSortAdvertismentsAsync(parameter, type, page));
+
+        // POST: api/advertisments/
+        [HttpPost]
+        [Authorize]
+        public async Task<ActionResult> PostAdvertisement([FromBody] CreateAdv Command)
+        {
+            await _userService.AddAdvertisementAsync(Command, UserId);
+
+            return Created("/advertisments", null);
+        }
     }
 }

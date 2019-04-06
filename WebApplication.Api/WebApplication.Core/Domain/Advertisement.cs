@@ -62,6 +62,7 @@ namespace WebApplication.Core.Domain
             this.Size = Size;
             this.Category = Category;
             this.Floor = Floor;
+            Date = DateTime.UtcNow;
         }
 
         // Metody

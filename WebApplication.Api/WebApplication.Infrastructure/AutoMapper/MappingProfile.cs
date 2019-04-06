@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using System.Linq;
 using WebApplication.Core.Domain;
+using WebApplication.Infrastructure.Commands;
 using WebApplication.Infrastructure.DTO;
 
 namespace WebApplication.Infrastructure.AutoMapper
