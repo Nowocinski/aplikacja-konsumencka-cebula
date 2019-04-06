@@ -40,12 +40,12 @@ namespace WebApplication.Core.Domain
         }
 
         // Metody
-        public void AddAdvertisement(string Title, string Description, float Price,
+        /*public void AddAdvertisement(string Title, string Description, float Price,
             int City, string Street, float Size, string Category, int? Floor = null)
         {
             var Adv = new Advertisement(Id, Title, Description, Price, City, Street, Size, Category, Floor);
             _advertisements.Add(Adv);
-        }
+        }*/
 
         // Walidacja pól
         public void SetFirstName(string FirstName)

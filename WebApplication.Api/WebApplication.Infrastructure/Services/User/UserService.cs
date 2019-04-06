@@ -132,10 +132,17 @@ namespace WebApplication.Infrastructure.Services.User
 
         public async Task AddAdvertisementAsync(CreateAdv Command, Guid UserId)
         {
-            var advertisement = new Advertisement(UserId, Command.Title, Command.Description, Command.Price,
+            Guid ADvId = Guid.NewGuid();
+            var advertisement = new Advertisement(ADvId, UserId, Command.Title, Command.Description, Command.Price,
                 Command.City, Command.Street, Command.Size, Command.Category, Command.Floor);
 
             await _userRepository.AddAdvertisementAsync(advertisement);
+
+            var Images = new List<AdvertisementImage>();
+            foreach(var I in Command.Images)
+                Images.Add(new AdvertisementImage(ADvId, I.Image, I.Name, I.Description));
+
+            await _userRepository.AddImagesAsync(Images);
         }
 
         public async Task UpdateAdvertisementAsync(Advertisement Advertisement)

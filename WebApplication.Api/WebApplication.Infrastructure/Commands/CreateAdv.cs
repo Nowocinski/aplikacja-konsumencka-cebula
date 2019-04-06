@@ -1,4 +1,6 @@
-﻿namespace WebApplication.Infrastructure.Commands
+﻿using System.Collections.Generic;
+
+namespace WebApplication.Infrastructure.Commands
 {
     public class CreateAdv
     {
@@ -10,5 +12,7 @@
         public float Size { get; set; }
         public string Category { get; set; }
         public int? Floor { get; set; }
+
+        public IEnumerable<ImageToAdv> Images { get; set; }
     }
 }

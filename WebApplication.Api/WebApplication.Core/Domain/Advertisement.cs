@@ -49,10 +49,10 @@ namespace WebApplication.Core.Domain
         public IEnumerable<AdvertisementImage> Images => _images;
 
         // Konstruktory
-        public Advertisement(Guid UserId, string Title, string Description, float Price,
+        public Advertisement(Guid Id, Guid UserId, string Title, string Description, float Price,
             int City, string Street, float Size, string Category, int? Floor=null)
         {
-            Id = Guid.NewGuid();
+            this.Id = Id;
             this.UserId = UserId;
             this.Title = Title;
             this.Description = Description;

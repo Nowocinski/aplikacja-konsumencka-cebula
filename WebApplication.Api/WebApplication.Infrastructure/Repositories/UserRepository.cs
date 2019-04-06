@@ -101,5 +101,13 @@ namespace WebApplication.Infrastructure.Repositories
             await _context.SaveChangesAsync();
             await Task.CompletedTask;
         }
+
+        public async Task AddImagesAsync(List<AdvertisementImage> Images)
+        {
+            foreach(var I in Images)
+                _context.AdvertisementImages.Add(I);
+            await _context.SaveChangesAsync();
+            await Task.CompletedTask;
+        }
     }
 }
