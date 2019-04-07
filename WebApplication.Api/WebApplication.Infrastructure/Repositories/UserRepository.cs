@@ -62,6 +62,7 @@ namespace WebApplication.Infrastructure.Repositories
             var adv = await _context.Advertisements
                 .Include(x => x.Images)
                 .Include(x => x.Relation)
+                .Include(x => x.CityRel)
                 .SingleOrDefaultAsync(x => x.Id == Id);
 
             return await Task.FromResult(adv);

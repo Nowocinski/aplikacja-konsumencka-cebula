@@ -25,5 +25,7 @@ namespace WebApplication.Core.Domain
             this.Name = Name;
             this.Voivodeship = Voivodeship;
         }
+
+        public virtual Advertisement Advertisement { get; set; }
     }
 }

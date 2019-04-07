@@ -29,6 +29,10 @@ namespace WebApplication.Infrastructure.AutoMapper
             .ForMember(
                     x => x.Email,
                     y => y.MapFrom(src => src.Relation.Email)
+                )
+            .ForMember(
+                    x => x.City,
+                    y => y.MapFrom(src => src.CityRel.Name)
                 );
             CreateMap<User, AdvertisementDetailsDTO>();
             CreateMap<AdvertisementImage, ImageDTO>();

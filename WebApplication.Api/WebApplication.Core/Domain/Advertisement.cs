@@ -11,6 +11,9 @@ namespace WebApplication.Core.Domain
         [ForeignKey("UserId")]
         public User Relation { get; protected set; }
 
+        [ForeignKey("City")]
+        public City CityRel { get; protected set; }
+
         //-----------------------------------------
 
         // Pola

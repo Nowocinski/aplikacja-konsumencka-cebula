@@ -19,6 +19,11 @@ namespace WebApplication.Core.Domain.Context
             .HasOne(a => a.Relation)
             .WithMany(b => b.Advertisements)
             .OnDelete(DeleteBehavior.Restrict);
+
+            // Ogłoszenia -> Użytkownik
+            modelBuilder.Entity<Advertisement>()
+            .HasOne(a => a.CityRel)
+            .WithOne(b => b.Advertisement);
         }
 
         public DbSet<User> Users { get; set; }
