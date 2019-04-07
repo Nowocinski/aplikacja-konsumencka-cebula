@@ -161,9 +161,10 @@ namespace WebApplication.Infrastructure.Services.User
             await _userRepository.UpdateAdvertisementAsync(adv);
         }
 
-        public async Task DeleteAdvertisementAsync(Advertisement Advertisement)
+        public async Task DeleteAdvertisementAsync(Guid Id)
         {
-            throw new NotImplementedException();
+            var adv = await _userRepository.GetAdvertisementAsync(Id);
+            await _userRepository.DeleteAdvertisementAsync(adv);
         }
 
         public async Task<AdvertisementsWithPageToEndDTO> GetSortAdvertismentsAsync(string parameter, string type, int page)

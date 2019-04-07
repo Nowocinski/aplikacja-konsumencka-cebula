@@ -60,5 +60,23 @@ namespace WebApplication.Api.Controllers
 
             return NoContent();
         }
+
+        // DELETE: api/advertisments/
+        [HttpDelete("{id}")]
+        [Authorize]
+        public async Task<ActionResult> DeleteAdvertisement(Guid Id)
+        {
+            var adv = await _userService.GetAdvertisementAsync(Id);
+
+            if (adv == null)
+                return NotFound();
+
+            if (adv.UserId != UserId)
+                return Forbid();
+
+            await _userService.DeleteAdvertisementAsync(Id);
+
+            return NoContent();
+        }
     }
 }
