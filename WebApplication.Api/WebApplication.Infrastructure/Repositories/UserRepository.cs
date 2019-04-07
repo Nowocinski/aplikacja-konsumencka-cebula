@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebApplication.Core.Domain;
 using WebApplication.Core.Domain.Context;
@@ -55,6 +55,16 @@ namespace WebApplication.Infrastructure.Repositories
             _context.Users.Remove(User);
             await _context.SaveChangesAsync();
             await Task.CompletedTask;
+        }
+
+        public async Task<IEnumerable<Advertisement>> GetAdvertisementsUserAsync(Guid Id)
+        {
+            var advs = await _context.Advertisements
+                .Include(x => x.Images)
+                .Include(x => x.Relation)
+                .Where(x => x.UserId == Id).ToListAsync();
+
+            return await Task.FromResult(advs);
         }
 
         public async Task<Advertisement> GetAdvertisementAsync(Guid Id)

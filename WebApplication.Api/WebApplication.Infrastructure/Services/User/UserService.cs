@@ -102,6 +102,12 @@ namespace WebApplication.Infrastructure.Services.User
             await _userRepository.UpdateAsync(user);
         }
 
+        public async Task<IEnumerable<AdvertismentDTO>> GetAdvertisementsUserAsync(Guid Id)
+        {
+            var advs = await _userRepository.GetAdvertisementsUserAsync(Id);
+            return _mapper.Map<IEnumerable<AdvertismentDTO>>(advs);
+        }
+
         public async Task<AdvertisementDetailsDTO> GetAdvertisementAsync(Guid Id)
         {
             var advertisement = await _userRepository.GetAdvertisementAsync(Id);

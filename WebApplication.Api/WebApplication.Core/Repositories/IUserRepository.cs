@@ -14,6 +14,7 @@ namespace WebApplication.Core.Repositories
         Task UpdateAsync(User User);
         Task DeleteAsync(User User);
 
+        Task<IEnumerable<Advertisement>> GetAdvertisementsUserAsync(Guid Id);
         Task<Advertisement> GetAdvertisementAsync(Guid Id);
         Task<IEnumerable<Advertisement>> GetAllAdvertismentsAsync();
         Task AddAdvertisementAsync(Advertisement Advertisement);

@@ -22,6 +22,11 @@ namespace WebApplication.Api.Controllers
         public async Task<ActionResult> GetAccount(Guid Id)
             => Json(await _userService.GetAsync(Id));
 
+        // GET: api/users/advertisements/{id} - Pobranie danych konta
+        [HttpGet("advertisements/{Id}")]
+        public async Task<ActionResult> GetUserAdvs(Guid Id)
+            => Json(await _userService.GetAdvertisementsUserAsync(Id));
+
         // POST: api/users/registration - Rejestracja
         [HttpPost("registration")]
         public async Task<ActionResult> Register([FromBody] Register command)
