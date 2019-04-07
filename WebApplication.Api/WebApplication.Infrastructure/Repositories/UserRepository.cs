@@ -59,24 +59,20 @@ namespace WebApplication.Infrastructure.Repositories
 
         public async Task<Advertisement> GetAdvertisementAsync(Guid Id)
         {
-            var adv = await _context.Advertisements.SingleOrDefaultAsync(x => x.Id == Id);
-            if (adv != null)
-            {
-                var images = await _context.AdvertisementImages.Where(x => x.Advertisement == adv.Id).ToListAsync();
-                adv.LoadImages(images);
-            }
+            var adv = await _context.Advertisements
+                .Include(x => x.Images)
+                .Include(x => x.Relation)
+                .SingleOrDefaultAsync(x => x.Id == Id);
 
             return await Task.FromResult(adv);
         }
 
         public async Task<IEnumerable<Advertisement>> GetAllAdvertismentsAsync()
         {
-            var advs = await _context.Advertisements.ToListAsync();
-            for(int i=0; i<advs.Count; i++)
-            {
-                var image = await _context.AdvertisementImages.FirstOrDefaultAsync(x => x.Advertisement == advs[i].Id);
-                advs[i].LoadImages(image);
-            }
+            var advs = await _context.Advertisements
+                .Include(x => x.Images)
+                .Include(x => x.Relation)
+                .ToListAsync();
 
             return await Task.FromResult(advs);
         }

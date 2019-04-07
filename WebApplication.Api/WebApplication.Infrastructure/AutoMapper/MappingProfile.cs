@@ -13,7 +13,23 @@ namespace WebApplication.Infrastructure.AutoMapper
             CreateMap<User, AccountDTO>();
             CreateMap<Voivodeship, VoivodeshipDTO>();
             CreateMap<City, CityDTO>();
-            CreateMap<Advertisement, AdvertisementDetailsDTO>();
+            CreateMap<Advertisement, AdvertisementDetailsDTO>()
+                .ForMember(
+                    x => x.FirstName,
+                    y => y.MapFrom(src => src.Relation.FirstName)
+                )
+            .ForMember(
+                    x => x.LastName,
+                    y => y.MapFrom(src => src.Relation.LastName)
+                )
+            .ForMember(
+                    x => x.PhoneNumber,
+                    y => y.MapFrom(src => src.Relation.PhoneNumber)
+                )
+            .ForMember(
+                    x => x.Email,
+                    y => y.MapFrom(src => src.Relation.Email)
+                );
             CreateMap<User, AdvertisementDetailsDTO>();
             CreateMap<AdvertisementImage, ImageDTO>();
             CreateMap<Advertisement, AdvertismentDTO>()

@@ -106,15 +106,10 @@ namespace WebApplication.Infrastructure.Services.User
         {
             var advertisement = await _userRepository.GetAdvertisementAsync(Id);
             var advDitDTO = _mapper.Map<AdvertisementDetailsDTO>(advertisement);
+            advDitDTO.FirstName = advertisement.Relation.FirstName;
 
             if (advDitDTO == null)
                 throw new Exception($"Id '{Id}' advertisement dose not exist.");
-
-            advDitDTO.City = await _voivodeshipRepository.GetNameCity(advertisement.City);
-
-            var user = await _userRepository.GetAsync(advertisement.UserId);
-
-            advDitDTO = _mapper.Map(user, advDitDTO);
 
             return advDitDTO;
         }
