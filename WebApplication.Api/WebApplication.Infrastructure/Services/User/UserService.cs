@@ -224,5 +224,13 @@ namespace WebApplication.Infrastructure.Services.User
                 PageToEnd = pagesToEnd
             };
         }
+
+        public async Task UpdateMessageAsync(Guid sender, Guid recipient, string text)
+        {
+            var user = await _userRepository.GetAsync(sender);
+            user.AddMessage(recipient, text);
+
+            await _userRepository.UpdateMessageAsync(user.Messages);
+        }
     }
 }

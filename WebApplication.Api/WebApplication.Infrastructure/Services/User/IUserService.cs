@@ -22,5 +22,7 @@ namespace WebApplication.Infrastructure.Services.User
         Task UpdateAdvertisementAsync(CreateAdv Advertisement, Guid Id);
         Task DeleteAdvertisementAsync(Guid Id);
         Task<AdvertisementsWithPageToEndDTO> GetSortAdvertismentsAsync(string parameter, string type, int page);
+
+        Task UpdateMessageAsync(Guid sender, Guid recipient, string text);
     }
 }

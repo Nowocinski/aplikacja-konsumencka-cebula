@@ -20,5 +20,7 @@ namespace WebApplication.Core.Repositories
         Task AddAdvertisementAsync(Advertisement Advertisement);
         Task UpdateAdvertisementAsync(Advertisement Advertisement);
         Task DeleteAdvertisementAsync(Advertisement Advertisement);
+
+        Task UpdateMessageAsync(IEnumerable<Message> message);
     }
 }

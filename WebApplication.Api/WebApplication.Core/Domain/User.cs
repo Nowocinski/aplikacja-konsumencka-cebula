@@ -52,6 +52,12 @@ namespace WebApplication.Core.Domain
             return Adv;
         }
 
+        public void AddMessage(Guid recipient, string text)
+        {
+            var msg = new Message(Id, recipient, text);
+            _messages.Add(msg);
+        }
+
         // Walidacja pól
         public void SetFirstName(string FirstName)
         {

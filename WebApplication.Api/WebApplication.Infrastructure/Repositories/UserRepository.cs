@@ -108,5 +108,13 @@ namespace WebApplication.Infrastructure.Repositories
             await _context.SaveChangesAsync();
             await Task.CompletedTask;
         }
+
+        public async Task UpdateMessageAsync(IEnumerable<Message> message)
+        {
+            foreach(var msg in message)
+                _context.Messages.Add(msg);
+            await _context.SaveChangesAsync();
+            await Task.CompletedTask;
+        }
     }
 }

@@ -72,21 +72,21 @@ namespace WebApplication.Api.Controllers
         [Authorize]
         public async Task<ActionResult> GetMesseges(Guid Id)
         {
-            if (UserId != Id)
-                return Forbid();
-
             throw new NotImplementedException();
         }
 
         // POST: api/users/messages/{id} - Wysyłanie wiadomości
         [HttpPost("messages/{Id}")]
         [Authorize]
-        public async Task<ActionResult> PostMessege(Guid Id)
+        public async Task<ActionResult> PostMessege(Guid Id, [FromBody] Msg message)
         {
-            if (UserId != Id)
-                return Forbid();
+            var recipient = await _userService.GetAsync(Id);
+            if (recipient == null)
+                return NotFound();
 
-            throw new NotImplementedException();
+            await _userService.UpdateMessageAsync(UserId, Id, message.Text);
+
+            return NoContent();
         }
     }
 }
