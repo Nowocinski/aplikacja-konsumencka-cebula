@@ -140,9 +140,25 @@ namespace WebApplication.Infrastructure.Services.User
             await _userRepository.AddAdvertisementAsync(adv);
         }
 
-        public async Task UpdateAdvertisementAsync(Advertisement Advertisement)
+        public async Task UpdateAdvertisementAsync(CreateAdv Command, Guid Id)
         {
-            throw new NotImplementedException();
+            var adv = await _userRepository.GetAdvertisementAsync(Id);
+
+            ISet<AdvertisementImage> Imgs = new HashSet<AdvertisementImage>();
+            foreach (var I in Command.Images)
+                Imgs.Add(new AdvertisementImage(adv.Id, I.Image, I.Name, I.Description));
+
+            adv.SetTitle(Command.Title);
+            adv.SetDescription(Command.Description);
+            adv.SetPrice(Command.Price);
+            adv.SetCity(Command.City);
+            adv.SetStreet(Command.Street);
+            adv.SetSize(Command.Size);
+            adv.SetCategory(Command.Category);
+            adv.SetFloor(Command.Floor);
+            adv.SetAddImages(Imgs);
+
+            await _userRepository.UpdateAdvertisementAsync(adv);
         }
 
         public async Task DeleteAdvertisementAsync(Advertisement Advertisement)

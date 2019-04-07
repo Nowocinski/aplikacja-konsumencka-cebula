@@ -12,18 +12,18 @@ namespace WebApplication.Core.Domain.Context
             modelBuilder.Entity<AdvertisementImage>()
             .HasOne(a => a.Relation)
             .WithMany(b => b.Images)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Cascade);
 
             // Ogłoszenia -> Użytkownik
-            modelBuilder.Entity<Advertisement>()
-            .HasOne(a => a.Relation)
-            .WithMany(b => b.Advertisements)
+            modelBuilder.Entity<Advertisement>()  // Relacja n..1
+            .HasOne(a => a.Relation)              // Relacja Advs.UserId do klasy Users
+            .WithMany(b => b.Advertisements)      // Wysłanie ogłoszeń do tablicy advs w klasie Users
             .OnDelete(DeleteBehavior.Restrict);
 
-            // Ogłoszenia -> Użytkownik
-            modelBuilder.Entity<Advertisement>()
-            .HasOne(a => a.CityRel)
-            .WithOne(b => b.Advertisement);
+            // Miasta -> Ogłoszenia
+            modelBuilder.Entity<Advertisement>()  // Relacja  1..1
+            .HasOne(a => a.CityRel)               // Relacja Advs.City do klasy Cities
+            .WithOne(b => b.Advertisement);       // Przypisanie danych z relacji do wirutalnego pola w Cities.Advs typu Advs
         }
 
         public DbSet<User> Users { get; set; }

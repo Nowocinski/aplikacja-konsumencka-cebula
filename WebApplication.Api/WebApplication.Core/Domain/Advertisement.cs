@@ -88,5 +88,56 @@ namespace WebApplication.Core.Domain
             foreach (var I in Imgs)
                 _images.Add(new AdvertisementImage(Id, I.Image, I.Name, I.Description));
         }
+
+        // Metody do obsługi pól
+
+        public void SetTitle(string Title)
+        {
+            this.Title = Title;
+        }
+
+        public void SetDescription(string Description)
+        {
+            this.Description = Description;
+        }
+
+        public void SetPrice(float Price)
+        {
+            this.Price = Price;
+        }
+
+        public void SetCity(int City)
+        {
+            this.City = City;
+        }
+
+        public void SetStreet(string Street)
+        {
+            this.Street = Street;
+        }
+
+        public void SetSize(float Size)
+        {
+            this.Size = Size;
+        }
+
+        public void SetCategory(string Category)
+        {
+            this.Category = Category;
+        }
+
+        public void SetFloor(int? Floor)
+        {
+            this.Floor = Floor;
+        }
+
+        public void SetAddImages(ISet<AdvertisementImage> Images)
+        {
+            _images.Clear();
+
+            foreach (var I in Images)
+                _images.Add(I);
+
+        }
     }
 }

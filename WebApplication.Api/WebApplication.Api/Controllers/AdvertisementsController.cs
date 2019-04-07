@@ -23,12 +23,12 @@ namespace WebApplication.Api.Controllers
         public async Task<ActionResult<AdvertisementDetailsDTO>> GetAdvertisement(Guid Id)
             => Json(await _userService.GetAdvertisementAsync(Id));
 
-        // GET: api/advertisments/- Pobranie danych wszystkich ogłoszeń
+        // GET: api/advertisments - Pobranie danych wszystkich ogłoszeń
         [HttpGet]
         public async Task<ActionResult<IEnumerable<AdvertismentDTO>>> GetAdvertisement()
             => Json(await _userService.GetAllAdvertismentsAsync());
 
-        // GET: api/advertisments/{parameter}/{type}:{page}- Sortowanie ogłoszeń
+        // GET: api/advertisments/{parameter}/{type}:{page} - Sortowanie ogłoszeń
         [HttpGet("{parameter}/{type}:{page}")]
         public async Task<ActionResult<IEnumerable<AdvertismentDTO>>> GetAdvertisement(string parameter, string type, int page)
             => Json(await _userService.GetSortAdvertismentsAsync(parameter, type, page));
@@ -41,6 +41,24 @@ namespace WebApplication.Api.Controllers
             await _userService.AddAdvertisementAsync(Command, UserId);
 
             return Created("/advertisments", null);
+        }
+
+        // POST: api/advertisments/
+        [HttpPut("{id}")]
+        [Authorize]
+        public async Task<ActionResult> PutAdvertisement(Guid Id, [FromBody] CreateAdv Command)
+        {
+            var adv = await _userService.GetAdvertisementAsync(Id);
+
+            if (adv == null)
+                return NotFound();
+
+            if(adv.UserId != UserId)
+                return Forbid();
+
+            await _userService.UpdateAdvertisementAsync(Command, Id);
+
+            return NoContent();
         }
     }
 }
