@@ -66,5 +66,27 @@ namespace WebApplication.Api.Controllers
 
             return NoContent();
         }
+
+        // GET: api/users/messages/{id} - Pobieranie konwersacji z danym użytkownikiem
+        [HttpGet("messages/{Id}")]
+        [Authorize]
+        public async Task<ActionResult> GetMesseges(Guid Id)
+        {
+            if (UserId != Id)
+                return Forbid();
+
+            throw new NotImplementedException();
+        }
+
+        // POST: api/users/messages/{id} - Wysyłanie wiadomości
+        [HttpPost("messages/{Id}")]
+        [Authorize]
+        public async Task<ActionResult> PostMessege(Guid Id)
+        {
+            if (UserId != Id)
+                return Forbid();
+
+            throw new NotImplementedException();
+        }
     }
 }
