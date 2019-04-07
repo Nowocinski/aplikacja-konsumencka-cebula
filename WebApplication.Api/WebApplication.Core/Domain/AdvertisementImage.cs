@@ -8,7 +8,7 @@ namespace WebApplication.Core.Domain
     {
         // Relacje
         [ForeignKey("Advertisement")]
-        public Advertisement Relation { get; protected set; }
+        public virtual Advertisement Relation { get; protected set; }
 
         //-----------------------------------------
 

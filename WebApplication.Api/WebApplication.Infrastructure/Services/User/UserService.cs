@@ -80,26 +80,26 @@ namespace WebApplication.Infrastructure.Services.User
 
         public async Task UpdateAsync(Guid Id, UpdateUser command)
         {
+            var existUser = await _userRepository.GetAsync(Id);
+            if (existUser == null)
+                throw new Exception($"Exception with id: '{Id}' does not exists");
+
             var user = await _userRepository.GetAsync(command.Email);
 
-            if (user != null)
+            if (user != null && user != existUser)
                 throw new Exception($"Exception with e-mail: '{command.Email}' already exists");
 
             user = await _userRepository.GetByPhoneAsync(command.PhoneNumber);
-            if (user != null)
+            if (user != null && user != existUser)
                 throw new Exception($"Exception with this phone number: '{command.PhoneNumber}' already exists");
 
-            user = await _userRepository.GetAsync(Id);
-            if (user == null)
-                throw new Exception($"Exception with id: '{Id}' does not exists");
+            existUser.SetFirstName(command.FirstName);
+            existUser.SetLastName(command.LastName);
+            existUser.SetPhoneNumber(command.PhoneNumber);
+            existUser.SetEmail(command.Email);
+            existUser.SetPassword(command.Password.Hash());
 
-            user.SetFirstName(command.FirstName);
-            user.SetLastName(command.LastName);
-            user.SetPhoneNumber(command.PhoneNumber);
-            user.SetEmail(command.Email);
-            user.SetPassword(command.Password.Hash());
-
-            await _userRepository.UpdateAsync(user);
+            await _userRepository.UpdateAsync(existUser);
         }
 
         public async Task<IEnumerable<AdvertismentDTO>> GetAdvertisementsUserAsync(Guid Id)

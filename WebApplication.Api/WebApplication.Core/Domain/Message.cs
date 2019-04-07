@@ -9,7 +9,7 @@ namespace WebApplication.Core.Domain
     {
         // Relacje
         [ForeignKey("Sender")]
-        public User Relation { get; protected set; }
+        public virtual User Relation { get; protected set; }
 
         //-----------------------------------------
 

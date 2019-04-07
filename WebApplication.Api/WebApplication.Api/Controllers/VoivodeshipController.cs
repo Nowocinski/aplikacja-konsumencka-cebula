@@ -19,7 +19,7 @@ namespace WebApplication.Api.Controllers
         public async Task<ActionResult> GetVoivodeship(int Id)
             => Json(await _voivodeshipService.GetAsync(Id));
 
-        // GET: api/voivodeships/{id} - Pobranie wszystkich województw
+        // GET: api/voivodeships - Pobranie wszystkich województw
         [HttpGet]
         public async Task<ActionResult> GetVoivodeships()
             => Json(await _voivodeshipService.GetAllAsync());

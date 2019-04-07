@@ -9,10 +9,10 @@ namespace WebApplication.Core.Domain
     {
         // Relacje
         [ForeignKey("UserId")]
-        public User Relation { get; protected set; }
+        public virtual User Relation { get; protected set; }
 
         [ForeignKey("City")]
-        public City CityRel { get; protected set; }
+        public virtual City CityRel { get; protected set; }
 
         //-----------------------------------------
 
@@ -49,7 +49,7 @@ namespace WebApplication.Core.Domain
 
         // Listy pomocnicze
         private ISet<AdvertisementImage> _images = new HashSet<AdvertisementImage>();
-        public IEnumerable<AdvertisementImage> Images => _images;
+        public virtual IEnumerable<AdvertisementImage> Images => _images;
 
         // Konstruktory
         protected Advertisement() { }

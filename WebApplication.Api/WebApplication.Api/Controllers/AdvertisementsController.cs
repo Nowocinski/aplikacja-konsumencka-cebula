@@ -33,7 +33,7 @@ namespace WebApplication.Api.Controllers
         public async Task<ActionResult<IEnumerable<AdvertismentDTO>>> GetAdvertisement(string parameter, string type, int page)
             => Json(await _userService.GetSortAdvertismentsAsync(parameter, type, page));
 
-        // POST: api/advertisments/
+        // POST: api/advertisments - Dodawanie ogłoszenia
         [HttpPost]
         [Authorize]
         public async Task<ActionResult> PostAdvertisement([FromBody] CreateAdv Command)
@@ -43,7 +43,7 @@ namespace WebApplication.Api.Controllers
             return Created("/advertisments", null);
         }
 
-        // POST: api/advertisments/
+        // PUT: api/advertisments - Aktualizowanie ogłoszenia
         [HttpPut("{id}")]
         [Authorize]
         public async Task<ActionResult> PutAdvertisement(Guid Id, [FromBody] CreateAdv Command)
@@ -61,7 +61,7 @@ namespace WebApplication.Api.Controllers
             return NoContent();
         }
 
-        // DELETE: api/advertisments/
+        // DELETE: api/advertisments - Usuwanie ogłoszenia
         [HttpDelete("{id}")]
         [Authorize]
         public async Task<ActionResult> DeleteAdvertisement(Guid Id)

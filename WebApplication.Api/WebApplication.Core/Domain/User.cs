@@ -26,7 +26,10 @@ namespace WebApplication.Core.Domain
 
         // Listy pomocnicze
         private ISet<Advertisement> _advertisements = new HashSet<Advertisement>();
-        public IEnumerable<Advertisement> Advertisements => _advertisements;
+        public virtual IEnumerable<Advertisement> Advertisements => _advertisements;
+
+        private ISet<Message> _messages = new HashSet<Message>();
+        public virtual IEnumerable<Message> Messages => _messages;
 
         // Konstruktory
         public User(string FirstName, string LastName, string PhoneNumber, string Email, string Password)

@@ -24,6 +24,10 @@ namespace WebApplication.Core.Domain.Context
             modelBuilder.Entity<Advertisement>()  // Relacja  1..1
             .HasOne(a => a.CityRel)               // Relacja Advs.City do klasy Cities
             .WithOne(b => b.Advertisement);       // Przypisanie danych z relacji do wirutalnego pola w Cities.Advs typu Advs
+
+            modelBuilder.Entity<Message>()
+            .HasOne(a => a.Relation)
+            .WithMany(b => b.Messages);
         }
 
         public DbSet<User> Users { get; set; }

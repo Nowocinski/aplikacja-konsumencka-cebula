@@ -8,7 +8,7 @@ namespace WebApplication.Core.Domain
     {
         // Relacje
         [ForeignKey("Voivodeship")]
-        public Voivodeship Relation { get; protected set; }
+        public virtual Voivodeship Relation { get; protected set; }
 
         //-----------------------------------------
 

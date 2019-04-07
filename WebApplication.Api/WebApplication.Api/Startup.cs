@@ -41,8 +41,9 @@ namespace WebApplication.Api
             services.AddScoped<IVoivodeshipService, VoivodeshipService>();
 
             // Łączenie się z bazą danych MS SQL
-            services.AddDbContext<DataBaseContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DevConnection"), b => b.MigrationsAssembly("WebApplication.Api"))
+            services.AddDbContext<DataBaseContext>(options => options
+                .UseLazyLoadingProxies()
+                .UseSqlServer(Configuration.GetConnectionString("DevConnection"), b => b.MigrationsAssembly("WebApplication.Api"))
             );
 
             // Konfiguracja Jwt token
