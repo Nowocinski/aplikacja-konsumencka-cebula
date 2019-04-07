@@ -106,7 +106,6 @@ namespace WebApplication.Infrastructure.Services.User
         {
             var advertisement = await _userRepository.GetAdvertisementAsync(Id);
             var advDitDTO = _mapper.Map<AdvertisementDetailsDTO>(advertisement);
-            advDitDTO.FirstName = advertisement.Relation.FirstName;
 
             if (advDitDTO == null)
                 throw new Exception($"Id '{Id}' advertisement dose not exist.");
