@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ using WebApplication.Infrastructure.Services.User.JwtToken;
 
 namespace WebApplication.Infrastructure.Services.User
 {
-    public class UserService : IUserService
+    public class UserService : Hub, IUserService
     {
         private readonly IUserRepository _userRepository;
         private readonly IJwtHandler _jwtHandler;
@@ -231,6 +232,7 @@ namespace WebApplication.Infrastructure.Services.User
             user.AddMessage(recipient, text);
 
             await _userRepository.UpdateMessageAsync(user.Messages);
+            await Clients.All.SendAsync("ReceiveMessage", user.FirstName, user.LastName, text);
         }
     }
 }
