@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using WebApplication.Infrastructure.Services.User;
 
 namespace WebApplication.Api.Controllers
 {
+    [EnableCors("Origins")]
     public class UsersController : ApiControllerBase
     {
         private readonly IUserService _userService;

@@ -26,6 +26,7 @@ namespace WebApplication.Api
             Configuration = configuration;
         }
 
+        readonly string MyAllowSpecificOrigins = "Origins";
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -77,6 +78,18 @@ namespace WebApplication.Api
             services.AddSingleton(mapper);
 
             services.AddSignalR();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(MyAllowSpecificOrigins,
+                builder =>
+                {
+                    builder
+                        .WithOrigins("http://localhost:4200")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -97,6 +110,7 @@ namespace WebApplication.Api
                 routes.MapHub<UserService>("/chatHub");
             });
 
+            app.UseCors(MyAllowSpecificOrigins);
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseMvc();
