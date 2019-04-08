@@ -44,13 +44,9 @@ namespace WebApplication.Api.Controllers
 
         // POST: api/users/registration - Rejestracja
         [HttpPost("registration")]
-        public async Task<ActionResult> Register([FromBody] Register command)
+        public async Task<ActionResult> Register([FromBody] Register data)
         {
-            try
-            {
-                await _userService.RegisterAsync(command.FirstName, command.LastName,
-                    command.PhoneNumber, command.Email, command.Password);
-            }
+            try { await _userService.RegisterAsync(data); }
             catch (Exception e) { return StatusCode(419, new { e.Message }); }
 
             return Created("/users", null);
