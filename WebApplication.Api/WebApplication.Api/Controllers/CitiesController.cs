@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using WebApplication.Infrastructure.DTO;
 using WebApplication.Infrastructure.Services.Voivodeship;
 
 namespace WebApplication.Api.Controllers
@@ -16,12 +19,26 @@ namespace WebApplication.Api.Controllers
 
         // GET: api/cities/{id} - Pobranie danych miasta
         [HttpGet("{Id}")]
-        public async Task<ActionResult> GetCity(int Id)
-            => Json(await _voivodeshipService.GetCityAsync(Id));
+        public async Task<ActionResult<CityDTO>> GetCity(int Id)
+        {
+            CityDTO city;
+
+            try { city = await _voivodeshipService.GetCityAsync(Id); }
+            catch (Exception e) { return StatusCode(419, new { e.Message }); }
+
+            return Json(city);
+        }
 
         // GET: api/cities - Pobranie danych wszystkich miast
         [HttpGet]
-        public async Task<ActionResult> GetCities()
-            => Json(await _voivodeshipService.GetAllCitiesAsync());
+        public async Task<ActionResult<IEnumerable<CityDTO>>> GetCities()
+        {
+            IEnumerable<CityDTO> cities; 
+
+            try { cities = await _voivodeshipService.GetAllCitiesAsync(); }
+            catch (Exception e) { return StatusCode(419, new { e.Message }); }
+
+            return Json(cities);
+        }
     }
 }

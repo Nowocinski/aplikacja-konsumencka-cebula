@@ -21,24 +21,47 @@ namespace WebApplication.Api.Controllers
         // GET: api/advertisments/{id} - Pobranie danych ogłoszenia po id
         [HttpGet("{Id}")]
         public async Task<ActionResult<AdvertisementDetailsDTO>> GetAdvertisement(Guid Id)
-            => Json(await _userService.GetAdvertisementAsync(Id));
+        {
+            AdvertisementDetailsDTO adv;
+
+            try { adv = await _userService.GetAdvertisementAsync(Id); }
+            catch (Exception e) { return StatusCode(419, new { e.Message }); }
+
+            return Json(adv);
+        }
 
         // GET: api/advertisments - Pobranie danych wszystkich ogłoszeń
         [HttpGet]
         public async Task<ActionResult<IEnumerable<AdvertismentDTO>>> GetAdvertisement()
-            => Json(await _userService.GetAllAdvertismentsAsync());
+        {
+            IEnumerable<AdvertismentDTO> advs;
+
+            try { advs = await _userService.GetAllAdvertismentsAsync(); }
+            catch (Exception e) { return StatusCode(419, new  { e.Message}); }
+
+            return Json(advs);
+        }
 
         // GET: api/advertisments/{parameter}/{type}:{page} - Sortowanie ogłoszeń
         [HttpGet("{parameter}/{type}:{page}")]
-        public async Task<ActionResult<IEnumerable<AdvertismentDTO>>> GetAdvertisement(string parameter, string type, int page)
-            => Json(await _userService.GetSortAdvertismentsAsync(parameter, type, page));
+        public async Task<ActionResult<AdvertisementsWithPageToEndDTO>>
+            GetAdvertisement(string parameter, string type, int page)
+        {
+            AdvertisementsWithPageToEndDTO advs;
+
+            try { advs = await _userService.GetSortAdvertismentsAsync(parameter, type, page); }
+            catch (Exception e) { return StatusCode(419, new { e.Message }); }
+
+            return advs;
+        }
 
         // POST: api/advertisments - Dodawanie ogłoszenia
         [HttpPost]
         [Authorize]
         public async Task<ActionResult> PostAdvertisement([FromBody] CreateAdv Command)
         {
-            await _userService.AddAdvertisementAsync(Command, UserId);
+            try { await _userService.AddAdvertisementAsync(Command, UserId); }
+            catch (Exception e) { return StatusCode(419, new { e.Message }); }
 
             return Created("/advertisments", null);
         }
@@ -48,15 +71,19 @@ namespace WebApplication.Api.Controllers
         [Authorize]
         public async Task<ActionResult> PutAdvertisement(Guid Id, [FromBody] CreateAdv Command)
         {
-            var adv = await _userService.GetAdvertisementAsync(Id);
+            try
+            {
+                var adv = await _userService.GetAdvertisementAsync(Id);
 
-            if (adv == null)
-                return NotFound();
+                if (adv == null)
+                    return NotFound();
 
-            if(adv.UserId != UserId)
-                return Forbid();
+                if (adv.UserId != UserId)
+                    return Forbid();
 
-            await _userService.UpdateAdvertisementAsync(Command, Id);
+                await _userService.UpdateAdvertisementAsync(Command, Id);
+            }
+            catch (Exception e) { return StatusCode(419, new { e.Message }); }
 
             return NoContent();
         }
@@ -66,15 +93,19 @@ namespace WebApplication.Api.Controllers
         [Authorize]
         public async Task<ActionResult> DeleteAdvertisement(Guid Id)
         {
-            var adv = await _userService.GetAdvertisementAsync(Id);
+            try
+            {
+                var adv = await _userService.GetAdvertisementAsync(Id);
 
-            if (adv == null)
-                return NotFound();
+                if (adv == null)
+                    return NotFound();
 
-            if (adv.UserId != UserId)
-                return Forbid();
+                if (adv.UserId != UserId)
+                    return Forbid();
 
-            await _userService.DeleteAdvertisementAsync(Id);
+                await _userService.DeleteAdvertisementAsync(Id);
+            }
+            catch (Exception e) { return StatusCode(419, new { e.Message }); }
 
             return NoContent();
         }

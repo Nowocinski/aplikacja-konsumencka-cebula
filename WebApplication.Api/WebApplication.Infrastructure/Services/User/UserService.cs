@@ -186,8 +186,8 @@ namespace WebApplication.Infrastructure.Services.User
                 throw new Exception("Number page must be greater than zero");
             if (!types.Contains(type))
                 throw new Exception($"Type sort '{type}' do not exist.");
-            if (!types.Contains(type))
-                throw new Exception($"Type sort '{type}' do not exist.");
+            if (!parameters.Contains(parameter))
+                throw new Exception($"Type parameter '{parameter}' do not exist.");
 
             var adv = await GetAllAdvertismentsAsync();
 

@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using WebApplication.Infrastructure.DTO;
 using WebApplication.Infrastructure.Services.Voivodeship;
 
 namespace WebApplication.Api.Controllers
@@ -16,17 +19,37 @@ namespace WebApplication.Api.Controllers
 
         // GET: api/voivodeships/{id} - Pobranie danych danego województwa
         [HttpGet("{Id}")]
-        public async Task<ActionResult> GetVoivodeship(int Id)
-            => Json(await _voivodeshipService.GetAsync(Id));
+        public async Task<ActionResult<VoivodeshipDTO>> GetVoivodeship(int Id)
+        {
+            VoivodeshipDTO voivo;
+            try { voivo = await _voivodeshipService.GetAsync(Id); }
+            catch (Exception e) { return StatusCode(419, new { e.Message }); }
+
+            return Json(voivo);
+        }
 
         // GET: api/voivodeships - Pobranie wszystkich województw
         [HttpGet]
-        public async Task<ActionResult> GetVoivodeships()
-            => Json(await _voivodeshipService.GetAllAsync());
+        public async Task<ActionResult<IEnumerable<VoivodeshipDTO>>> GetVoivodeships()
+        {
+            IEnumerable<VoivodeshipDTO> voivos;
+
+            try { voivos = await _voivodeshipService.GetAllAsync(); }
+            catch (Exception e) { return StatusCode(419, new { e.Message }); }
+
+            return Json(voivos);
+        }
 
         // GET: api/voivodeships/{id}/cities - Pobranie wysztkich miast w danym województwie
         [HttpGet("{Id}/cities")]
-        public async Task<ActionResult> GetAllVoivodeships(int Id)
-            => Json(await _voivodeshipService.GetCitiesInVoivodeship(Id));
+        public async Task<ActionResult<IEnumerable<CityDTO>>> GetAllVoivodeships(int Id)
+        {
+            IEnumerable<CityDTO> cities;
+
+            try { cities = await _voivodeshipService.GetCitiesInVoivodeship(Id); }
+            catch (Exception e) { return StatusCode(419, new { e.Message }); }
+
+            return Json(cities);
+        }
     }
 }
