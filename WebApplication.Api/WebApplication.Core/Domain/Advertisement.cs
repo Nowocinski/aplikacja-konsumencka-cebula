@@ -71,18 +71,6 @@ namespace WebApplication.Core.Domain
             AddImages(Images, Id);
         }
 
-        // Metody
-        public void LoadImages(List<AdvertisementImage> Images)
-        {
-            foreach (AdvertisementImage i in Images)
-                _images.Add(i);
-        }
-
-        public void LoadImages(AdvertisementImage Image)
-        {
-                _images.Add(Image);
-        }
-
         private void AddImages(ISet<AdvertisementImage> Imgs, Guid Id)
         {
             foreach (var I in Imgs)
