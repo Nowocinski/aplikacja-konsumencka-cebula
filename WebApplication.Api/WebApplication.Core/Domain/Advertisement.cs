@@ -81,36 +81,69 @@ namespace WebApplication.Core.Domain
 
         public void SetTitle(string Title)
         {
+            if (string.IsNullOrWhiteSpace(Title))
+                throw new Exception($"Exception title: The title can not have an empty decription.");
+
+            if (Title.Length > 25)
+                throw new Exception($"Exception title {Title}: The title can be up to 25 characters long");
+
             this.Title = Title;
         }
 
         public void SetDescription(string Description)
         {
+            if (string.IsNullOrWhiteSpace(Description))
+                throw new Exception($"Exception description: The description can not have an empty decription.");
+
+            if (Description.Length > 500)
+                throw new Exception($"Exception description '{Description}': The description can be up to 500 characters long");
+
             this.Description = Description;
         }
 
         public void SetPrice(float Price)
         {
+            if (Price <= 0)
+                throw new Exception($"Exception price '{Price}': Price must be greater than zero");
+
             this.Price = Price;
         }
 
         public void SetCity(int City)
         {
+            if (City <= 0)
+                throw new Exception($"Exception city's id '{City}': City's id must be greater than zero");
+
             this.City = City;
         }
 
         public void SetStreet(string Street)
         {
+            if (string.IsNullOrWhiteSpace(Street))
+                throw new Exception($"Exception street: The street can not have an empty decription.");
+
+            if (Street.Length > 50)
+                throw new Exception($"Exception street '{Street}': The street can be up to 50 characters long");
+
             this.Street = Street;
         }
 
         public void SetSize(float Size)
         {
+            if (Size <= 0)
+                throw new Exception($"Exception size '{Size}': Size must be greater than zero");
+
             this.Size = Size;
         }
 
         public void SetCategory(string Category)
         {
+            if (string.IsNullOrWhiteSpace(Category))
+                throw new Exception($"Exception category: The category can not have an empty decription.");
+
+            if (Category.Length > 30)
+                throw new Exception($"Exception category '{Category}': The category can be up to 30 characters long");
+
             this.Category = Category;
         }
 
