@@ -52,7 +52,7 @@ namespace WebApplication.Api.Controllers
             try { advs = await _userService.GetSortAdvertismentsAsync(parameter, type, page); }
             catch (Exception e) { return StatusCode(419, new { e.Message }); }
 
-            return advs;
+            return Json(advs);
         }
 
         // POST: api/advertisments - Dodawanie ogłoszenia
