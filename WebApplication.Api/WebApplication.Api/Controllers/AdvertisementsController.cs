@@ -20,7 +20,7 @@ namespace WebApplication.Api.Controllers
             _userService = userService;
         }
 
-        // GET: api/advertisments/{id} - Pobranie danych ogłoszenia po id
+        // GET: api/advertisements/{id} - Pobranie danych ogłoszenia po id
         [HttpGet("{Id}")]
         public async Task<ActionResult<AdvertisementDetailsDTO>> GetAdvertisement(Guid Id)
         {
@@ -32,7 +32,7 @@ namespace WebApplication.Api.Controllers
             return Json(adv);
         }
 
-        // GET: api/advertisments - Pobranie danych wszystkich ogłoszeń
+        // GET: api/advertisements - Pobranie danych wszystkich ogłoszeń
         [HttpGet]
         public async Task<ActionResult<IEnumerable<AdvertismentDTO>>> GetAdvertisement()
         {
@@ -44,7 +44,7 @@ namespace WebApplication.Api.Controllers
             return Json(advs);
         }
 
-        // GET: api/advertisments/{parameter}/{type}:{page} - Sortowanie ogłoszeń
+        // GET: api/advertisements/{parameter}/{type}:{page} - Sortowanie ogłoszeń
         [HttpGet("{parameter}/{type}:{page}")]
         public async Task<ActionResult<AdvertisementsWithPageToEndDTO>>
             GetAdvertisement(string parameter, string type, int page)
@@ -57,7 +57,7 @@ namespace WebApplication.Api.Controllers
             return Json(advs);
         }
 
-        // POST: api/advertisments - Dodawanie ogłoszenia
+        // POST: api/advertisements - Dodawanie ogłoszenia
         [HttpPost]
         [Authorize]
         public async Task<ActionResult> PostAdvertisement([FromBody] CreateAdv Command)
@@ -68,7 +68,7 @@ namespace WebApplication.Api.Controllers
             return Created("/advertisments", null);
         }
 
-        // PUT: api/advertisments - Aktualizowanie ogłoszenia
+        // PUT: api/advertisements - Aktualizowanie ogłoszenia
         [HttpPut("{id}")]
         [Authorize]
         public async Task<ActionResult> PutAdvertisement(Guid Id, [FromBody] CreateAdv Command)
@@ -90,7 +90,7 @@ namespace WebApplication.Api.Controllers
             return NoContent();
         }
 
-        // DELETE: api/advertisments - Usuwanie ogłoszenia
+        // DELETE: api/advertisements - Usuwanie ogłoszenia
         [HttpDelete("{id}")]
         [Authorize]
         public async Task<ActionResult> DeleteAdvertisement(Guid Id)
