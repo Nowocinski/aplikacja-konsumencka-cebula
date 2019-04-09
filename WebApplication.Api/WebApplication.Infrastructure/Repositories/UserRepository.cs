@@ -62,6 +62,8 @@ namespace WebApplication.Infrastructure.Repositories
             var advs = await _context.Advertisements
                 .Include(x => x.Images)
                 .Include(x => x.Relation)
+                .Include(x => x.CityRel)
+                    .ThenInclude(x => x.Relation)
                 .Where(x => x.UserId == Id).ToListAsync();
 
             return await Task.FromResult(advs);

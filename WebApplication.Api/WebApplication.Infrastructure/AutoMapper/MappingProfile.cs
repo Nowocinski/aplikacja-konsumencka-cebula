@@ -40,6 +40,14 @@ namespace WebApplication.Infrastructure.AutoMapper
                .ForMember(
                     x => x.Image,
                     y => y.MapFrom(src => src.Images.FirstOrDefault())
+                )
+                .ForMember(
+                    x => x.City,
+                    y => y.MapFrom(src => src.CityRel.Name)
+                )
+                .ForMember(
+                    x => x.Voivodeship,
+                    y => y.MapFrom(src => src.CityRel.Relation.Name)
                 );
         }
     }

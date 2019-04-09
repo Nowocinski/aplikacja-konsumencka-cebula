@@ -12,6 +12,7 @@ namespace WebApplication.Infrastructure.DTO
         public decimal Size { get; set; }
         public string Category { get; set; }
         public DateTime Date { get; set; }
+        public string Voivodeship { get; set; }
 
         public ImageDTO Image { get; set; }
     }
