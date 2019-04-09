@@ -86,7 +86,7 @@ namespace WebApplication.Core.Domain
             if (Email.Length > 40)
                 throw new Exception($"User with id: '{Id}' e-mail can not have more than 40 characters.");
 
-            Regex syntax = new Regex("^[0-9a-zA-Z]+([.-]{1}[0-9a-zA-Z]+)*@[a-z]+([.-]{1}[0-9a-z]+)*.[a-z]$");
+            Regex syntax = new Regex("^[0-9a-zA-Z]+([.-]{1}[0-9a-zA-Z]+)*@[a-z]+([.-]{1}[0-9a-z]+)*.[a-z]*$");
             if (!syntax.IsMatch(Email))
                 throw new Exception($"User with id: '{Id}' the e-mail syntax is incorrect.");
 
