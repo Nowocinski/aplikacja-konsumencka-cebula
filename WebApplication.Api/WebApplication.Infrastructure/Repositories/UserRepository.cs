@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using WebApplication.Core.Domain;
 using WebApplication.Core.Domain.Context;
 using WebApplication.Core.Repositories;
+using WebApplication.Infrastructure.Extensions;
 
 namespace WebApplication.Infrastructure.Repositories
 {
@@ -80,9 +81,9 @@ namespace WebApplication.Infrastructure.Repositories
             return await Task.FromResult(adv);
         }
 
-        public async Task<IEnumerable<Advertisement>> GetAllAdvertismentsAsync()
+        public async Task<IEnumerable<Advertisement>> GetAllAdvertismentsAsync(string text="")
         {
-            var advs = await _context.Advertisements
+            var advs = await _context.Advertisements.Where(x => x.Title.ToLower().Contains(text.ToLower()))
                 .Include(x => x.Images)
                 .Include(x => x.Relation)
                 .ToListAsync();

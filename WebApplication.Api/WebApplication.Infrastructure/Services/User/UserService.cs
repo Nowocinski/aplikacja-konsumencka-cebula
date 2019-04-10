@@ -120,9 +120,9 @@ namespace WebApplication.Infrastructure.Services.User
             return advDitDTO;
         }
 
-        public async Task<IEnumerable<AdvertismentDTO>> GetAllAdvertismentsAsync()
+        public async Task<IEnumerable<AdvertismentDTO>> GetAllAdvertismentsAsync(string text = "")
         {
-            var advs = await _userRepository.GetAllAdvertismentsAsync();
+            var advs = await _userRepository.GetAllAdvertismentsAsync(text);
 
             return _mapper.Map<IEnumerable<AdvertismentDTO>>(advs);
         }
@@ -170,7 +170,7 @@ namespace WebApplication.Infrastructure.Services.User
             await _userRepository.DeleteAdvertisementAsync(adv);
         }
 
-        public async Task<AdvertisementsWithPageToEndDTO> GetSortAdvertismentsAsync(string parameter, string type, int page)
+        public async Task<AdvertisementsWithPageToEndDTO> GetSortAdvertismentsAsync(string parameter, string type, int page, string text)
         {
             parameter = parameter.ToLower();
             type = type.ToLower();
@@ -185,7 +185,7 @@ namespace WebApplication.Infrastructure.Services.User
             if (!parameters.Contains(parameter))
                 throw new Exception($"Type parameter '{parameter}' do not exist.");
 
-            var adv = await GetAllAdvertismentsAsync();
+            var adv = await GetAllAdvertismentsAsync(text);
 
             if(type == "asc")
                 switch (parameter)

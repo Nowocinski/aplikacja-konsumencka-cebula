@@ -57,6 +57,19 @@ namespace WebApplication.Api.Controllers
             return Json(advs);
         }
 
+        // GET: api/advertisements/{parameter}/{type}:{page}/{text} - Sortowanie ogłoszeń z filtorowaniem po tytule
+        [HttpGet("{parameter}/{type}:{page}/{text}")]
+        public async Task<ActionResult<AdvertisementsWithPageToEndDTO>>
+            GetFiltrationAdvertisement(string parameter, string type, int page, string text)
+        {
+            AdvertisementsWithPageToEndDTO advs;
+
+            try { advs = await _userService.GetSortAdvertismentsAsync(parameter, type, page, text); }
+            catch (Exception e) { return StatusCode(419, new { e.Message }); }
+
+            return Json(advs);
+        }
+
         // POST: api/advertisements - Dodawanie ogłoszenia
         [HttpPost]
         [Authorize]

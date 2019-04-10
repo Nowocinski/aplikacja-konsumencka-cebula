@@ -17,11 +17,11 @@ namespace WebApplication.Infrastructure.Services.User
 
         Task<IEnumerable<AdvertismentDTO>> GetAdvertisementsUserAsync(Guid Id);
         Task<AdvertisementDetailsDTO> GetAdvertisementAsync(Guid Id);
-        Task<IEnumerable<AdvertismentDTO>> GetAllAdvertismentsAsync();
+        Task<IEnumerable<AdvertismentDTO>> GetAllAdvertismentsAsync(string text="");
         Task AddAdvertisementAsync(CreateAdv Command, Guid UserId);
         Task UpdateAdvertisementAsync(CreateAdv Advertisement, Guid Id);
         Task DeleteAdvertisementAsync(Guid Id);
-        Task<AdvertisementsWithPageToEndDTO> GetSortAdvertismentsAsync(string parameter, string type, int page);
+        Task<AdvertisementsWithPageToEndDTO> GetSortAdvertismentsAsync(string parameter, string type, int page, string text="");
 
         Task UpdateMessageAsync(Guid sender, Guid recipient, string text);
     }
