@@ -123,12 +123,8 @@ namespace WebApplication.Infrastructure.Services.User
         public async Task<IEnumerable<AdvertismentDTO>> GetAllAdvertismentsAsync()
         {
             var advs = await _userRepository.GetAllAdvertismentsAsync();
-            var advsDTO = _mapper.Map<IEnumerable<AdvertismentDTO>>(advs);
 
-            foreach(var a in advsDTO)
-                a.City = await _voivodeshipRepository.GetNameCity(int.Parse(a.City));
-
-            return advsDTO;
+            return _mapper.Map<IEnumerable<AdvertismentDTO>>(advs);
         }
 
         public async Task AddAdvertisementAsync(CreateAdv Command, Guid UserId)
