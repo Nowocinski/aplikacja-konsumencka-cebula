@@ -83,7 +83,7 @@ namespace WebApplication.Infrastructure.Repositories
 
         public async Task<IEnumerable<Advertisement>> GetAllAdvertismentsAsync(string text="")
         {
-            var advs = await _context.Advertisements.Where(x => x.Title.ToLower().Contains(text.ToLower()))
+            var advs = await _context.Advertisements.Where(x => x.Title.ToLower().RemoveDiacritics().Contains(text.ToLower()))
                 .Include(x => x.Images)
                 .Include(x => x.Relation)
                 .ToListAsync();
