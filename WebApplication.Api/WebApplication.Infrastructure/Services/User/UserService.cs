@@ -45,6 +45,9 @@ namespace WebApplication.Infrastructure.Services.User
                 throw new Exception($"User phone number: '{data.PhoneNumber}' already exists.");
 
             user = new Core.Domain.User(data.FirstName, data.LastName, data.PhoneNumber, data.Email, data.Password.Hash());
+
+            SendEmailExtensions.SendEmail(data.Email);
+
             await _userRepository.AddAsync(user);
         }
 
