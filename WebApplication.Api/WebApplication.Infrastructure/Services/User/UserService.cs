@@ -88,6 +88,9 @@ namespace WebApplication.Infrastructure.Services.User
             if (existUser == null)
                 throw new Exception($"Exception with id: '{Id}' does not exists");
 
+            if (existUser.Password != command.OldPassword.Hash())
+                throw new Exception("Exception password: The old password is incorrect");
+
             var user = await _userRepository.GetAsync(command.Email);
 
             if (user != null && user != existUser)
@@ -97,11 +100,16 @@ namespace WebApplication.Infrastructure.Services.User
             if (user != null && user != existUser)
                 throw new Exception($"Exception with this phone number: '{command.PhoneNumber}' already exists");
 
-            existUser.SetFirstName(command.FirstName);
-            existUser.SetLastName(command.LastName);
-            existUser.SetPhoneNumber(command.PhoneNumber);
-            existUser.SetEmail(command.Email);
-            existUser.SetPassword(command.Password.Hash());
+            if(command.FirstName != null)
+                existUser.SetFirstName(command.FirstName);
+            if(command.LastName != null)
+                existUser.SetLastName(command.LastName);
+            if(command.PhoneNumber != null)
+                existUser.SetPhoneNumber(command.PhoneNumber);
+            if(command.Email != null)
+                existUser.SetEmail(command.Email);
+            if(command.Password != null)
+                existUser.SetPassword(command.Password.Hash());
 
             await _userRepository.UpdateAsync(existUser);
         }
