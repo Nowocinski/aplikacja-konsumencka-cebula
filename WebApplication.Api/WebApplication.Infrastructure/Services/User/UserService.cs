@@ -239,7 +239,6 @@ namespace WebApplication.Infrastructure.Services.User
             user.AddMessage(recipient, text);
 
             await _userRepository.UpdateMessageAsync(user.Messages);
-            await Clients.All.SendAsync("ReceiveMessage", user.FirstName, user.LastName, text);
         }
     }
 }

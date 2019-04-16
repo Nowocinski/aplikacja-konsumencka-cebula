@@ -105,11 +105,6 @@ namespace WebApplication.Api
                 app.UseHsts();
             }
 
-            app.UseSignalR(routes =>
-            {
-                routes.MapHub<UserService>("/chatHub");
-            });
-
             app.UseCors(MyAllowSpecificOrigins);
             app.UseHttpsRedirection();
             app.UseAuthentication();
