@@ -17,6 +17,7 @@ namespace WebApplication.Infrastructure.DTO
 
         public string Title { get; set; }
         public string City { get; set; }
+        public string Voivodeship { get; set; }
         public string Street { get; set; }
         public int Floor { get; set; }
         public string Category { get; set; }

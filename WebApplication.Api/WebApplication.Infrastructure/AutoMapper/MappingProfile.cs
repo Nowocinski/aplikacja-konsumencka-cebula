@@ -33,6 +33,10 @@ namespace WebApplication.Infrastructure.AutoMapper
             .ForMember(
                     x => x.City,
                     y => y.MapFrom(src => src.CityRel.Name)
+                )
+            .ForMember(
+                    x => x.Voivodeship,
+                    y => y.MapFrom(src => src.CityRel.Relation.Name)
                 );
             CreateMap<User, AdvertisementDetailsDTO>();
             CreateMap<AdvertisementImage, ImageDTO>();
