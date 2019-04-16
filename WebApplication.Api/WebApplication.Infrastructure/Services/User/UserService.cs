@@ -240,5 +240,11 @@ namespace WebApplication.Infrastructure.Services.User
 
             await _userRepository.UpdateMessageAsync(user.Messages);
         }
+
+        public async Task<IEnumerable<MessagesDTO>> GetMessagesAsync(Guid Sender, Guid Recipient)
+        {
+            var msgs = await _userRepository.GetMessagesAsync(Sender, Recipient);
+            return _mapper.Map<IEnumerable<MessagesDTO>>(msgs);
+        }
     }
 }

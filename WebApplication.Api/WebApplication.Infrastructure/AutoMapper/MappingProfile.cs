@@ -49,6 +49,19 @@ namespace WebApplication.Infrastructure.AutoMapper
                     x => x.Voivodeship,
                     y => y.MapFrom(src => src.CityRel.Relation.Name)
                 );
+            CreateMap<Message, MessagesDTO>()
+                .ForMember(
+                    x => x.FirstName,
+                    y => y.MapFrom(src => src.Relation.FirstName)
+                )
+                .ForMember(
+                    x => x.LastName,
+                    y => y.MapFrom(src => src.Relation.LastName)
+                )
+                .ForMember(
+                    x => x.Content,
+                    y => y.MapFrom(src => src.Contents)
+                );
         }
     }
 }

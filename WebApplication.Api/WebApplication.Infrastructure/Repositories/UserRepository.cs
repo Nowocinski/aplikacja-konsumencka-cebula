@@ -119,5 +119,16 @@ namespace WebApplication.Infrastructure.Repositories
             await _context.SaveChangesAsync();
             await Task.CompletedTask;
         }
+
+        public async Task<IEnumerable<Message>> GetMessagesAsync(Guid Sender, Guid Recipient)
+        {
+            var messages = await _context.Messages.Where(x =>
+                (x.Sender == Sender && x.Recipient == Recipient) || (x.Sender == Recipient && x.Recipient == Sender))
+                .Include(x => x.Relation)
+                .OrderByDescending(x => x.Date)
+                .ToListAsync();
+
+            return await Task.FromResult(messages);
+        }
     }
 }

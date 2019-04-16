@@ -22,5 +22,6 @@ namespace WebApplication.Core.Repositories
         Task DeleteAdvertisementAsync(Advertisement Advertisement);
 
         Task UpdateMessageAsync(IEnumerable<Message> message);
+        Task<IEnumerable<Message>> GetMessagesAsync(Guid Sender, Guid Recipient);
     }
 }

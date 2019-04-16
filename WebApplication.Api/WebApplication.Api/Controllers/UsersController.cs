@@ -97,9 +97,9 @@ namespace WebApplication.Api.Controllers
         // GET: api/users/messages/{id} - Pobieranie konwersacji z danym użytkownikiem
         [HttpGet("messages/{Id}")]
         [Authorize]
-        public async Task<ActionResult> GetMesseges(Guid Id)
+        public async Task<ActionResult<IEnumerable<MessagesDTO>>> GetMesseges(Guid Id)
         {
-            throw new NotImplementedException();
+            return Json(await _userService.GetMessagesAsync(UserId, Id));
         }
 
         // POST: api/users/messages/{id} - Wysyłanie wiadomości
