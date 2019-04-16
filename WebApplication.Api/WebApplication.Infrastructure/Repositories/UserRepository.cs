@@ -115,7 +115,7 @@ namespace WebApplication.Infrastructure.Repositories
         public async Task UpdateMessageAsync(IEnumerable<Message> message)
         {
             foreach(var msg in message)
-                _context.Messages.Add(msg);
+                _context.Messages.Update(msg);
             await _context.SaveChangesAsync();
             await Task.CompletedTask;
         }
