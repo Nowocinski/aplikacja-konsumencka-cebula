@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +12,7 @@ using WebApplication.Infrastructure.Services.User.JwtToken;
 
 namespace WebApplication.Infrastructure.Services.User
 {
-    public class UserService : Hub, IUserService
+    public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
         private readonly IJwtHandler _jwtHandler;
