@@ -133,12 +133,10 @@ namespace WebApplication.Infrastructure.Repositories
 
         public async Task<IEnumerable<Message>> GetConversationListAsync(Guid Id)
         {
-            // Jest błąd - trzeba poprawić
-
-            var listConversation = await _context.Messages.Where(x => x.Sender == Id || x.Recipient == Id)
+            var listConversation = await _context.Messages.Where(x => x.Recipient == Id)
                 .Include(x => x.Relation)
                 .OrderByDescending(x => x.Date)
-                .GroupBy(x => x.Relation.Id != Id)
+                .GroupBy(x => x.Sender)
                 .ToListAsync();
 
             IEnumerable<Message> smths = listConversation.SelectMany(group => group);
