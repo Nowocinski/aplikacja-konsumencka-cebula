@@ -102,6 +102,14 @@ namespace WebApplication.Api.Controllers
             return Json(await _userService.GetMessagesAsync(UserId, Id));
         }
 
+        // GET: api/users/messages/conversations - Pobieranie konwersacji z danym użytkownikiem
+        [HttpGet("messages/conversations")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<ListConversationDTO>>> GetMesseges()
+        {
+            return Json(await _userService.GetConversationListAsync(UserId));
+        }
+
         // POST: api/users/messages/{id} - Wysyłanie wiadomości
         [HttpPost("messages/{Id}")]
         [Authorize]

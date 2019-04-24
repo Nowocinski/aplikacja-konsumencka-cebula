@@ -130,5 +130,21 @@ namespace WebApplication.Infrastructure.Repositories
 
             return await Task.FromResult(messages);
         }
+
+        public async Task<IEnumerable<Message>> GetConversationListAsync(Guid Id)
+        {
+            // Jest błąd - trzeba poprawić
+
+            var listConversation = await _context.Messages.Where(x => x.Sender == Id || x.Recipient == Id)
+                .Include(x => x.Relation)
+                .OrderByDescending(x => x.Date)
+                .GroupBy(x => x.Relation.Id != Id)
+                .ToListAsync();
+
+            IEnumerable<Message> smths = listConversation.SelectMany(group => group);
+            List<Message> newList = smths.ToList();
+
+            return await Task.FromResult(newList);
+        }
     }
 }

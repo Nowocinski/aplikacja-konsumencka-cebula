@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using WebApplication.Core.Domain;
 using WebApplication.Infrastructure.Commands;
 using WebApplication.Infrastructure.DTO;
 
@@ -24,6 +23,7 @@ namespace WebApplication.Infrastructure.Services.User
         Task<AdvertisementsWithPageToEndDTO> GetSortAdvertismentsAsync(string parameter, string type, int page, string text="");
 
         Task UpdateMessageAsync(Guid sender, Guid recipient, string text);
+        Task<IEnumerable<ListConversationDTO>> GetConversationListAsync(Guid Id);
         Task<IEnumerable<MessagesDTO>> GetMessagesAsync(Guid Sender, Guid Recipient);
     }
 }

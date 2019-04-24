@@ -66,6 +66,19 @@ namespace WebApplication.Infrastructure.AutoMapper
                     x => x.Content,
                     y => y.MapFrom(src => src.Contents)
                 );
+            CreateMap<Message, ListConversationDTO>()
+                .ForMember(
+                    x => x.FirstName,
+                    y => y.MapFrom(src => src.Relation.FirstName)
+                )
+                .ForMember(
+                    x => x.LastName,
+                    y => y.MapFrom(src => src.Relation.LastName)
+                )
+                .ForMember(
+                    x => x.SenderId,
+                    y => y.MapFrom(src => src.Relation.Id)
+                );
         }
     }
 }

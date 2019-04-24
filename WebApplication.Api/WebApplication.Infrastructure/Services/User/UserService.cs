@@ -245,5 +245,11 @@ namespace WebApplication.Infrastructure.Services.User
             var msgs = await _userRepository.GetMessagesAsync(Sender, Recipient);
             return _mapper.Map<IEnumerable<MessagesDTO>>(msgs);
         }
+
+        public async Task<IEnumerable<ListConversationDTO>> GetConversationListAsync(Guid Id)
+        {
+            var listAllConversations = await _userRepository.GetConversationListAsync(Id);
+            return _mapper.Map<IEnumerable<ListConversationDTO>>(listAllConversations);
+        }
     }
 }

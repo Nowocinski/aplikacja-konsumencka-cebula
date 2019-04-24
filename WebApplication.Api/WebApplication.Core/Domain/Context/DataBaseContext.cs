@@ -23,7 +23,8 @@ namespace WebApplication.Core.Domain.Context
             // Miasta -> Ogłoszenia
             modelBuilder.Entity<Advertisement>()  // Relacja  1..1
             .HasOne(a => a.CityRel)               // Relacja Advs.City do klasy Cities
-            .WithOne(b => b.Advertisement);       // Przypisanie danych z relacji do wirutalnego pola w Cities.Advs typu Advs
+            .WithOne(b => b.Advertisement)        // Przypisanie danych z relacji do wirutalnego pola w Cities.Advs typu Advs
+            .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Message>()
             .HasOne(a => a.Relation)
