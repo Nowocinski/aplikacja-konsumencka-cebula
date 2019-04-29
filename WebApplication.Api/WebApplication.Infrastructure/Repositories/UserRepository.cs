@@ -135,14 +135,10 @@ namespace WebApplication.Infrastructure.Repositories
         {
             var listConversation = await _context.Messages.Where(x => x.Recipient == Id)
                 .Include(x => x.Relation)
-                .OrderByDescending(x => x.Date)
-                .GroupBy(x => x.Sender)
+                .GroupBy(x => x.Sender, (key, group) => group.LastOrDefault())
                 .ToListAsync();
 
-            IEnumerable<Message> smths = listConversation.SelectMany(group => group);
-            List<Message> newList = smths.ToList();
-
-            return await Task.FromResult(newList);
+            return await Task.FromResult(listConversation);
         }
     }
 }
