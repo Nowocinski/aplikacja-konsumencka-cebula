@@ -5,13 +5,8 @@ namespace WebApplication.Core.Domain
 {
     public class Advertisement : EntityGuid
     {
-        // Relacje
         public virtual User Relation { get; protected set; }
         public virtual City CityRel { get; protected set; }
-
-        //-----------------------------------------
-
-        // Pola
         public Guid UserId { get; private set; }
         public string Title { get; private set; }
         public string Description { get; private set; }
@@ -23,12 +18,12 @@ namespace WebApplication.Core.Domain
         public string Category { get; private set; }
         public DateTime Date { get; private set; }
 
-        // Listy pomocnicze
         private ISet<AdvertisementImage> _images = new HashSet<AdvertisementImage>();
         public virtual IEnumerable<AdvertisementImage> Images => _images;
 
-        // Konstruktory
-        protected Advertisement() { }
+        protected Advertisement()
+        {
+        }
 
         public Advertisement(Guid Id, Guid UserId, string Title, string Description, float Price,
             int City, string Street, float Size, string Category, ISet<AdvertisementImage> Images, int? Floor)
@@ -52,8 +47,6 @@ namespace WebApplication.Core.Domain
             foreach (var I in Imgs)
                 _images.Add(new AdvertisementImage(Id, I.Image, I.Name, I.Description));
         }
-
-        // Metody do obsługi pól
 
         public void SetTitle(string Title)
         {
