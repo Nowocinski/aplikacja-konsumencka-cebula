@@ -7,7 +7,6 @@ namespace WebApplication.Core.Domain
     public class Voivodeship : EntityInt
     {
         // Pola
-        [Required] [Column(TypeName = "nvarchar(30)")]
         public string Name { get; protected set; }
 
         // Konstruktory

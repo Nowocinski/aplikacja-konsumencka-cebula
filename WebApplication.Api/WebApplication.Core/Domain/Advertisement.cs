@@ -1,50 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApplication.Core.Domain
 {
     public class Advertisement : EntityGuid
     {
         // Relacje
-        [ForeignKey("UserId")]
         public virtual User Relation { get; protected set; }
-
-        [ForeignKey("City")]
         public virtual City CityRel { get; protected set; }
 
         //-----------------------------------------
 
         // Pola
-        [Required] [Column(TypeName = "uniqueidentifier")]
         public Guid UserId { get; private set; }
-
-        [Required] [Column(TypeName = "nvarchar(25)")]
         public string Title { get; private set; }
-
-        [Required] [Column(TypeName = "nvarchar(500)")]
         public string Description { get; private set; }
-
-        [Required] [Column(TypeName = "decimal(20, 2)")]
         public float Price { get; private set; }
-
-        [Required] [Column(TypeName = "int")]
         public int City { get; private set; }
-
-        [Required] [Column(TypeName = "nvarchar(50)")]
         public string Street { get; private set; }
-
-        [Column(TypeName = "int")]
         public int? Floor { get; private set; }
-
-        [Required] [Column(TypeName = "decimal(20, 2)")]
         public float Size { get; private set; }
-
-        [Required] [Column(TypeName = "nvarchar(30)")]
         public string Category { get; private set; }
-
-        [Required] [Column(TypeName = "datetime")]
         public DateTime Date { get; private set; }
 
         // Listy pomocnicze

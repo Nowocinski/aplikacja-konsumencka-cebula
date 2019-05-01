@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.RegularExpressions;
 
 namespace WebApplication.Core.Domain
@@ -9,19 +7,10 @@ namespace WebApplication.Core.Domain
     public class User : EntityGuid
     {
         // Pola
-        [Required] [Column(TypeName = "nvarchar(20)")]
         public string FirstName { get; private set; }
-
-        [Required] [Column(TypeName = "nvarchar(30)")]
         public string LastName { get; protected set; }
-
-        [Required] [Column(TypeName = "nvarchar(11)")]
         public string PhoneNumber { get; protected set; }
-
-        [Required] [Column(TypeName = "nvarchar(40)")]
         public string Email { get; protected set; }
-
-        [Required] [Column(TypeName = "nvarchar(100)")]
         public string Password { get; protected set; }
 
         // Listy pomocnicze
