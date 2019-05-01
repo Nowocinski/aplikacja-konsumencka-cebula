@@ -5,13 +5,13 @@ namespace WebApplication.Core.Domain
 {
     public class Advertisement : EntityGuid
     {
-        public virtual User Relation { get; protected set; }
-        public virtual City CityRel { get; protected set; }
-        public Guid UserId { get; private set; }
+        public virtual User User { get; protected set; }
+        public virtual City City { get; protected set; }
+        public Guid User_Id { get; private set; }
         public string Title { get; private set; }
         public string Description { get; private set; }
         public float Price { get; private set; }
-        public int City { get; private set; }
+        public int City_Id { get; private set; }
         public string Street { get; private set; }
         public int? Floor { get; private set; }
         public float Size { get; private set; }
@@ -25,15 +25,15 @@ namespace WebApplication.Core.Domain
         {
         }
 
-        public Advertisement(Guid Id, Guid UserId, string Title, string Description, float Price,
-            int City, string Street, float Size, string Category, ISet<AdvertisementImage> Images, int? Floor)
+        public Advertisement(Guid Id, Guid User_Id, string Title, string Description, float Price,
+            int City_Id, string Street, float Size, string Category, ISet<AdvertisementImage> Images, int? Floor)
         {
             this.Id = Id;
-            this.UserId = UserId;
+            this.User_Id = User_Id;
             this.Title = Title;
             this.Description = Description;
             this.Price = Price;
-            this.City = City;
+            this.City_Id = City_Id;
             this.Street = Street;
             this.Size = Size;
             this.Category = Category;
@@ -78,12 +78,12 @@ namespace WebApplication.Core.Domain
             this.Price = Price;
         }
 
-        public void SetCity(int City)
+        public void SetCity(int City_Id)
         {
-            if (City <= 0)
+            if (City_Id <= 0)
                 throw new Exception($"Exception city's id '{City}': City's id must be greater than zero");
 
-            this.City = City;
+            this.City_Id = City_Id;
         }
 
         public void SetStreet(string Street)

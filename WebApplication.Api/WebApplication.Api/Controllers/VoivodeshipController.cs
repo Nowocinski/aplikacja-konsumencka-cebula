@@ -23,23 +23,23 @@ namespace WebApplication.Api.Controllers
         [HttpGet("{Id}")]
         public async Task<ActionResult<VoivodeshipDTO>> GetVoivodeship(int Id)
         {
-            VoivodeshipDTO voivo;
-            try { voivo = await _voivodeshipService.GetAsync(Id); }
+            VoivodeshipDTO voivodeship;
+            try { voivodeship = await _voivodeshipService.GetAsync(Id); }
             catch (Exception e) { return StatusCode(419, new { e.Message }); }
 
-            return Json(voivo);
+            return Json(voivodeship);
         }
 
         // GET: api/voivodeships - Pobranie wszystkich województw
         [HttpGet]
         public async Task<ActionResult<IEnumerable<VoivodeshipDTO>>> GetVoivodeships()
         {
-            IEnumerable<VoivodeshipDTO> voivos;
+            IEnumerable<VoivodeshipDTO> voivodeships;
 
-            try { voivos = await _voivodeshipService.GetAllAsync(); }
+            try { voivodeships = await _voivodeshipService.GetAllAsync(); }
             catch (Exception e) { return StatusCode(419, new { e.Message }); }
 
-            return Json(voivos);
+            return Json(voivodeships);
         }
 
         // GET: api/voivodeships/{id}/cities - Pobranie wysztkich miast w danym województwie

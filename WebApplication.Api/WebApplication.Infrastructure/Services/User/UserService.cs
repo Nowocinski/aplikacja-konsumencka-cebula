@@ -115,69 +115,70 @@ namespace WebApplication.Infrastructure.Services.User
 
         public async Task<IEnumerable<AdvertismentDTO>> GetAdvertisementsUserAsync(Guid Id)
         {
-            var advs = await _userRepository.GetAdvertisementsUserAsync(Id);
-            return _mapper.Map<IEnumerable<AdvertismentDTO>>(advs);
+            IEnumerable<Advertisement> advertisments = await _userRepository.GetAdvertisementsUserAsync(Id);
+            return _mapper.Map<IEnumerable<AdvertismentDTO>>(advertisments);
         }
 
         public async Task<AdvertisementDetailsDTO> GetAdvertisementAsync(Guid Id)
         {
-            var advertisement = await _userRepository.GetAdvertisementAsync(Id);
-            var advDitDTO = _mapper.Map<AdvertisementDetailsDTO>(advertisement);
+            Advertisement advertisement = await _userRepository.GetAdvertisementAsync(Id);
+            AdvertisementDetailsDTO advertisementDetailsDTO = _mapper.Map<AdvertisementDetailsDTO>(advertisement);
 
-            if (advDitDTO == null)
+            if (advertisementDetailsDTO == null)
                 throw new Exception($"Id '{Id}' advertisement dose not exist.");
 
-            return advDitDTO;
+            return advertisementDetailsDTO;
         }
 
         public async Task<IEnumerable<AdvertismentDTO>> GetAllAdvertismentsAsync(string text = "")
         {
-            var advs = await _userRepository.GetAllAdvertismentsAsync(text);
+            IEnumerable<Advertisement> advertisements = await _userRepository.GetAllAdvertismentsAsync(text);
 
-            return _mapper.Map<IEnumerable<AdvertismentDTO>>(advs);
+            return _mapper.Map<IEnumerable<AdvertismentDTO>>(advertisements);
         }
 
-        public async Task AddAdvertisementAsync(CreateAdv Command, Guid UserId)
+        public async Task AddAdvertisementAsync(CreateAdvertisment Command, Guid UserId)
         {
-            Guid AdvId = Guid.NewGuid();
+            Guid advertisement_id = Guid.NewGuid();
 
             ISet<AdvertisementImage> Imgs = new HashSet<AdvertisementImage>();
             foreach(var I in Command.Images)
-                Imgs.Add(new AdvertisementImage(AdvId, I.Image, I.Name, I.Description));
+                Imgs.Add(new AdvertisementImage(advertisement_id, I.Image, I.Name, I.Description));
 
             var user = await _userRepository.GetAsync(UserId);
             
-            var adv = user.AddAdvertisement(AdvId, Command.Title, Command.Description, Command.Price, Command.City, Command.Street,
+            var adv = user.AddAdvertisement(advertisement_id, Command.Title,
+                Command.Description, Command.Price, Command.City, Command.Street,
                 Command.Size, Command.Category, Imgs, Command.Floor);
 
             await _userRepository.AddAdvertisementAsync(adv);
         }
 
-        public async Task UpdateAdvertisementAsync(CreateAdv Command, Guid Id)
+        public async Task UpdateAdvertisementAsync(CreateAdvertisment Command, Guid Id)
         {
-            var adv = await _userRepository.GetAdvertisementAsync(Id);
+            Advertisement advertisement = await _userRepository.GetAdvertisementAsync(Id);
 
             ISet<AdvertisementImage> Imgs = new HashSet<AdvertisementImage>();
             foreach (var I in Command.Images)
-                Imgs.Add(new AdvertisementImage(adv.Id, I.Image, I.Name, I.Description));
+                Imgs.Add(new AdvertisementImage(advertisement.Id, I.Image, I.Name, I.Description));
 
-            adv.SetTitle(Command.Title);
-            adv.SetDescription(Command.Description);
-            adv.SetPrice(Command.Price);
-            adv.SetCity(Command.City);
-            adv.SetStreet(Command.Street);
-            adv.SetSize(Command.Size);
-            adv.SetCategory(Command.Category);
-            adv.SetFloor(Command.Floor);
-            adv.SetAddImages(Imgs);
+            advertisement.SetTitle(Command.Title);
+            advertisement.SetDescription(Command.Description);
+            advertisement.SetPrice(Command.Price);
+            advertisement.SetCity(Command.City);
+            advertisement.SetStreet(Command.Street);
+            advertisement.SetSize(Command.Size);
+            advertisement.SetCategory(Command.Category);
+            advertisement.SetFloor(Command.Floor);
+            advertisement.SetAddImages(Imgs);
 
-            await _userRepository.UpdateAdvertisementAsync(adv);
+            await _userRepository.UpdateAdvertisementAsync(advertisement);
         }
 
         public async Task DeleteAdvertisementAsync(Guid Id)
         {
-            var adv = await _userRepository.GetAdvertisementAsync(Id);
-            await _userRepository.DeleteAdvertisementAsync(adv);
+            var advertisement = await _userRepository.GetAdvertisementAsync(Id);
+            await _userRepository.DeleteAdvertisementAsync(advertisement);
         }
 
         public async Task<AdvertisementsWithPageToEndDTO> GetSortAdvertismentsAsync(string parameter, string type, int page, string text)
@@ -242,14 +243,14 @@ namespace WebApplication.Infrastructure.Services.User
 
         public async Task<IEnumerable<MessagesDTO>> GetMessagesAsync(Guid Sender, Guid Recipient)
         {
-            var msgs = await _userRepository.GetMessagesAsync(Sender, Recipient);
-            return _mapper.Map<IEnumerable<MessagesDTO>>(msgs);
+            IEnumerable<Message> messages = await _userRepository.GetMessagesAsync(Sender, Recipient);
+            return _mapper.Map<IEnumerable<MessagesDTO>>(messages);
         }
 
         public async Task<IEnumerable<ListConversationDTO>> GetConversationListAsync(Guid Id)
         {
-            var listAllConversations = await _userRepository.GetConversationListAsync(Id);
-            return _mapper.Map<IEnumerable<ListConversationDTO>>(listAllConversations);
+            IEnumerable<Message> Conversations = await _userRepository.GetConversationListAsync(Id);
+            return _mapper.Map<IEnumerable<ListConversationDTO>>(Conversations);
         }
     }
 }

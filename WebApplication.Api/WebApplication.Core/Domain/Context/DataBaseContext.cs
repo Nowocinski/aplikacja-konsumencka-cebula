@@ -29,9 +29,9 @@ namespace WebApplication.Core.Domain.Context
 
             modelBuilder.Entity<Message>(column =>
             {
-                column.Property(name => name.Sender)
+                column.Property(name => name.Sender_Id)
                       .IsRequired(true);
-                column.Property(name => name.Recipient)
+                column.Property(name => name.Recipient_Id)
                       .IsRequired(true);
                 column.Property(name => name.Contents)
                       .IsRequired(true);
@@ -41,7 +41,7 @@ namespace WebApplication.Core.Domain.Context
 
             modelBuilder.Entity<Advertisement>(column =>
             {
-                column.Property(name => name.UserId)
+                column.Property(name => name.User_Id)
                       .IsRequired(true);
                 column.Property(name => name.Title)
                       .IsRequired(true)
@@ -51,7 +51,7 @@ namespace WebApplication.Core.Domain.Context
                       .HasMaxLength(500);
                 column.Property(name => name.Price)
                       .IsRequired(true);
-                column.Property(name => name.City)
+                column.Property(name => name.City_Id)
                       .IsRequired(true);
                 column.Property(name => name.Street)
                       .IsRequired(true)
@@ -69,7 +69,7 @@ namespace WebApplication.Core.Domain.Context
 
             modelBuilder.Entity<AdvertisementImage>(column =>
             {
-                column.Property(name => name.Advertisement)
+                column.Property(name => name.Advertisement_Id)
                       .IsRequired(true);
                 column.Property(name => name.Image)
                       .IsRequired(true);
@@ -93,38 +93,38 @@ namespace WebApplication.Core.Domain.Context
                 column.Property(name => name.Name)
                       .IsRequired(true)
                       .HasMaxLength(40);
-                column.Property(name => name.Voivodeship)
+                column.Property(name => name.Voivodeship_Id)
                       .IsRequired(true);
             });
 
             modelBuilder.Entity<AdvertisementImage>()
-                        .HasOne(a => a.Relation)
+                        .HasOne(a => a.Advertisement)
                         .WithMany(b => b.Images)
-                        .HasForeignKey(x => x.Advertisement)
+                        .HasForeignKey(x => x.Advertisement_Id)
                         .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Advertisement>()
-                        .HasOne(a => a.Relation)
+                        .HasOne(a => a.User)
                         .WithMany(b => b.Advertisements)
-                        .HasForeignKey(x => x.UserId)
+                        .HasForeignKey(x => x.User_Id)
                         .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Advertisement>()
-                        .HasOne(a => a.CityRel)
+                        .HasOne(a => a.City)
                         .WithOne(b => b.Advertisement)
-                        .HasForeignKey<Advertisement>(x => x.City)
+                        .HasForeignKey<Advertisement>(x => x.City_Id)
                         .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Message>()
-                        .HasOne(a => a.Relation)
+                        .HasOne(a => a.User)
                         .WithMany(b => b.Messages)
-                        .HasForeignKey(x => x.Sender)
+                        .HasForeignKey(x => x.Sender_Id)
                         .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<City>()
-                        .HasOne(g => g.Relation)
+                        .HasOne(g => g.Voivodeship)
                         .WithMany()
-                        .HasForeignKey(s => s.Voivodeship);
+                        .HasForeignKey(s => s.Voivodeship_Id);
         }
 
         public DbSet<User> Users { get; set; }
