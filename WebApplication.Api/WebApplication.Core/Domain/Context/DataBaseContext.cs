@@ -111,8 +111,8 @@ namespace WebApplication.Core.Domain.Context
 
             modelBuilder.Entity<Advertisement>()
                         .HasOne(a => a.City)
-                        .WithOne(b => b.Advertisement)
-                        .HasForeignKey<Advertisement>(x => x.City_Id)
+                        .WithMany(b => b.Advertisement)
+                        .HasForeignKey(x => x.City_Id)
                         .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Message>()

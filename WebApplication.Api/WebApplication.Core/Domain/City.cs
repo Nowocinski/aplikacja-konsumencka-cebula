@@ -1,4 +1,5 @@
-﻿using WebApplication.Core.Domain.Entities;
+﻿using System.Collections.Generic;
+using WebApplication.Core.Domain.Entities;
 
 namespace WebApplication.Core.Domain
 {
@@ -13,6 +14,6 @@ namespace WebApplication.Core.Domain
             this.Name = Name;
             this.Voivodeship_Id = Voivodeship_Id;
         }
-        public virtual Advertisement Advertisement { get; set; }
+        public virtual IEnumerable<Advertisement> Advertisement { get; set; }
     }
 }
