@@ -189,6 +189,8 @@ namespace WebApplication.Infrastructure.Services.User
             var parameters = new string[]{"price","city","size","category","date","title"};
             var types = new string[] { "desc", "asc" };
 
+
+
             if (page <= 0)
                 throw new Exception("Number page must be greater than zero");
             if (!types.Contains(type))
@@ -196,31 +198,31 @@ namespace WebApplication.Infrastructure.Services.User
             if (!parameters.Contains(parameter))
                 throw new Exception($"Type parameter '{parameter}' do not exist.");
 
-            var adv = await GetAllAdvertismentsAsync(text);
+            IEnumerable<AdvertismentDTO> advertisments = await GetAllAdvertismentsAsync(text);
 
             if(type == "asc")
                 switch (parameter)
                 {
-                    case "price":    adv = adv.OrderBy(x => x.Price).ToList();    break;
-                    case "city":     adv = adv.OrderBy(x => x.City).ToList();     break;
-                    case "size":     adv = adv.OrderBy(x => x.Size).ToList();     break;
-                    case "category": adv = adv.OrderBy(x => x.Category).ToList(); break;
-                    case "date":     adv = adv.OrderBy(x => x.Date).ToList();     break;
-                    case "title":    adv = adv.OrderBy(x => x.Title).ToList();    break;
+                    case "price":    advertisments = advertisments.OrderBy(x => x.Price).ToList();    break;
+                    case "city":     advertisments = advertisments.OrderBy(x => x.City).ToList();     break;
+                    case "size":     advertisments = advertisments.OrderBy(x => x.Size).ToList();     break;
+                    case "category": advertisments = advertisments.OrderBy(x => x.Category).ToList(); break;
+                    case "date":     advertisments = advertisments.OrderBy(x => x.Date).ToList();     break;
+                    case "title":    advertisments = advertisments.OrderBy(x => x.Title).ToList();    break;
                 }
 
             else
                 switch (parameter)
                 {
-                    case "price":    adv = adv.OrderByDescending(x => x.Price).ToList();    break;
-                    case "city":     adv = adv.OrderByDescending(x => x.City).ToList();     break;
-                    case "size":     adv = adv.OrderByDescending(x => x.Size).ToList();     break;
-                    case "category": adv = adv.OrderByDescending(x => x.Category).ToList(); break;
-                    case "date":     adv = adv.OrderByDescending(x => x.Date).ToList();     break;
-                    case "title":    adv = adv.OrderByDescending(x => x.Title).ToList();    break;
+                    case "price":    advertisments = advertisments.OrderByDescending(x => x.Price).ToList();    break;
+                    case "city":     advertisments = advertisments.OrderByDescending(x => x.City).ToList();     break;
+                    case "size":     advertisments = advertisments.OrderByDescending(x => x.Size).ToList();     break;
+                    case "category": advertisments = advertisments.OrderByDescending(x => x.Category).ToList(); break;
+                    case "date":     advertisments = advertisments.OrderByDescending(x => x.Date).ToList();     break;
+                    case "title":    advertisments = advertisments.OrderByDescending(x => x.Title).ToList();    break;
                 }
 
-            int pagesToEnd = adv.Count();
+            int pagesToEnd = advertisments.Count();
             if (pagesToEnd % 10 == 0)
                 pagesToEnd = pagesToEnd / 10 - page;
             else
@@ -228,7 +230,7 @@ namespace WebApplication.Infrastructure.Services.User
 
             return new AdvertisementsWithPageToEndDTO
             {
-                Advertisement = adv.Skip(page * 10 - 10).Take(10),
+                Advertisement = advertisments.Skip(page * 10 - 10).Take(10),
                 PageToEnd = pagesToEnd
             };
         }
