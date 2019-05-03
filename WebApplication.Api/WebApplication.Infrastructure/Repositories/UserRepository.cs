@@ -72,26 +72,47 @@ namespace WebApplication.Infrastructure.Repositories
 
         public async Task<Advertisement> GetAdvertisementAsync(Guid Id)
         {
-            Advertisement advertisements = await _context.Advertisements
+            Advertisement advertisement = await _context.Advertisements
                 .Include(x => x.Images)
                 .Include(x => x.User)
                 .Include(x => x.City)
                 .SingleOrDefaultAsync(x => x.Id == Id);
 
-            return await Task.FromResult(advertisements);
+            return await Task.FromResult(advertisement);
         }
 
-        public async Task<IEnumerable<Advertisement>> GetAllAdvertismentsAsync(string text="")
+        public async Task<IEnumerable<Advertisement>> GetFilterAdvertismentsAsync(string parameter, string type, int number_page, string text = "")
         {
-            List<Advertisement> advertisements = await _context.Advertisements.Where(x => x.Title.ToLower()
-                .RemoveDiacritics()
-                .Contains(text.ToLower()))
+            List<Advertisement> advertisements = await _context.Advertisements
+                .Where(x => x.Title.ToLower().Contains(text.ToLower()))
                 .Include(x => x.Images)
-                .Include(x => x.User)
+                .Include(x => x.City)
                 .ToListAsync();
 
-            return await Task.FromResult(advertisements);
+            var property_to_sort = typeof(Advertisement).GetProperty(parameter);
+
+            if (type == "desc")
+            {
+                advertisements = advertisements
+                                .OrderByDescending(x => property_to_sort.GetValue(x))
+                                .ToList();
+            }
+            else
+            {
+                advertisements = advertisements
+                                .OrderBy(x => property_to_sort.GetValue(x))
+                                .ToList();
+            }
+
+            return await Task.FromResult(advertisements.Skip(number_page * 10 - 10).Take(10));
         }
+
+        public async Task<int> GetAmountOfAdvertismentsAsync()
+        {
+            int amount = await _context.Advertisements.CountAsync();
+            return await Task.FromResult(amount);
+        }
+
 
         public async Task AddAdvertisementAsync(Advertisement Advertisement)
         {

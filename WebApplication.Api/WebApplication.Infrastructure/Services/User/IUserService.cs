@@ -13,15 +13,12 @@ namespace WebApplication.Infrastructure.Services.User
         Task<LoginDTO> LoginAsync(string Email, string Password);
         Task DeleteAsync(Guid Id);
         Task UpdateAsync(Guid Id, UpdateUser User);
-
         Task<IEnumerable<AdvertismentDTO>> GetAdvertisementsUserAsync(Guid Id);
         Task<AdvertisementDetailsDTO> GetAdvertisementAsync(Guid Id);
-        Task<IEnumerable<AdvertismentDTO>> GetAllAdvertismentsAsync(string text="");
         Task AddAdvertisementAsync(CreateAdvertisment Command, Guid UserId);
         Task UpdateAdvertisementAsync(CreateAdvertisment Advertisement, Guid Id);
         Task DeleteAdvertisementAsync(Guid Id);
-        Task<AdvertisementsWithPageToEndDTO> GetSortAdvertismentsAsync(string parameter, string type, int page, string text="");
-
+        Task<AdvertisementsWithPageToEndDTO> GetFilterAdvertismentsAsync(string parameter, string type, int page, string text="");
         Task UpdateMessageAsync(Guid sender, Guid recipient, string text);
         Task<IEnumerable<ListConversationDTO>> GetConversationListAsync(Guid Id);
         Task<IEnumerable<MessagesDTO>> GetMessagesAsync(Guid Sender, Guid Recipient);

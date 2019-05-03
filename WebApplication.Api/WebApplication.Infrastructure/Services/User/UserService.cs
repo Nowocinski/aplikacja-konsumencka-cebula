@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using WebApplication.Core.Domain;
 using WebApplication.Core.Repositories;
@@ -130,13 +130,33 @@ namespace WebApplication.Infrastructure.Services.User
             return advertisementDetailsDTO;
         }
 
-        public async Task<IEnumerable<AdvertismentDTO>> GetAllAdvertismentsAsync(string text = "")
+        public async Task<AdvertisementsWithPageToEndDTO> GetFilterAdvertismentsAsync(string parameter, string type, int number_page, string text = "")
         {
-            IEnumerable<Advertisement> advertisements = await _userRepository.GetAllAdvertismentsAsync(text);
+            if (number_page <= 0)
+                throw new Exception("Number page must be greater than zero");
+            if (type != "asc" && type != "desc")
+                throw new Exception($"Type sort '{type}' do not exist.");
 
-            return _mapper.Map<IEnumerable<AdvertismentDTO>>(advertisements);
+            parameter = char.ToUpper(parameter[0]) + parameter.Substring(1);
+            PropertyInfo property = typeof(Advertisement).GetProperty(parameter);
+
+            if (property == null)
+                throw new Exception($"Parameter '{parameter}' do not exist.");
+
+            IEnumerable<Advertisement> advertisements = await _userRepository.GetFilterAdvertismentsAsync(parameter, type, number_page, text);
+
+            int pagesToEnd = await _userRepository.GetAmountOfAdvertismentsAsync();
+            if (pagesToEnd % 10 == 0)
+                pagesToEnd = pagesToEnd / 10 - number_page;
+            else
+                pagesToEnd = pagesToEnd / 10 - number_page + 1;
+
+            return new AdvertisementsWithPageToEndDTO
+            {
+                Advertisement = _mapper.Map<IEnumerable<AdvertismentDTO>>(advertisements),
+                PageToEnd = pagesToEnd
+            };
         }
-
         public async Task AddAdvertisementAsync(CreateAdvertisment Command, Guid UserId)
         {
             Guid advertisement_id = Guid.NewGuid();
@@ -179,60 +199,6 @@ namespace WebApplication.Infrastructure.Services.User
         {
             var advertisement = await _userRepository.GetAdvertisementAsync(Id);
             await _userRepository.DeleteAdvertisementAsync(advertisement);
-        }
-
-        public async Task<AdvertisementsWithPageToEndDTO> GetSortAdvertismentsAsync(string parameter, string type, int page, string text)
-        {
-            parameter = parameter.ToLower();
-            type = type.ToLower();
-
-            var parameters = new string[]{"price","city","size","category","date","title"};
-            var types = new string[] { "desc", "asc" };
-
-
-
-            if (page <= 0)
-                throw new Exception("Number page must be greater than zero");
-            if (!types.Contains(type))
-                throw new Exception($"Type sort '{type}' do not exist.");
-            if (!parameters.Contains(parameter))
-                throw new Exception($"Type parameter '{parameter}' do not exist.");
-
-            IEnumerable<AdvertismentDTO> advertisments = await GetAllAdvertismentsAsync(text);
-
-            if(type == "asc")
-                switch (parameter)
-                {
-                    case "price":    advertisments = advertisments.OrderBy(x => x.Price).ToList();    break;
-                    case "city":     advertisments = advertisments.OrderBy(x => x.City).ToList();     break;
-                    case "size":     advertisments = advertisments.OrderBy(x => x.Size).ToList();     break;
-                    case "category": advertisments = advertisments.OrderBy(x => x.Category).ToList(); break;
-                    case "date":     advertisments = advertisments.OrderBy(x => x.Date).ToList();     break;
-                    case "title":    advertisments = advertisments.OrderBy(x => x.Title).ToList();    break;
-                }
-
-            else
-                switch (parameter)
-                {
-                    case "price":    advertisments = advertisments.OrderByDescending(x => x.Price).ToList();    break;
-                    case "city":     advertisments = advertisments.OrderByDescending(x => x.City).ToList();     break;
-                    case "size":     advertisments = advertisments.OrderByDescending(x => x.Size).ToList();     break;
-                    case "category": advertisments = advertisments.OrderByDescending(x => x.Category).ToList(); break;
-                    case "date":     advertisments = advertisments.OrderByDescending(x => x.Date).ToList();     break;
-                    case "title":    advertisments = advertisments.OrderByDescending(x => x.Title).ToList();    break;
-                }
-
-            int pagesToEnd = advertisments.Count();
-            if (pagesToEnd % 10 == 0)
-                pagesToEnd = pagesToEnd / 10 - page;
-            else
-                pagesToEnd = pagesToEnd / 10 - page + 1;
-
-            return new AdvertisementsWithPageToEndDTO
-            {
-                Advertisement = advertisments.Skip(page * 10 - 10).Take(10),
-                PageToEnd = pagesToEnd
-            };
         }
 
         public async Task UpdateMessageAsync(Guid sender, Guid recipient, string text)
