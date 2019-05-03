@@ -63,10 +63,8 @@ namespace WebApplication.Api.Controllers
         [Authorize]
         public async Task<ActionResult> PostAdvertisement([FromBody] CreateAdvertisment Command)
         {
-            await _userService.AddAdvertisementAsync(Command, UserId);
-
-            //try { await _userService.AddAdvertisementAsync(Command, UserId); }
-            //catch (Exception e) { return StatusCode(419, new { e.Message }); }
+            try { await _userService.AddAdvertisementAsync(Command, UserId); }
+            catch (Exception e) { return StatusCode(419, new { e.Message }); }
 
             return Created("/advertisments", null);
         }
