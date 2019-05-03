@@ -7,10 +7,10 @@ namespace WebApplication.Core.Domain
     public class User : EntityGuid
     {
         public string FirstName { get; private set; }
-        public string LastName { get; protected set; }
-        public string PhoneNumber { get; protected set; }
-        public string Email { get; protected set; }
-        public string Password { get; protected set; }
+        public string LastName { get; private set; }
+        public string PhoneNumber { get; private set; }
+        public string Email { get; private set; }
+        public string Password { get; private set; }
 
         private ISet<Advertisement> _advertisements = new HashSet<Advertisement>();
         public virtual IEnumerable<Advertisement> Advertisements => _advertisements;

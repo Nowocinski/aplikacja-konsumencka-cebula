@@ -5,13 +5,13 @@ namespace WebApplication.Core.Domain
 {
     public class Advertisement : EntityGuid
     {
-        public virtual User User { get; protected set; }
-        public virtual City City { get; protected set; }
+        public virtual User User { get; private set; }
+        public virtual City City { get; private set; }
         public Guid User_Id { get; private set; }
         public string Title { get; private set; }
         public string Description { get; private set; }
         public float Price { get; private set; }
-        public int City_Id { get; private set; }
+        public int City_id { get; private set; }
         public string Street { get; private set; }
         public int? Floor { get; private set; }
         public float Size { get; private set; }
@@ -33,7 +33,7 @@ namespace WebApplication.Core.Domain
             this.Title = Title;
             this.Description = Description;
             this.Price = Price;
-            this.City_Id = City_Id;
+            this.City_id = City_Id;
             this.Street = Street;
             this.Size = Size;
             this.Category = Category;
@@ -78,12 +78,12 @@ namespace WebApplication.Core.Domain
             this.Price = Price;
         }
 
-        public void SetCity(int City_Id)
+        public void SetCity(int City_id)
         {
-            if (City_Id <= 0)
+            if (City_id <= 0)
                 throw new Exception($"Exception city's id '{City}': City's id must be greater than zero");
 
-            this.City_Id = City_Id;
+            this.City_id = City_id;
         }
 
         public void SetStreet(string Street)

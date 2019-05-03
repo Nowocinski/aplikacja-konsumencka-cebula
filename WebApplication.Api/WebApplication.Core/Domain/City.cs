@@ -5,9 +5,9 @@ namespace WebApplication.Core.Domain
 {
     public class City : EntityInt
     {
-        public virtual Voivodeship Voivodeship { get; protected set; }
-        public string Name { get; protected set; }
-        public int Voivodeship_Id { get; protected set; }
+        public virtual Voivodeship Voivodeship { get; private set; }
+        public string Name { get; private set; }
+        public int Voivodeship_Id { get; private set; }
         public City(string Name, int Voivodeship_Id)
         {
             Id = null;

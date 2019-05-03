@@ -4,7 +4,7 @@ namespace WebApplication.Core.Domain
 {
     public class Voivodeship : EntityInt
     {
-        public string Name { get; protected set; }
+        public string Name { get; private set; }
 
         public Voivodeship(string Name)
         {

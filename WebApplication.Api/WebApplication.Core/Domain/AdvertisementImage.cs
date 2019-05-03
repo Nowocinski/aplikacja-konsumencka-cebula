@@ -4,10 +4,10 @@ namespace WebApplication.Core.Domain
 {
     public class AdvertisementImage : EntityGuid
     {
-        public Guid Advertisement_Id { get; protected set; }
-        public string Image { get; protected set; }
-        public string Description { get; protected set; }
-        public string Name { get; protected set; }
+        public Guid Advertisement_Id { get; private set; }
+        public string Image { get; private set; }
+        public string Description { get; private set; }
+        public string Name { get; private set; }
         public AdvertisementImage(Guid Advertisement_Id, string Image, string Name, string Description="")
         {
             Id = Guid.NewGuid();
