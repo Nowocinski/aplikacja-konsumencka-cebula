@@ -32,18 +32,6 @@ namespace WebApplication.Api.Controllers
             return Json(advertisement);
         }
 
-        // GET: api/advertisements - Pobranie danych wszystkich ogłoszeń
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<AdvertismentDTO>>> GetAdvertisement()
-        {
-            IEnumerable<AdvertismentDTO> advertisments;
-
-            try { advertisments = await _userService.GetAllAdvertismentsAsync(); }
-            catch (Exception e) { return StatusCode(419, new  { e.Message}); }
-
-            return Json(advertisments);
-        }
-
         // GET: api/advertisements/{parameter}/{type}:{page} - Sortowanie ogłoszeń
         [HttpGet("{parameter}/{type}:{page}")]
         public async Task<ActionResult<AdvertisementsWithPageToEndDTO>>
@@ -51,7 +39,7 @@ namespace WebApplication.Api.Controllers
         {
             AdvertisementsWithPageToEndDTO advertisements;
 
-            try { advertisements = await _userService.GetSortAdvertismentsAsync(parameter, type, page); }
+            try { advertisements = await _userService.GetFilterAdvertismentsAsync(parameter, type, page); }
             catch (Exception e) { return StatusCode(419, new { e.Message }); }
 
             return Json(advertisements);
@@ -64,7 +52,7 @@ namespace WebApplication.Api.Controllers
         {
             AdvertisementsWithPageToEndDTO advertisements;
 
-            try { advertisements = await _userService.GetSortAdvertismentsAsync(parameter, type, page, text); }
+            try { advertisements = await _userService.GetFilterAdvertismentsAsync(parameter, type, page, text); }
             catch (Exception e) { return StatusCode(419, new { e.Message }); }
 
             return Json(advertisements);
@@ -75,8 +63,10 @@ namespace WebApplication.Api.Controllers
         [Authorize]
         public async Task<ActionResult> PostAdvertisement([FromBody] CreateAdvertisment Command)
         {
-            try { await _userService.AddAdvertisementAsync(Command, UserId); }
-            catch (Exception e) { return StatusCode(419, new { e.Message }); }
+            await _userService.AddAdvertisementAsync(Command, UserId);
+
+            //try { await _userService.AddAdvertisementAsync(Command, UserId); }
+            //catch (Exception e) { return StatusCode(419, new { e.Message }); }
 
             return Created("/advertisments", null);
         }
