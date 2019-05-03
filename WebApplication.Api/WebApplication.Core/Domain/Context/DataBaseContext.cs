@@ -97,9 +97,9 @@ namespace WebApplication.Core.Domain.Context
                       .IsRequired(true);
             });
 
-            modelBuilder.Entity<AdvertisementImage>()
-                        .HasOne(a => a.Advertisement)
-                        .WithMany(b => b.Images)
+            modelBuilder.Entity<Advertisement>()
+                        .HasMany(a => a.Images)
+                        .WithOne()
                         .HasForeignKey(x => x.Advertisement_Id)
                         .OnDelete(DeleteBehavior.Cascade);
 

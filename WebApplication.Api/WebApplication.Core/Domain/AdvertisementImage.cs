@@ -4,7 +4,6 @@ namespace WebApplication.Core.Domain
 {
     public class AdvertisementImage : EntityGuid
     {
-        public virtual Advertisement Advertisement { get; protected set; }
         public Guid Advertisement_Id { get; protected set; }
         public string Image { get; protected set; }
         public string Description { get; protected set; }
