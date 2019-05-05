@@ -1,6 +1,6 @@
 ﻿namespace WebApplication.Infrastructure.Commands
 {
-    public class Msg
+    public class SendMessage
     {
         public string Text { get; set; }
     }

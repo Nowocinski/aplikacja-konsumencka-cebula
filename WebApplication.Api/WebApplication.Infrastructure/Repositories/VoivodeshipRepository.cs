@@ -19,44 +19,44 @@ namespace WebApplication.Infrastructure.Repositories
 
         public async Task<Voivodeship> GetAsync(int Id)
         {
-            var voivodeship = await _context.Voivodeships.SingleOrDefaultAsync(x => x.Id == Id);
+            Voivodeship voivodeship = await _context.Voivodeships.SingleOrDefaultAsync(x => x.Id == Id);
             return await Task.FromResult(voivodeship);
         }
 
         public async Task<IEnumerable<Voivodeship>> GetAllAsync()
         {
-            var voivodeships = await _context.Voivodeships.ToListAsync();
+            List<Voivodeship> voivodeships = await _context.Voivodeships.ToListAsync();
             return await Task.FromResult(voivodeships);
         }
 
         public async Task<City> GetCityAsync(int Id)
         {
-            var city = await _context.Cities.SingleOrDefaultAsync(x => x.Id == Id);
+            City city = await _context.Cities.SingleOrDefaultAsync(x => x.Id == Id);
             return await Task.FromResult(city);
         }
 
         public async Task<IEnumerable<City>> GetAllCitiesAsync()
         {
-            var cites = await _context.Cities.ToListAsync();
+            List<City> cites = await _context.Cities.ToListAsync();
             return await Task.FromResult(cites);
         }
 
         public async Task<IEnumerable<City>> GetCitiesInVoivodeship(int Id)
         {
-            var cites = await _context.Cities.Where(x => x.Voivodeship == Id).ToListAsync();
+            List<City> cites = await _context.Cities.Where(x => x.Voivodeship_Id == Id).ToListAsync();
             return await Task.FromResult(cites);
         }
 
         public async Task<string> GetNameVoivodeship(int Id)
         {
-            var city = await _context.Cities.SingleOrDefaultAsync(x => x.Id == Id);
-            var voivodeship = await _context.Voivodeships.SingleOrDefaultAsync(x => x.Id == city.Voivodeship);
+            City city = await _context.Cities.SingleOrDefaultAsync(x => x.Id == Id);
+            Voivodeship voivodeship = await _context.Voivodeships.SingleOrDefaultAsync(x => x.Id == city.Voivodeship_Id);
             return await Task.FromResult(voivodeship.Name);
         }
 
         public async Task<string> GetNameCity(int Id)
         {
-            var city = await _context.Cities.SingleOrDefaultAsync(x => x.Id == Id);
+            City city = await _context.Cities.SingleOrDefaultAsync(x => x.Id == Id);
             return await Task.FromResult(city.Name);
         }
     }

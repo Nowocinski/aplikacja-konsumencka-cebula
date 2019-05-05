@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using System.Linq;
 using WebApplication.Core.Domain;
-using WebApplication.Infrastructure.Commands;
 using WebApplication.Infrastructure.DTO;
 
 namespace WebApplication.Infrastructure.AutoMapper
@@ -16,27 +15,27 @@ namespace WebApplication.Infrastructure.AutoMapper
             CreateMap<Advertisement, AdvertisementDetailsDTO>()
                 .ForMember(
                     x => x.FirstName,
-                    y => y.MapFrom(src => src.Relation.FirstName)
+                    y => y.MapFrom(src => src.User.FirstName)
                 )
             .ForMember(
                     x => x.LastName,
-                    y => y.MapFrom(src => src.Relation.LastName)
+                    y => y.MapFrom(src => src.User.LastName)
                 )
             .ForMember(
                     x => x.PhoneNumber,
-                    y => y.MapFrom(src => src.Relation.PhoneNumber)
+                    y => y.MapFrom(src => src.User.PhoneNumber)
                 )
             .ForMember(
                     x => x.Email,
-                    y => y.MapFrom(src => src.Relation.Email)
+                    y => y.MapFrom(src => src.User.Email)
                 )
             .ForMember(
                     x => x.City,
-                    y => y.MapFrom(src => src.CityRel.Name)
+                    y => y.MapFrom(src => src.City.Name)
                 )
             .ForMember(
                     x => x.Voivodeship,
-                    y => y.MapFrom(src => src.CityRel.Relation.Name)
+                    y => y.MapFrom(src => src.City.Voivodeship.Name)
                 );
             CreateMap<User, AdvertisementDetailsDTO>();
             CreateMap<AdvertisementImage, ImageDTO>();
@@ -47,20 +46,20 @@ namespace WebApplication.Infrastructure.AutoMapper
                 )
                 .ForMember(
                     x => x.City,
-                    y => y.MapFrom(src => src.CityRel.Name)
+                    y => y.MapFrom(src => src.City.Name)
                 )
                 .ForMember(
                     x => x.Voivodeship,
-                    y => y.MapFrom(src => src.CityRel.Relation.Name)
+                    y => y.MapFrom(src => src.City.Voivodeship.Name)
                 );
             CreateMap<Message, MessagesDTO>()
                 .ForMember(
                     x => x.FirstName,
-                    y => y.MapFrom(src => src.Relation.FirstName)
+                    y => y.MapFrom(src => src.User.FirstName)
                 )
                 .ForMember(
                     x => x.LastName,
-                    y => y.MapFrom(src => src.Relation.LastName)
+                    y => y.MapFrom(src => src.User.LastName)
                 )
                 .ForMember(
                     x => x.Content,
@@ -69,15 +68,15 @@ namespace WebApplication.Infrastructure.AutoMapper
             CreateMap<Message, ListConversationDTO>()
                 .ForMember(
                     x => x.FirstName,
-                    y => y.MapFrom(src => src.Relation.FirstName)
+                    y => y.MapFrom(src => src.User.FirstName)
                 )
                 .ForMember(
                     x => x.LastName,
-                    y => y.MapFrom(src => src.Relation.LastName)
+                    y => y.MapFrom(src => src.User.LastName)
                 )
                 .ForMember(
                     x => x.SenderId,
-                    y => y.MapFrom(src => src.Relation.Id)
+                    y => y.MapFrom(src => src.User.Id)
                 );
         }
     }

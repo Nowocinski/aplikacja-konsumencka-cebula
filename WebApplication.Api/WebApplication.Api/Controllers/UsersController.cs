@@ -59,11 +59,11 @@ namespace WebApplication.Api.Controllers
         public async Task<ActionResult<LoginDTO>> Login([FromBody] Login command)
         //=> Json(await _userService.LoginAsync(command.Email, command.Password));
         {
-            LoginDTO praram;
-            try { praram = await _userService.LoginAsync(command.Email, command.Password); }
+            LoginDTO login_data;
+            try { login_data = await _userService.LoginAsync(command.Email, command.Password); }
             catch (Exception e) { return StatusCode(419, new { e.Message }); }
 
-            return Json(praram);
+            return Json(login_data);
         }
 
         // PUT: api/users/id - Aktualizacja użytkownika
@@ -113,11 +113,11 @@ namespace WebApplication.Api.Controllers
         // POST: api/users/messages/{id} - Wysyłanie wiadomości
         [HttpPost("messages/{Id}")]
         [Authorize]
-        public async Task<ActionResult> PostMessege(Guid Id, [FromBody] Msg message)
+        public async Task<ActionResult> PostMessege(Guid Id, [FromBody] SendMessage message)
         {
             try
             {
-                var recipient = await _userService.GetAsync(Id);
+                AccountDTO recipient = await _userService.GetAsync(Id);
                 if (recipient == null)
                     return NotFound();
 

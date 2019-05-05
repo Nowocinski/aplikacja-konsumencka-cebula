@@ -21,19 +21,19 @@ namespace WebApplication.Infrastructure.Repositories
 
         public async Task<User> GetAsync(Guid Id)
         {
-            var user = await _context.Users.SingleOrDefaultAsync(x => x.Id == Id);
+            User user = await _context.Users.SingleOrDefaultAsync(x => x.Id == Id);
             return await Task.FromResult(user);
         }
 
         public async Task<User> GetAsync(string Email)
         {
-            var user = await _context.Users.SingleOrDefaultAsync(x => x.Email == Email);
+            User user = await _context.Users.SingleOrDefaultAsync(x => x.Email == Email);
             return await Task.FromResult(user);
         }
 
         public async Task<User> GetByPhoneAsync(string Phone)
         {
-            var user = await _context.Users.SingleOrDefaultAsync(x => x.PhoneNumber == Phone);
+            User user = await _context.Users.SingleOrDefaultAsync(x => x.PhoneNumber == Phone);
             return await Task.FromResult(user);
         }
 
@@ -60,36 +60,59 @@ namespace WebApplication.Infrastructure.Repositories
 
         public async Task<IEnumerable<Advertisement>> GetAdvertisementsUserAsync(Guid Id)
         {
-            var advs = await _context.Advertisements
+            List<Advertisement> advertisements = await _context.Advertisements
                 .Include(x => x.Images)
-                .Include(x => x.Relation)
-                .Include(x => x.CityRel)
-                    .ThenInclude(x => x.Relation)
-                .Where(x => x.UserId == Id).ToListAsync();
+                .Include(x => x.User)
+                .Include(x => x.City)
+                    .ThenInclude(x => x.Voivodeship)
+                .Where(x => x.User_Id == Id).ToListAsync();
 
-            return await Task.FromResult(advs);
+            return await Task.FromResult(advertisements);
         }
 
         public async Task<Advertisement> GetAdvertisementAsync(Guid Id)
         {
-            var adv = await _context.Advertisements
+            Advertisement advertisement = await _context.Advertisements
                 .Include(x => x.Images)
-                .Include(x => x.Relation)
-                .Include(x => x.CityRel)
+                .Include(x => x.User)
+                .Include(x => x.City)
                 .SingleOrDefaultAsync(x => x.Id == Id);
 
-            return await Task.FromResult(adv);
+            return await Task.FromResult(advertisement);
         }
 
-        public async Task<IEnumerable<Advertisement>> GetAllAdvertismentsAsync(string text="")
+        public async Task<IEnumerable<Advertisement>> GetFilterAdvertismentsAsync(string parameter, string type, int number_page, string text = "")
         {
-            var advs = await _context.Advertisements.Where(x => x.Title.ToLower().RemoveDiacritics().Contains(text.ToLower()))
+            List<Advertisement> advertisements = await _context.Advertisements
+                .Where(x => x.Title.ToLower().Contains(text.ToLower()))
                 .Include(x => x.Images)
-                .Include(x => x.Relation)
+                .Include(x => x.City)
                 .ToListAsync();
 
-            return await Task.FromResult(advs);
+            var property_to_sort = typeof(Advertisement).GetProperty(parameter);
+
+            if (type == "desc")
+            {
+                advertisements = advertisements
+                                .OrderByDescending(x => property_to_sort.GetValue(x))
+                                .ToList();
+            }
+            else
+            {
+                advertisements = advertisements
+                                .OrderBy(x => property_to_sort.GetValue(x))
+                                .ToList();
+            }
+
+            return await Task.FromResult(advertisements.Skip(number_page * 10 - 10).Take(10));
         }
+
+        public async Task<int> GetAmountOfAdvertismentsAsync()
+        {
+            int amount = await _context.Advertisements.CountAsync();
+            return await Task.FromResult(amount);
+        }
+
 
         public async Task AddAdvertisementAsync(Advertisement Advertisement)
         {
@@ -122,9 +145,9 @@ namespace WebApplication.Infrastructure.Repositories
 
         public async Task<IEnumerable<Message>> GetMessagesAsync(Guid Sender, Guid Recipient)
         {
-            var messages = await _context.Messages.Where(x =>
-                (x.Sender == Sender && x.Recipient == Recipient) || (x.Sender == Recipient && x.Recipient == Sender))
-                .Include(x => x.Relation)
+            List<Message> messages = await _context.Messages.Where(x =>
+                (x.Sender_Id == Sender && x.Recipient_Id == Recipient) || (x.Sender_Id == Recipient && x.Recipient_Id == Sender))
+                .Include(x => x.User)
                 .OrderByDescending(x => x.Date)
                 .ToListAsync();
 
@@ -133,16 +156,12 @@ namespace WebApplication.Infrastructure.Repositories
 
         public async Task<IEnumerable<Message>> GetConversationListAsync(Guid Id)
         {
-            var listConversation = await _context.Messages.Where(x => x.Recipient == Id)
-                .Include(x => x.Relation)
-                .OrderByDescending(x => x.Date)
-                .GroupBy(x => x.Sender)
+            List<Message> conversations = await _context.Messages.Where(x => x.Recipient_Id == Id)
+                .Include(x => x.User)
+                .GroupBy(x => x.Sender_Id, (key, group) => group.LastOrDefault())
                 .ToListAsync();
 
-            IEnumerable<Message> smths = listConversation.SelectMany(group => group);
-            List<Message> newList = smths.ToList();
-
-            return await Task.FromResult(newList);
+            return await Task.FromResult(conversations);
         }
     }
 }

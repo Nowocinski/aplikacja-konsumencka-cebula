@@ -24,24 +24,12 @@ namespace WebApplication.Api.Controllers
         [HttpGet("{Id}")]
         public async Task<ActionResult<AdvertisementDetailsDTO>> GetAdvertisement(Guid Id)
         {
-            AdvertisementDetailsDTO adv;
+            AdvertisementDetailsDTO advertisement;
 
-            try { adv = await _userService.GetAdvertisementAsync(Id); }
+            try { advertisement = await _userService.GetAdvertisementAsync(Id); }
             catch (Exception e) { return StatusCode(419, new { e.Message }); }
 
-            return Json(adv);
-        }
-
-        // GET: api/advertisements - Pobranie danych wszystkich ogłoszeń
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<AdvertismentDTO>>> GetAdvertisement()
-        {
-            IEnumerable<AdvertismentDTO> advs;
-
-            try { advs = await _userService.GetAllAdvertismentsAsync(); }
-            catch (Exception e) { return StatusCode(419, new  { e.Message}); }
-
-            return Json(advs);
+            return Json(advertisement);
         }
 
         // GET: api/advertisements/{parameter}/{type}:{page} - Sortowanie ogłoszeń
@@ -49,12 +37,12 @@ namespace WebApplication.Api.Controllers
         public async Task<ActionResult<AdvertisementsWithPageToEndDTO>>
             GetAdvertisement(string parameter, string type, int page)
         {
-            AdvertisementsWithPageToEndDTO advs;
+            AdvertisementsWithPageToEndDTO advertisements;
 
-            try { advs = await _userService.GetSortAdvertismentsAsync(parameter, type, page); }
+            try { advertisements = await _userService.GetFilterAdvertismentsAsync(parameter, type, page); }
             catch (Exception e) { return StatusCode(419, new { e.Message }); }
 
-            return Json(advs);
+            return Json(advertisements);
         }
 
         // GET: api/advertisements/{parameter}/{type}:{page}/{text} - Sortowanie ogłoszeń z filtorowaniem po tytule
@@ -62,18 +50,18 @@ namespace WebApplication.Api.Controllers
         public async Task<ActionResult<AdvertisementsWithPageToEndDTO>>
             GetFiltrationAdvertisement(string parameter, string type, int page, string text)
         {
-            AdvertisementsWithPageToEndDTO advs;
+            AdvertisementsWithPageToEndDTO advertisements;
 
-            try { advs = await _userService.GetSortAdvertismentsAsync(parameter, type, page, text); }
+            try { advertisements = await _userService.GetFilterAdvertismentsAsync(parameter, type, page, text); }
             catch (Exception e) { return StatusCode(419, new { e.Message }); }
 
-            return Json(advs);
+            return Json(advertisements);
         }
 
         // POST: api/advertisements - Dodawanie ogłoszenia
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult> PostAdvertisement([FromBody] CreateAdv Command)
+        public async Task<ActionResult> PostAdvertisement([FromBody] CreateAdvertisment Command)
         {
             try { await _userService.AddAdvertisementAsync(Command, UserId); }
             catch (Exception e) { return StatusCode(419, new { e.Message }); }
@@ -84,16 +72,16 @@ namespace WebApplication.Api.Controllers
         // PUT: api/advertisements - Aktualizowanie ogłoszenia
         [HttpPut("{id}")]
         [Authorize]
-        public async Task<ActionResult> PutAdvertisement(Guid Id, [FromBody] CreateAdv Command)
+        public async Task<ActionResult> PutAdvertisement(Guid Id, [FromBody] CreateAdvertisment Command)
         {
             try
             {
-                var adv = await _userService.GetAdvertisementAsync(Id);
+                AdvertisementDetailsDTO advertisement= await _userService.GetAdvertisementAsync(Id);
 
-                if (adv == null)
+                if (advertisement == null)
                     return NotFound();
 
-                if (adv.UserId != UserId)
+                if (advertisement.UserId != UserId)
                     return Forbid();
 
                 await _userService.UpdateAdvertisementAsync(Command, Id);
@@ -110,12 +98,12 @@ namespace WebApplication.Api.Controllers
         {
             try
             {
-                var adv = await _userService.GetAdvertisementAsync(Id);
+                AdvertisementDetailsDTO advertisement = await _userService.GetAdvertisementAsync(Id);
 
-                if (adv == null)
+                if (advertisement == null)
                     return NotFound();
 
-                if (adv.UserId != UserId)
+                if (advertisement.UserId != UserId)
                     return Forbid();
 
                 await _userService.DeleteAdvertisementAsync(Id);

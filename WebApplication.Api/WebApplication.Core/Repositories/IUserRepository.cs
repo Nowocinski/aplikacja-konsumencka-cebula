@@ -13,14 +13,13 @@ namespace WebApplication.Core.Repositories
         Task AddAsync(User User);
         Task UpdateAsync(User User);
         Task DeleteAsync(User User);
-
         Task<IEnumerable<Advertisement>> GetAdvertisementsUserAsync(Guid Id);
         Task<Advertisement> GetAdvertisementAsync(Guid Id);
-        Task<IEnumerable<Advertisement>> GetAllAdvertismentsAsync(string text="");
+        Task<IEnumerable<Advertisement>> GetFilterAdvertismentsAsync(string parameter, string type, int page, string text = "");
+        Task<int> GetAmountOfAdvertismentsAsync();
         Task AddAdvertisementAsync(Advertisement Advertisement);
         Task UpdateAdvertisementAsync(Advertisement Advertisement);
         Task DeleteAdvertisementAsync(Advertisement Advertisement);
-
         Task UpdateMessageAsync(IEnumerable<Message> message);
         Task<IEnumerable<Message>> GetConversationListAsync(Guid Id);
         Task<IEnumerable<Message>> GetMessagesAsync(Guid Sender, Guid Recipient);

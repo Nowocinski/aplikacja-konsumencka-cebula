@@ -1,37 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.RegularExpressions;
 
 namespace WebApplication.Core.Domain
 {
     public class User : EntityGuid
     {
-        // Pola
-        [Required] [Column(TypeName = "nvarchar(20)")]
         public string FirstName { get; private set; }
+        public string LastName { get; private set; }
+        public string PhoneNumber { get; private set; }
+        public string Email { get; private set; }
+        public string Password { get; private set; }
 
-        [Required] [Column(TypeName = "nvarchar(30)")]
-        public string LastName { get; protected set; }
-
-        [Required] [Column(TypeName = "nvarchar(11)")]
-        public string PhoneNumber { get; protected set; }
-
-        [Required] [Column(TypeName = "nvarchar(40)")]
-        public string Email { get; protected set; }
-
-        [Required] [Column(TypeName = "nvarchar(100)")]
-        public string Password { get; protected set; }
-
-        // Listy pomocnicze
         private ISet<Advertisement> _advertisements = new HashSet<Advertisement>();
         public virtual IEnumerable<Advertisement> Advertisements => _advertisements;
 
         private ISet<Message> _messages = new HashSet<Message>();
         public virtual IEnumerable<Message> Messages => _messages;
 
-        // Konstruktory
         public User(string FirstName, string LastName, string PhoneNumber, string Email, string Password)
         {
             Id = Guid.NewGuid();
@@ -42,7 +28,6 @@ namespace WebApplication.Core.Domain
             SetPassword(Password);
         }
 
-        // Metody
         public Advertisement AddAdvertisement(Guid AdvId ,string Title, string Description, float Price,
             int City, string Street, float Size, string Category, ISet<AdvertisementImage> Images, int? Floor = null)
         {
@@ -58,7 +43,6 @@ namespace WebApplication.Core.Domain
             _messages.Add(msg);
         }
 
-        // Walidacja pól
         public void SetFirstName(string FirstName)
         {
             if (string.IsNullOrWhiteSpace(FirstName))

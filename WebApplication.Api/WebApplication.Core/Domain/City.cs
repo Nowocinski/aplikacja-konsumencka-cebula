@@ -1,31 +1,19 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.Collections.Generic;
 using WebApplication.Core.Domain.Entities;
 
 namespace WebApplication.Core.Domain
 {
     public class City : EntityInt
     {
-        // Relacje
-        [ForeignKey("Voivodeship")]
-        public virtual Voivodeship Relation { get; protected set; }
-
-        //-----------------------------------------
-
-        [Required] [Column(TypeName = "nvarchar(40)")]
-        public string Name { get; protected set; }
-
-        [Required] [Column(TypeName = "int")]
-        public int Voivodeship { get; protected set; }
-
-        // Konstruktory
-        public City(string Name, int Voivodeship)
+        public virtual Voivodeship Voivodeship { get; private set; }
+        public string Name { get; private set; }
+        public int Voivodeship_Id { get; private set; }
+        public City(string Name, int Voivodeship_Id)
         {
             Id = null;
             this.Name = Name;
-            this.Voivodeship = Voivodeship;
+            this.Voivodeship_Id = Voivodeship_Id;
         }
-
-        public virtual Advertisement Advertisement { get; set; }
+        public virtual IEnumerable<Advertisement> Advertisement { get; set; }
     }
 }

@@ -1,16 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using WebApplication.Core.Domain.Entities;
+﻿using WebApplication.Core.Domain.Entities;
 
 namespace WebApplication.Core.Domain
 {
     public class Voivodeship : EntityInt
     {
-        // Pola
-        [Required] [Column(TypeName = "nvarchar(30)")]
-        public string Name { get; protected set; }
+        public string Name { get; private set; }
 
-        // Konstruktory
         public Voivodeship(string Name)
         {
             Id = null;
