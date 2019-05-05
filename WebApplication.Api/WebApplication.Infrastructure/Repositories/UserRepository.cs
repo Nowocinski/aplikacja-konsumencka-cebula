@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using WebApplication.Core.Domain;
 using WebApplication.Core.Domain.Context;
 using WebApplication.Core.Repositories;
-using WebApplication.Infrastructure.Extensions;
+using WebApplication.Core.Models;
 
 namespace WebApplication.Infrastructure.Repositories
 {
@@ -147,21 +147,40 @@ namespace WebApplication.Infrastructure.Repositories
         {
             List<Message> messages = await _context.Messages.Where(x =>
                 (x.Sender_Id == Sender && x.Recipient_Id == Recipient) || (x.Sender_Id == Recipient && x.Recipient_Id == Sender))
-                .Include(x => x.User)
+                .Include(x => x.Sender)
                 .OrderByDescending(x => x.Date)
                 .ToListAsync();
 
             return await Task.FromResult(messages);
         }
 
-        public async Task<IEnumerable<Message>> GetConversationListAsync(Guid Id)
+        public async Task<IEnumerable<ListConversations>> GetConversationListAsync(Guid Id)
         {
-            List<Message> conversations = await _context.Messages.Where(x => x.Recipient_Id == Id)
-                .Include(x => x.User)
-                .GroupBy(x => x.Sender_Id, (key, group) => group.LastOrDefault())
+            List<ListConversations> senders = await _context.Messages.Where(x => x.Recipient_Id == Id && x.Sender_Id != null)
+                .Include(x => x.Sender)
+                .Select(x => new ListConversations
+                {
+                    UserId = x.Sender_Id,
+                    FirstName = x.Sender.FirstName,
+                    LastName = x.Sender.LastName,
+                    Date = x.Date
+                })
                 .ToListAsync();
 
-            return await Task.FromResult(conversations);
+            List<ListConversations> recipients = await _context.Messages.Where(x => x.Sender_Id == Id && x.Recipient_Id != null)
+                .Include(x => x.Recipient)
+                .Select(x => new ListConversations
+                {
+                    UserId = x.Recipient_Id,
+                    FirstName = x.Recipient.FirstName,
+                    LastName = x.Recipient.LastName,
+                    Date = x.Date
+                })
+                .ToListAsync();
+
+            IEnumerable<ListConversations> conversation_list = senders.Concat(recipients);
+
+            return await Task.FromResult(conversation_list.GroupBy(x => x.UserId, (key, group) => group.LastOrDefault()));
         }
     }
 }

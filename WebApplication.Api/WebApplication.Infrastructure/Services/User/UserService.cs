@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
 using WebApplication.Core.Domain;
+using WebApplication.Core.Models;
 using WebApplication.Core.Repositories;
 using WebApplication.Infrastructure.Commands;
 using WebApplication.Infrastructure.DTO;
@@ -45,7 +46,7 @@ namespace WebApplication.Infrastructure.Services.User
 
             user = new Core.Domain.User(data.FirstName, data.LastName, data.PhoneNumber, data.Email, data.Password.Hash());
 
-            SendEmailExtensions.SendEmail(data.Email);
+           // SendEmailExtensions.SendEmail(data.Email);
 
             await _userRepository.AddAsync(user);
         }
@@ -215,10 +216,10 @@ namespace WebApplication.Infrastructure.Services.User
             return _mapper.Map<IEnumerable<MessagesDTO>>(messages);
         }
 
-        public async Task<IEnumerable<ListConversationDTO>> GetConversationListAsync(Guid Id)
+        public async Task<IEnumerable<ListConversations>> GetConversationListAsync(Guid Id)
         {
-            IEnumerable<Message> Conversations = await _userRepository.GetConversationListAsync(Id);
-            return _mapper.Map<IEnumerable<ListConversationDTO>>(Conversations);
+            IEnumerable<ListConversations> Conversations = await _userRepository.GetConversationListAsync(Id);
+            return Conversations;
         }
     }
 }

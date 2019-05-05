@@ -55,28 +55,15 @@ namespace WebApplication.Infrastructure.AutoMapper
             CreateMap<Message, MessagesDTO>()
                 .ForMember(
                     x => x.FirstName,
-                    y => y.MapFrom(src => src.User.FirstName)
+                    y => y.MapFrom(src => src.Sender.FirstName)
                 )
                 .ForMember(
                     x => x.LastName,
-                    y => y.MapFrom(src => src.User.LastName)
+                    y => y.MapFrom(src => src.Sender.LastName)
                 )
                 .ForMember(
                     x => x.Content,
                     y => y.MapFrom(src => src.Contents)
-                );
-            CreateMap<Message, ListConversationDTO>()
-                .ForMember(
-                    x => x.FirstName,
-                    y => y.MapFrom(src => src.User.FirstName)
-                )
-                .ForMember(
-                    x => x.LastName,
-                    y => y.MapFrom(src => src.User.LastName)
-                )
-                .ForMember(
-                    x => x.SenderId,
-                    y => y.MapFrom(src => src.User.Id)
                 );
         }
     }

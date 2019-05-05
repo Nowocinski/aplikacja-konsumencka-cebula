@@ -35,10 +35,10 @@ namespace WebApplication.Core.Domain.Context
             {
                 column.Property(name => name.Sender_Id)
                       .HasColumnType("uniqueidentifier")
-                      .IsRequired(true);
+                      .IsRequired(false);
                 column.Property(name => name.Recipient_Id)
                       .HasColumnType("uniqueidentifier")
-                      .IsRequired(true);
+                      .IsRequired(false);
                 column.Property(name => name.Contents)
                       .HasColumnType("nvarchar(MAX)")
                       .IsRequired(true);
@@ -133,10 +133,16 @@ namespace WebApplication.Core.Domain.Context
                         .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Message>()
-                        .HasOne(a => a.User)
+                        .HasOne(a => a.Sender)
                         .WithMany(b => b.Messages)
-                        .HasForeignKey(x => x.Sender_Id)
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey(x => x.Sender_Id);
+                        //.OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Message>()
+                        .HasOne(a => a.Recipient)
+                        .WithMany(b => b.Recipient)
+                        .HasForeignKey(x => x.Recipient_Id);
+                        //.OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<City>()
                         .HasOne(g => g.Voivodeship)

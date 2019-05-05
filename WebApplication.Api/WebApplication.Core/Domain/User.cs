@@ -18,6 +18,8 @@ namespace WebApplication.Core.Domain
         private ISet<Message> _messages = new HashSet<Message>();
         public virtual IEnumerable<Message> Messages => _messages;
 
+        public virtual IEnumerable<Message> Recipient { get; private set; }
+
         public User(string FirstName, string LastName, string PhoneNumber, string Email, string Password)
         {
             Id = Guid.NewGuid();
