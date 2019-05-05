@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using WebApplication.Core.Models;
 using WebApplication.Infrastructure.Commands;
 using WebApplication.Infrastructure.DTO;
 using WebApplication.Infrastructure.Services.User;
@@ -88,8 +89,10 @@ namespace WebApplication.Api.Controllers
             if(UserId != Id)
                 return Forbid();
 
-            try { await _userService.DeleteAsync(Id); }
-            catch (Exception e) { return StatusCode(419, new { e.Message }); }
+            await _userService.DeleteAsync(Id);
+
+            //try { await _userService.DeleteAsync(Id); }
+            //catch (Exception e) { return StatusCode(419, new { e.Message }); }
 
             return NoContent();
         }
@@ -105,7 +108,7 @@ namespace WebApplication.Api.Controllers
         // GET: api/users/messages/conversations - Pobieranie konwersacji z danym użytkownikiem
         [HttpGet("messages/conversations")]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<ListConversationDTO>>> GetMesseges()
+        public async Task<ActionResult<IEnumerable<ListConversations>>> GetMesseges()
         {
             return Json(await _userService.GetConversationListAsync(UserId));
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using WebApplication.Core.Models;
 using WebApplication.Infrastructure.Commands;
 using WebApplication.Infrastructure.DTO;
 
@@ -20,7 +21,7 @@ namespace WebApplication.Infrastructure.Services.User
         Task DeleteAdvertisementAsync(Guid Id);
         Task<AdvertisementsWithPageToEndDTO> GetFilterAdvertismentsAsync(string parameter, string type, int page, string text="");
         Task UpdateMessageAsync(Guid sender, Guid recipient, string text);
-        Task<IEnumerable<ListConversationDTO>> GetConversationListAsync(Guid Id);
+        Task<IEnumerable<ListConversations>> GetConversationListAsync(Guid Id);
         Task<IEnumerable<MessagesDTO>> GetMessagesAsync(Guid Sender, Guid Recipient);
     }
 }

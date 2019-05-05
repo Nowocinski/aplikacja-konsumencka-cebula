@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebApplication.Core.Domain;
+using WebApplication.Core.Models;
 
 namespace WebApplication.Core.Repositories
 {
@@ -21,7 +22,7 @@ namespace WebApplication.Core.Repositories
         Task UpdateAdvertisementAsync(Advertisement Advertisement);
         Task DeleteAdvertisementAsync(Advertisement Advertisement);
         Task UpdateMessageAsync(IEnumerable<Message> message);
-        Task<IEnumerable<Message>> GetConversationListAsync(Guid Id);
+        Task<IEnumerable<ListConversations>> GetConversationListAsync(Guid Id);
         Task<IEnumerable<Message>> GetMessagesAsync(Guid Sender, Guid Recipient);
     }
 }
