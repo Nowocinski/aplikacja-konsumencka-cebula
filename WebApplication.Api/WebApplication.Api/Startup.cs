@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +17,7 @@ using WebApplication.Infrastructure.Services.User;
 using WebApplication.Infrastructure.Services.User.JwtToken;
 using WebApplication.Infrastructure.Services.Voivodeship;
 using WebApplication.Infrastructure.Settings;
+using WebApplication.Api.Hubs;
 
 namespace WebApplication.Api
 {
@@ -77,8 +79,6 @@ namespace WebApplication.Api
             IMapper mapper = mappingConfig.CreateMapper();
             services.AddSingleton(mapper);
 
-            services.AddSignalR();
-
             services.AddCors(options =>
             {
                 options.AddPolicy(MyAllowSpecificOrigins,
@@ -86,10 +86,13 @@ namespace WebApplication.Api
                 {
                     builder
                         .WithOrigins("http://localhost:4200")
+                        .AllowAnyMethod()
                         .AllowAnyHeader()
-                        .AllowAnyMethod();
-                });
+                        .AllowCredentials();
             });
+            });
+
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -106,6 +109,10 @@ namespace WebApplication.Api
             }
 
             app.UseCors(MyAllowSpecificOrigins);
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<MessageHub>("/message");
+            });
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseMvc();

@@ -347,3 +347,4 @@ MigrationBackup/
 
 bin
 obj
+/WebApplication.Api/WebApplication.Api/Migrations
