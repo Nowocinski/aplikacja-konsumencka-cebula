@@ -20,32 +20,29 @@ namespace WebApplication.Infrastructure.Services.User.JwtToken
 
         public string CreateToken(Guid UserId)
         {
-            var now = DateTime.UtcNow;
-            var claims = new Claim[]
+            DateTime now = DateTime.UtcNow;
+            Claim[] claims = new Claim[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, UserId.ToString()),                // Klucz użytkownika
-                new Claim(JwtRegisteredClaimNames.UniqueName, UserId.ToString()),         // Unikatowa nazwa użytkownika
-                //new Claim(ClaimTypes.Role, Role),                                       // Rola użytkownika
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),        // Unikalny identyfikator tokena
-                new Claim(JwtRegisteredClaimNames.Iat, now.ToTimestamp().ToString())      // Data wydania tokena
+                new Claim(JwtRegisteredClaimNames.Sub, UserId.ToString()),
+                new Claim(JwtRegisteredClaimNames.UniqueName, UserId.ToString()),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Iat, now.ToTimestamp().ToString())
             };
 
-            var expires = now.AddMinutes(_jwtSettings.ExpiryInMinutes);                   // Data wyczerpania tokena
-
-            var signingCredentials = new SigningCredentials(
+            DateTime expires = now.AddMinutes(_jwtSettings.ExpiryInMinutes);
+            SigningCredentials signingCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SigningKey)),
                 SecurityAlgorithms.HmacSha256);
 
-            var jwt = new JwtSecurityToken(
-                issuer: _jwtSettings.Site, // Strony mogące korzystać z tokena
-                claims: claims,            // Lista ról użytkownika
-                notBefore: now,            // Blokowanie używania tokena z inną datą niż teraz
-                expires: expires,          // Data wyczerpania
+            JwtSecurityToken jwt = new JwtSecurityToken(
+                issuer: _jwtSettings.Site,
+                claims: claims,
+                notBefore: now,
+                expires: expires,
                 signingCredentials: signingCredentials
                 );
 
-            var token = new JwtSecurityTokenHandler().WriteToken(jwt);
-
+            string token = new JwtSecurityTokenHandler().WriteToken(jwt);
             return token;
         }
     }

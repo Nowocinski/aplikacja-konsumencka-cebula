@@ -6,10 +6,10 @@ namespace WebApplication.Infrastructure.Services.Voivodeship
 {
     public interface IVoivodeshipService
     {
-        Task<VoivodeshipDTO> GetAsync(int Id);
+        Task<VoivodeshipDTO> GetAsync(int id);
         Task<IEnumerable<VoivodeshipDTO>> GetAllAsync();
-        Task<CityDTO> GetCityAsync(int Id);
+        Task<CityDTO> GetCityAsync(int id);
         Task<IEnumerable<CityDTO>> GetAllCitiesAsync();
-        Task<IEnumerable<CityDTO>> GetCitiesInVoivodeship(int Id);
+        Task<IEnumerable<CityDTO>> GetCitiesInVoivodeship(int id);
     }
 }

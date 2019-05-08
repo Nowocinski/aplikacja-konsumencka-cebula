@@ -12,7 +12,6 @@ namespace WebApplication.Infrastructure.Commands
         public float Size { get; set; }
         public string Category { get; set; }
         public int? Floor { get; set; }
-
         public ISet<ImageToAdv> Images { get; set; }
     }
 }

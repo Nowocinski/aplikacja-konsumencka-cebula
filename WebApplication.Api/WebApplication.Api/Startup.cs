@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,46 +30,36 @@ namespace WebApplication.Api
         readonly string MyAllowSpecificOrigins = "Origins";
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
-            // Wstrzykiwanie zależności
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IJwtHandler, JwtHandler>();
             services.AddScoped<IVoivodeshipRepository, VoivodeshipRepository>();
             services.AddScoped<IVoivodeshipService, VoivodeshipService>();
-
-            // Łączenie się z bazą danych MS SQL
             services.AddDbContext<DataBaseContext>(options => options
                 .UseLazyLoadingProxies()
-                .UseSqlServer(Configuration.GetConnectionString("DevConnection"), b => b.MigrationsAssembly("WebApplication.Api"))
-            );
-
-            // Konfiguracja Jwt token
+                .UseSqlServer(Configuration.GetConnectionString("DevConnection"), b => 
+                b.MigrationsAssembly("WebApplication.Api")));
             services.Configure<JwtSettings>(Configuration.GetSection("Jwt"));
-
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(x =>
-            {
+            }).AddJwtBearer(x =>
+                {
                 x.RequireHttpsMetadata = false;
                 x.SaveToken = true;
                 x.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:SigningKey"])),
-                    ValidateIssuer = false,     // Podmiot zdolny do wystawienia tokenu. UWAGA: ValidateIssuer != ValidIssuer
-                    ValidateAudience = false    // Strony mogące kożystać z serwisu. UWAGA: ValidateAudience != ValidAudience
+                    ValidateIssuer = false,
+                    ValidateAudience = false
                 };
             });
 
-            // Konfiguracja AutoMappera
             var mappingConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new MappingProfile());
@@ -78,7 +67,6 @@ namespace WebApplication.Api
 
             IMapper mapper = mappingConfig.CreateMapper();
             services.AddSingleton(mapper);
-
             services.AddCors(options =>
             {
                 options.AddPolicy(MyAllowSpecificOrigins,
@@ -89,13 +77,12 @@ namespace WebApplication.Api
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .AllowCredentials();
-            });
+                });
             });
 
             services.AddSignalR();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
@@ -104,7 +91,6 @@ namespace WebApplication.Api
             }
             else
             {
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 

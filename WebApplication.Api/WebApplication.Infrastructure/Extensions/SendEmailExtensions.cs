@@ -25,11 +25,9 @@ namespace WebApplication.Infrastructure.Extensions
             };
 
             msg.To.Add(new MailAddress(email));
-
             msg.Subject = "Potwierdzenie poprawnego utworzenia konta";
             msg.IsBodyHtml = true;
-            msg.Body = string.Format("<html><head></head><body><b>Twoje konto zostało utworzone.</b><br/><br/><br/>Wiadomość została wygenerowana automatycznie. Proszę na nią nie odpowiadać.</body>");
-
+            msg.Body = string.Format("<html><head></head><body><b>Twoje konto zostało utworzone.</b><br/><br/><br/>Wiadomość została wygenerowana automatycznie. Proszę na nią nie odpowiadać.</body></html>");
             client.Send(msg);
         }
     }

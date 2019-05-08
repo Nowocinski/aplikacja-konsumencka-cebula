@@ -19,28 +19,14 @@ namespace WebApplication.Api.Controllers
             _voivodeshipService = voivodeshipService;
         }
 
-        // GET: api/cities/{id} - Pobranie danych miasta
+        // GET: api/cities/id
         [HttpGet("{Id}")]
         public async Task<ActionResult<CityDTO>> GetCity(int Id)
-        {
-            CityDTO city;
+            => Json(await _voivodeshipService.GetCityAsync(Id));
 
-            try { city = await _voivodeshipService.GetCityAsync(Id); }
-            catch (Exception e) { return StatusCode(419, new { e.Message }); }
-
-            return Json(city);
-        }
-
-        // GET: api/cities - Pobranie danych wszystkich miast
+        // GET: api/cities
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CityDTO>>> GetCities()
-        {
-            IEnumerable<CityDTO> cities; 
-
-            try { cities = await _voivodeshipService.GetAllCitiesAsync(); }
-            catch (Exception e) { return StatusCode(419, new { e.Message }); }
-
-            return Json(cities);
-        }
+            => Json(await _voivodeshipService.GetAllCitiesAsync());
     }
 }

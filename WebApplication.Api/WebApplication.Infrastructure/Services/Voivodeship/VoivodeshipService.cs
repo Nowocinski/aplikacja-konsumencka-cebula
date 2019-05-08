@@ -19,47 +19,34 @@ namespace WebApplication.Infrastructure.Services.Voivodeship
             _mapper = mapper;
         }
 
-        public async Task<VoivodeshipDTO> GetAsync(int Id)
-        {
-            var voivodeship = await _voivodeshipRepository.GetAsync(Id);
-            return _mapper.Map<VoivodeshipDTO>(voivodeship);
-        }
+        public async Task<VoivodeshipDTO> GetAsync(int id)
+            => _mapper.Map<VoivodeshipDTO>(await _voivodeshipRepository.GetAsync(id));
 
         public async Task<IEnumerable<VoivodeshipDTO>> GetAllAsync()
+            => _mapper.Map<IEnumerable<VoivodeshipDTO>>(await _voivodeshipRepository.GetAllAsync());
+
+        public async Task<CityDTO> GetCityAsync(int id)
         {
-            var voivodeships = await _voivodeshipRepository.GetAllAsync();
-            return _mapper.Map<IEnumerable<VoivodeshipDTO>>(voivodeships);
-        }
-
-        public async Task<CityDTO> GetCityAsync(int Id)
-        {
-            var city = await _voivodeshipRepository.GetCityAsync(Id);
-            var cityDTO = _mapper.Map<CityDTO>(city);
-
-            cityDTO.Voivodeship = await _voivodeshipRepository.GetNameVoivodeship(Id);
-
+            CityDTO cityDTO = _mapper.Map<CityDTO>(await _voivodeshipRepository.GetCityAsync(id));
+            cityDTO.Voivodeship = await _voivodeshipRepository.GetNameVoivodeship(id); //###
             return cityDTO;
         }
 
         public async Task<IEnumerable<CityDTO>> GetAllCitiesAsync()
-        {
-            var cities = await _voivodeshipRepository.GetAllCitiesAsync();
-            var citiesDTO = _mapper.Map<IEnumerable<CityDTO>>(cities);
-
-            foreach(CityDTO c in citiesDTO)
-                c.Voivodeship = await _voivodeshipRepository.GetNameVoivodeship(c.Id);
-
+        { 
+            IEnumerable<CityDTO> citiesDTO = _mapper.Map<IEnumerable<CityDTO>>
+                (await _voivodeshipRepository.GetAllCitiesAsync());
+            foreach(CityDTO city in citiesDTO)
+                city.Voivodeship = await _voivodeshipRepository.GetNameVoivodeship(city.Id); //###
             return citiesDTO;
         }
 
-        public async Task<IEnumerable<CityDTO>> GetCitiesInVoivodeship(int Id)
+        public async Task<IEnumerable<CityDTO>> GetCitiesInVoivodeship(int id)
         {
-            var cities = await _voivodeshipRepository.GetCitiesInVoivodeship(Id);
-            var citiesDTO = _mapper.Map<IEnumerable<CityDTO>>(cities);
-
-            foreach (CityDTO c in citiesDTO)
-                c.Voivodeship = await _voivodeshipRepository.GetNameVoivodeship(c.Id);
-
+            IEnumerable<CityDTO> citiesDTO = _mapper.Map<IEnumerable<CityDTO>>
+                (await _voivodeshipRepository.GetCitiesInVoivodeship(id));
+            foreach (CityDTO city in citiesDTO)
+                city.Voivodeship = await _voivodeshipRepository.GetNameVoivodeship(city.Id); //###
             return citiesDTO;
         }
     }

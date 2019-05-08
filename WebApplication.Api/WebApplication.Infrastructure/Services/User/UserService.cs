@@ -20,7 +20,9 @@ namespace WebApplication.Infrastructure.Services.User
         private readonly IMapper _mapper;
         private readonly IVoivodeshipRepository _voivodeshipRepository;
 
-        public UserService(IUserRepository userRepository, IJwtHandler jwtHandler, IMapper mapper, IVoivodeshipRepository voivodeshipRepository)
+        public UserService
+            (IUserRepository userRepository, IJwtHandler jwtHandler, IMapper mapper,
+            IVoivodeshipRepository voivodeshipRepository)
         {
             _userRepository = userRepository;
             _jwtHandler = jwtHandler;
@@ -29,38 +31,29 @@ namespace WebApplication.Infrastructure.Services.User
         }
 
         public async Task<AccountDTO> GetAsync(Guid Id)
-        {
-            var user = await _userRepository.GetAsync(Id);
-            return _mapper.Map<AccountDTO>(user);
-        }
+            => _mapper.Map<AccountDTO>(await _userRepository.GetAsync(Id));
 
         public async Task RegisterAsync(Register data)
         {
-            var user = await _userRepository.GetAsync(data.Email);
+            Core.Domain.User user = await _userRepository.GetAsync(data.Email);
             if (user != null)
                 throw new Exception($"User e-mail: '{data.Email}' already exists.");
-
             user = await _userRepository.GetByPhoneAsync(data.PhoneNumber);
             if (user != null)
                 throw new Exception($"User phone number: '{data.PhoneNumber}' already exists.");
-
             user = new Core.Domain.User(data.FirstName, data.LastName, data.PhoneNumber, data.Email, data.Password.Hash());
-
-           // SendEmailExtensions.SendEmail(data.Email);
-
+            SendEmailExtensions.SendEmail(data.Email);
             await _userRepository.AddAsync(user);
         }
 
         public async Task<LoginDTO> LoginAsync(string Email, string Password)
         {
-            var user = await _userRepository.GetAsync(Email);
+            Core.Domain.User user = await _userRepository.GetAsync(Email);
             if (user == null)
                 throw new Exception("Invalid credentials.");
-
             if (user.Password != Password.Hash())
                 throw new Exception("Invalid credentials.");
-
-            var token = _jwtHandler.CreateToken(user.Id);
+            string token = _jwtHandler.CreateToken(user.Id);
 
             return new LoginDTO
             {
@@ -75,31 +68,27 @@ namespace WebApplication.Infrastructure.Services.User
 
         public async Task DeleteAsync(Guid Id)
         {
-            var user = await _userRepository.GetAsync(Id);
+            Core.Domain.User user = await _userRepository.GetAsync(Id);
             if (user == null)
                 throw new Exception($"Exception id: '{Id}' does not exists");
-
             await _userRepository.DeleteAsync(user);
         }
 
         public async Task UpdateAsync(Guid Id, UpdateUser command)
         {
-            var existUser = await _userRepository.GetAsync(Id);
+            Core.Domain.User existUser = await _userRepository.GetAsync(Id);
             if (existUser == null)
                 throw new Exception($"Exception with id: '{Id}' does not exists");
-
             if (existUser.Password != command.OldPassword.Hash())
                 throw new Exception("Exception password: The old password is incorrect");
 
-            var user = await _userRepository.GetAsync(command.Email);
-
+            Core.Domain.User user = await _userRepository.GetAsync(command.Email);
             if (user != null && user != existUser)
                 throw new Exception($"Exception with e-mail: '{command.Email}' already exists");
 
             user = await _userRepository.GetByPhoneAsync(command.PhoneNumber);
             if (user != null && user != existUser)
                 throw new Exception($"Exception with this phone number: '{command.PhoneNumber}' already exists");
-
             if(command.FirstName != null)
                 existUser.SetFirstName(command.FirstName);
             if(command.LastName != null)
@@ -110,28 +99,23 @@ namespace WebApplication.Infrastructure.Services.User
                 existUser.SetEmail(command.Email);
             if(command.Password != null)
                 existUser.SetPassword(command.Password.Hash());
-
             await _userRepository.UpdateAsync(existUser);
         }
 
         public async Task<IEnumerable<AdvertismentDTO>> GetAdvertisementsUserAsync(Guid Id)
-        {
-            IEnumerable<Advertisement> advertisments = await _userRepository.GetAdvertisementsUserAsync(Id);
-            return _mapper.Map<IEnumerable<AdvertismentDTO>>(advertisments);
-        }
+            => _mapper.Map<IEnumerable<AdvertismentDTO>>(await _userRepository.GetAdvertisementsUserAsync(Id));
 
         public async Task<AdvertisementDetailsDTO> GetAdvertisementAsync(Guid Id)
         {
             Advertisement advertisement = await _userRepository.GetAdvertisementAsync(Id);
             AdvertisementDetailsDTO advertisementDetailsDTO = _mapper.Map<AdvertisementDetailsDTO>(advertisement);
-
             if (advertisementDetailsDTO == null)
                 throw new Exception($"Id '{Id}' advertisement dose not exist.");
-
             return advertisementDetailsDTO;
         }
 
-        public async Task<AdvertisementsWithPageToEndDTO> GetFilterAdvertismentsAsync(string parameter, string type, int number_page, string text = "")
+        public async Task<AdvertisementsWithPageToEndDTO> GetFilterAdvertismentsAsync
+            (string parameter, string type, int number_page, string text = "")
         {
             if (number_page <= 0)
                 throw new Exception("Number page must be greater than zero");
@@ -140,11 +124,11 @@ namespace WebApplication.Infrastructure.Services.User
 
             parameter = char.ToUpper(parameter[0]) + parameter.Substring(1);
             PropertyInfo property = typeof(Advertisement).GetProperty(parameter);
-
             if (property == null)
                 throw new Exception($"Parameter '{parameter}' do not exist.");
 
-            IEnumerable<Advertisement> advertisements = await _userRepository.GetFilterAdvertismentsAsync(parameter, type, number_page, text);
+            IEnumerable<Advertisement> advertisements = await _userRepository
+                .GetFilterAdvertismentsAsync(parameter, type, number_page, text);
 
             int pagesToEnd = await _userRepository.GetAmountOfAdvertismentsAsync();
             if (pagesToEnd % 10 == 0)
@@ -162,26 +146,24 @@ namespace WebApplication.Infrastructure.Services.User
         {
             Guid advertisement_id = Guid.NewGuid();
 
-            ISet<AdvertisementImage> Imgs = new HashSet<AdvertisementImage>();
-            foreach(var I in Command.Images)
-                Imgs.Add(new AdvertisementImage(advertisement_id, I.Image, I.Name, I.Description));
+            ISet<AdvertisementImage> Images = new HashSet<AdvertisementImage>();
+            foreach(var Image in Command.Images)
+                Images.Add(new AdvertisementImage(advertisement_id, Image.Image, Image.Name, Image.Description));
 
-            var user = await _userRepository.GetAsync(UserId);
-            
-            var adv = user.AddAdvertisement(advertisement_id, Command.Title,
+            Core.Domain.User user = await _userRepository.GetAsync(UserId);
+            Advertisement advertisement = user.AddAdvertisement(advertisement_id, Command.Title,
                 Command.Description, Command.Price, Command.City, Command.Street,
-                Command.Size, Command.Category, Imgs, Command.Floor);
-
-            await _userRepository.AddAdvertisementAsync(adv);
+                Command.Size, Command.Category, Images, Command.Floor);
+            await _userRepository.AddAdvertisementAsync(advertisement);
         }
 
         public async Task UpdateAdvertisementAsync(CreateAdvertisment Command, Guid Id)
         {
             Advertisement advertisement = await _userRepository.GetAdvertisementAsync(Id);
 
-            ISet<AdvertisementImage> Imgs = new HashSet<AdvertisementImage>();
-            foreach (var I in Command.Images)
-                Imgs.Add(new AdvertisementImage(advertisement.Id, I.Image, I.Name, I.Description));
+            ISet<AdvertisementImage> Images = new HashSet<AdvertisementImage>();
+            foreach (var Image in Command.Images)
+                Images.Add(new AdvertisementImage(advertisement.Id, Image.Image, Image.Name, Image.Description));
 
             advertisement.SetTitle(Command.Title);
             advertisement.SetDescription(Command.Description);
@@ -191,14 +173,14 @@ namespace WebApplication.Infrastructure.Services.User
             advertisement.SetSize(Command.Size);
             advertisement.SetCategory(Command.Category);
             advertisement.SetFloor(Command.Floor);
-            advertisement.SetAddImages(Imgs);
+            advertisement.SetAddImages(Images);
 
             await _userRepository.UpdateAdvertisementAsync(advertisement);
         }
 
-        public async Task DeleteAdvertisementAsync(Guid Id)
+        public async Task DeleteAdvertisementAsync(Guid id)
         {
-            var advertisement = await _userRepository.GetAdvertisementAsync(Id);
+            Advertisement advertisement = await _userRepository.GetAdvertisementAsync(id);
             await _userRepository.DeleteAdvertisementAsync(advertisement);
         }
 
@@ -210,16 +192,10 @@ namespace WebApplication.Infrastructure.Services.User
             await _userRepository.UpdateMessageAsync(user.Messages);
         }
 
-        public async Task<IEnumerable<MessagesDTO>> GetMessagesAsync(Guid Sender, Guid Recipient)
-        {
-            IEnumerable<Message> messages = await _userRepository.GetMessagesAsync(Sender, Recipient);
-            return _mapper.Map<IEnumerable<MessagesDTO>>(messages);
-        }
+        public async Task<IEnumerable<MessagesDTO>> GetMessagesAsync(Guid sender, Guid recipient)
+            => _mapper.Map<IEnumerable<MessagesDTO>>(await _userRepository.GetMessagesAsync(sender, recipient));
 
-        public async Task<IEnumerable<ListConversations>> GetConversationListAsync(Guid Id)
-        {
-            IEnumerable<ListConversations> Conversations = await _userRepository.GetConversationListAsync(Id);
-            return Conversations;
-        }
+        public async Task<IEnumerable<ListConversations>> GetConversationListAsync(Guid id)
+            => await _userRepository.GetConversationListAsync(id);
     }
 }

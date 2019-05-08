@@ -94,14 +94,14 @@ namespace WebApplication.Infrastructure.Repositories
             if (type == "desc")
             {
                 advertisements = advertisements
-                                .OrderByDescending(x => property_to_sort.GetValue(x))
-                                .ToList();
+                    .OrderByDescending(x => property_to_sort.GetValue(x))
+                    .ToList();
             }
             else
             {
                 advertisements = advertisements
-                                .OrderBy(x => property_to_sort.GetValue(x))
-                                .ToList();
+                    .OrderBy(x => property_to_sort.GetValue(x))
+                    .ToList();
             }
 
             return await Task.FromResult(advertisements.Skip(number_page * 10 - 10).Take(10));
@@ -112,7 +112,6 @@ namespace WebApplication.Infrastructure.Repositories
             int amount = await _context.Advertisements.CountAsync();
             return await Task.FromResult(amount);
         }
-
 
         public async Task AddAdvertisementAsync(Advertisement Advertisement)
         {
@@ -135,10 +134,10 @@ namespace WebApplication.Infrastructure.Repositories
             await Task.CompletedTask;
         }
 
-        public async Task UpdateMessageAsync(IEnumerable<Message> message)
+        public async Task UpdateMessageAsync(IEnumerable<Message> messages)
         {
-            foreach(var msg in message)
-                _context.Messages.Update(msg);
+            foreach(Message message in messages)
+                _context.Messages.Update(message);
             await _context.SaveChangesAsync();
             await Task.CompletedTask;
         }
@@ -146,7 +145,8 @@ namespace WebApplication.Infrastructure.Repositories
         public async Task<IEnumerable<Message>> GetMessagesAsync(Guid Sender, Guid Recipient)
         {
             List<Message> messages = await _context.Messages.Where(x =>
-                (x.Sender_Id == Sender && x.Recipient_Id == Recipient) || (x.Sender_Id == Recipient && x.Recipient_Id == Sender))
+                (x.Sender_Id == Sender && x.Recipient_Id == Recipient) ||
+                (x.Sender_Id == Recipient && x.Recipient_Id == Sender))
                 .Include(x => x.Sender)
                 .OrderByDescending(x => x.Date)
                 .ToListAsync();
@@ -156,7 +156,8 @@ namespace WebApplication.Infrastructure.Repositories
 
         public async Task<IEnumerable<ListConversations>> GetConversationListAsync(Guid Id)
         {
-            List<ListConversations> senders = await _context.Messages.Where(x => x.Recipient_Id == Id && x.Sender_Id != null)
+            List<ListConversations> senders = await _context.Messages
+                .Where(x => x.Recipient_Id == Id && x.Sender_Id != null)
                 .Include(x => x.Sender)
                 .Select(x => new ListConversations
                 {
@@ -167,7 +168,8 @@ namespace WebApplication.Infrastructure.Repositories
                 })
                 .ToListAsync();
 
-            List<ListConversations> recipients = await _context.Messages.Where(x => x.Sender_Id == Id && x.Recipient_Id != null)
+            List<ListConversations> recipients = await _context.Messages
+                .Where(x => x.Sender_Id == Id && x.Recipient_Id != null)
                 .Include(x => x.Recipient)
                 .Select(x => new ListConversations
                 {
@@ -179,7 +181,6 @@ namespace WebApplication.Infrastructure.Repositories
                 .ToListAsync();
 
             IEnumerable<ListConversations> conversation_list = senders.Concat(recipients);
-
             return await Task.FromResult(conversation_list.GroupBy(x => x.UserId, (key, group) => group.LastOrDefault()));
         }
     }

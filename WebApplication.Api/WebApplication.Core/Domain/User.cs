@@ -35,7 +35,6 @@ namespace WebApplication.Core.Domain
         {
             var Adv = new Advertisement(AdvId, Id, Title, Description, Price, City, Street, Size, Category, Images, Floor);
             _advertisements.Add(Adv);
-
             return Adv;
         }
 
@@ -51,7 +50,6 @@ namespace WebApplication.Core.Domain
                 throw new Exception($"User with id: '{Id}' can not have an empty first name.");
             if (FirstName.Length > 20)
                 throw new Exception($"User with id: '{Id}' first name can not have more than 20 characters.");
-
             this.FirstName = FirstName;
         }
 
@@ -61,21 +59,18 @@ namespace WebApplication.Core.Domain
                 throw new Exception($"User with id: '{Id}' can not have an empty last name.");
             if (LastName.Length > 30)
                 throw new Exception($"User with id: '{Id}' last name can not have more than 30 characters.");
-
             this.LastName = LastName;
         }
 
         public void SetEmail(string Email)
         {
+            Regex syntax = new Regex("^[0-9a-zA-Z]+([.-]{1}[0-9a-zA-Z]+)*@[a-z]+([.-]{1}[0-9a-z]+)*.[a-z]*$");
             if (string.IsNullOrWhiteSpace(Email))
                 throw new Exception($"User with id: '{Id}' can not have an empty e-mail.");
             if (Email.Length > 40)
                 throw new Exception($"User with id: '{Id}' e-mail can not have more than 40 characters.");
-
-            Regex syntax = new Regex("^[0-9a-zA-Z]+([.-]{1}[0-9a-zA-Z]+)*@[a-z]+([.-]{1}[0-9a-z]+)*.[a-z]*$");
             if (!syntax.IsMatch(Email))
                 throw new Exception($"User with id: '{Id}' the e-mail syntax is incorrect.");
-
             this.Email = Email;
         }
 
@@ -85,7 +80,6 @@ namespace WebApplication.Core.Domain
                 throw new Exception($"User with id: '{Id}' can not have an empty phone number.");
             if (PhoneNumber.Length > 11)
                  throw new Exception($"User with id: '{Id}' phone number can not have more than 11 characters.");
-
             this.PhoneNumber = PhoneNumber;
         }
 
@@ -95,7 +89,6 @@ namespace WebApplication.Core.Domain
                 throw new Exception($"User with id: '{Id}' can not have an empty password.");
             if (Password.Length > 100)
                 throw new Exception($"User with id: '{Id}' password can not have more than 100 characters.");
-
             this.Password = Password;
         }
     }

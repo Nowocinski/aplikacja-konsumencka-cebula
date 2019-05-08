@@ -16,7 +16,8 @@ namespace WebApplication.Core.Repositories
         Task DeleteAsync(User User);
         Task<IEnumerable<Advertisement>> GetAdvertisementsUserAsync(Guid Id);
         Task<Advertisement> GetAdvertisementAsync(Guid Id);
-        Task<IEnumerable<Advertisement>> GetFilterAdvertismentsAsync(string parameter, string type, int page, string text = "");
+        Task<IEnumerable<Advertisement>> GetFilterAdvertismentsAsync
+            (string parameter, string type, int page, string text = "");
         Task<int> GetAmountOfAdvertismentsAsync();
         Task AddAdvertisementAsync(Advertisement Advertisement);
         Task UpdateAdvertisementAsync(Advertisement Advertisement);

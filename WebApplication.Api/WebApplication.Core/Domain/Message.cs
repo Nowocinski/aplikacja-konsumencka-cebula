@@ -13,7 +13,6 @@ namespace WebApplication.Core.Domain
         public DateTime Date { get; private set; }
         protected Message()
         {
-
         }
         public Message(Guid Sender_Id, Guid Recipient_Id, string Contents)
         {

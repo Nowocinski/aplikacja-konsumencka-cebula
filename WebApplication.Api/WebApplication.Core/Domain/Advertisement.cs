@@ -127,7 +127,6 @@ namespace WebApplication.Core.Domain
 
             foreach (var I in Images)
                 _images.Add(I);
-
         }
     }
 }

@@ -19,39 +19,19 @@ namespace WebApplication.Api.Controllers
             _voivodeshipService = voivodeshipService;
         }
 
-        // GET: api/voivodeships/{id} - Pobranie danych danego województwa
+        // GET: api/voivodeships/id
         [HttpGet("{Id}")]
         public async Task<ActionResult<VoivodeshipDTO>> GetVoivodeship(int Id)
-        {
-            VoivodeshipDTO voivodeship;
-            try { voivodeship = await _voivodeshipService.GetAsync(Id); }
-            catch (Exception e) { return StatusCode(419, new { e.Message }); }
+            => Json(await _voivodeshipService.GetAsync(Id));
 
-            return Json(voivodeship);
-        }
-
-        // GET: api/voivodeships - Pobranie wszystkich województw
+        // GET: api/voivodeships
         [HttpGet]
         public async Task<ActionResult<IEnumerable<VoivodeshipDTO>>> GetVoivodeships()
-        {
-            IEnumerable<VoivodeshipDTO> voivodeships;
+            => Json(await _voivodeshipService.GetAllAsync());
 
-            try { voivodeships = await _voivodeshipService.GetAllAsync(); }
-            catch (Exception e) { return StatusCode(419, new { e.Message }); }
-
-            return Json(voivodeships);
-        }
-
-        // GET: api/voivodeships/{id}/cities - Pobranie wysztkich miast w danym województwie
+        // GET: api/voivodeships/id/cities
         [HttpGet("{Id}/cities")]
         public async Task<ActionResult<IEnumerable<CityDTO>>> GetAllVoivodeships(int Id)
-        {
-            IEnumerable<CityDTO> cities;
-
-            try { cities = await _voivodeshipService.GetCitiesInVoivodeship(Id); }
-            catch (Exception e) { return StatusCode(419, new { e.Message }); }
-
-            return Json(cities);
-        }
+            => Json(await _voivodeshipService.GetCitiesInVoivodeship(Id));
     }
 }

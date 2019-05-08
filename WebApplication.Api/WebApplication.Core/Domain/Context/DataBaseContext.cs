@@ -136,13 +136,11 @@ namespace WebApplication.Core.Domain.Context
                         .HasOne(a => a.Sender)
                         .WithMany(b => b.Messages)
                         .HasForeignKey(x => x.Sender_Id);
-                        //.OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<Message>()
                         .HasOne(a => a.Recipient)
                         .WithMany(b => b.Recipient)
                         .HasForeignKey(x => x.Recipient_Id);
-                        //.OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<City>()
                         .HasOne(g => g.Voivodeship)

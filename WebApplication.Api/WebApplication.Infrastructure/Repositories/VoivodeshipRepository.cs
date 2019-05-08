@@ -18,34 +18,19 @@ namespace WebApplication.Infrastructure.Repositories
         }
 
         public async Task<Voivodeship> GetAsync(int Id)
-        {
-            Voivodeship voivodeship = await _context.Voivodeships.SingleOrDefaultAsync(x => x.Id == Id);
-            return await Task.FromResult(voivodeship);
-        }
+            => await Task.FromResult(await _context.Voivodeships.SingleOrDefaultAsync(x => x.Id == Id));
 
         public async Task<IEnumerable<Voivodeship>> GetAllAsync()
-        {
-            List<Voivodeship> voivodeships = await _context.Voivodeships.ToListAsync();
-            return await Task.FromResult(voivodeships);
-        }
+            => await Task.FromResult(await _context.Voivodeships.ToListAsync());
 
         public async Task<City> GetCityAsync(int Id)
-        {
-            City city = await _context.Cities.SingleOrDefaultAsync(x => x.Id == Id);
-            return await Task.FromResult(city);
-        }
+            => await Task.FromResult(await _context.Cities.SingleOrDefaultAsync(x => x.Id == Id));
 
         public async Task<IEnumerable<City>> GetAllCitiesAsync()
-        {
-            List<City> cites = await _context.Cities.ToListAsync();
-            return await Task.FromResult(cites);
-        }
+            => await Task.FromResult(await _context.Cities.ToListAsync());
 
         public async Task<IEnumerable<City>> GetCitiesInVoivodeship(int Id)
-        {
-            List<City> cites = await _context.Cities.Where(x => x.Voivodeship_Id == Id).ToListAsync();
-            return await Task.FromResult(cites);
-        }
+            => await Task.FromResult(await _context.Cities.Where(x => x.Voivodeship_Id == Id).ToListAsync());
 
         public async Task<string> GetNameVoivodeship(int Id)
         {

@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebApplication.Infrastructure.Commands;
 using WebApplication.Infrastructure.DTO;
@@ -20,96 +19,59 @@ namespace WebApplication.Api.Controllers
             _userService = userService;
         }
 
-        // GET: api/advertisements/{id} - Pobranie danych ogłoszenia po id
+        // GET: api/advertisements/id
         [HttpGet("{Id}")]
         public async Task<ActionResult<AdvertisementDetailsDTO>> GetAdvertisement(Guid Id)
-        {
-            AdvertisementDetailsDTO advertisement;
-
-            try { advertisement = await _userService.GetAdvertisementAsync(Id); }
-            catch (Exception e) { return StatusCode(419, new { e.Message }); }
-
-            return Json(advertisement);
-        }
-
-        // GET: api/advertisements/{parameter}/{type}:{page} - Sortowanie ogłoszeń
+            => Json(await _userService.GetAdvertisementAsync(Id));
+          
+        // GET: api/advertisements/parameter/type:page
         [HttpGet("{parameter}/{type}:{page}")]
         public async Task<ActionResult<AdvertisementsWithPageToEndDTO>>
             GetAdvertisement(string parameter, string type, int page)
-        {
-            AdvertisementsWithPageToEndDTO advertisements;
+            => Json(await _userService.GetFilterAdvertismentsAsync(parameter, type, page));
 
-            try { advertisements = await _userService.GetFilterAdvertismentsAsync(parameter, type, page); }
-            catch (Exception e) { return StatusCode(419, new { e.Message }); }
-
-            return Json(advertisements);
-        }
-
-        // GET: api/advertisements/{parameter}/{type}:{page}/{text} - Sortowanie ogłoszeń z filtorowaniem po tytule
+        // GET: api/advertisements/parameter/type:page/text
         [HttpGet("{parameter}/{type}:{page}/{text}")]
         public async Task<ActionResult<AdvertisementsWithPageToEndDTO>>
             GetFiltrationAdvertisement(string parameter, string type, int page, string text)
-        {
-            AdvertisementsWithPageToEndDTO advertisements;
+            => Json(await _userService.GetFilterAdvertismentsAsync(parameter, type, page, text));
 
-            try { advertisements = await _userService.GetFilterAdvertismentsAsync(parameter, type, page, text); }
-            catch (Exception e) { return StatusCode(419, new { e.Message }); }
-
-            return Json(advertisements);
-        }
-
-        // POST: api/advertisements - Dodawanie ogłoszenia
+        // POST: api/advertisements
         [HttpPost]
         [Authorize]
         public async Task<ActionResult> PostAdvertisement([FromBody] CreateAdvertisment Command)
         {
-            try { await _userService.AddAdvertisementAsync(Command, UserId); }
-            catch (Exception e) { return StatusCode(419, new { e.Message }); }
-
+            await _userService.AddAdvertisementAsync(Command, UserId);
             return Created("/advertisments", null);
         }
 
-        // PUT: api/advertisements - Aktualizowanie ogłoszenia
+        // PUT: api/advertisements
         [HttpPut("{id}")]
         [Authorize]
         public async Task<ActionResult> PutAdvertisement(Guid Id, [FromBody] CreateAdvertisment Command)
         {
-            try
-            {
-                AdvertisementDetailsDTO advertisement= await _userService.GetAdvertisementAsync(Id);
+            AdvertisementDetailsDTO advertisement = await _userService.GetAdvertisementAsync(Id);
 
-                if (advertisement == null)
-                    return NotFound();
-
-                if (advertisement.UserId != UserId)
-                    return Forbid();
-
-                await _userService.UpdateAdvertisementAsync(Command, Id);
-            }
-            catch (Exception e) { return StatusCode(419, new { e.Message }); }
-
+            if (advertisement == null)
+                return NotFound();
+            if (advertisement.UserId != UserId)
+                return Forbid();
+            await _userService.UpdateAdvertisementAsync(Command, Id);
             return NoContent();
         }
 
-        // DELETE: api/advertisements - Usuwanie ogłoszenia
+        // DELETE: api/advertisements
         [HttpDelete("{id}")]
         [Authorize]
         public async Task<ActionResult> DeleteAdvertisement(Guid Id)
         {
-            try
-            {
-                AdvertisementDetailsDTO advertisement = await _userService.GetAdvertisementAsync(Id);
+            AdvertisementDetailsDTO advertisement = await _userService.GetAdvertisementAsync(Id);
 
-                if (advertisement == null)
-                    return NotFound();
-
-                if (advertisement.UserId != UserId)
-                    return Forbid();
-
-                await _userService.DeleteAdvertisementAsync(Id);
-            }
-            catch (Exception e) { return StatusCode(419, new { e.Message }); }
-
+            if (advertisement == null)
+                return NotFound();
+            if (advertisement.UserId != UserId)
+                return Forbid();
+            await _userService.DeleteAdvertisementAsync(Id);
             return NoContent();
         }
     }

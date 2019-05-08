@@ -19,7 +19,8 @@ namespace WebApplication.Infrastructure.Services.User
         Task AddAdvertisementAsync(CreateAdvertisment Command, Guid UserId);
         Task UpdateAdvertisementAsync(CreateAdvertisment Advertisement, Guid Id);
         Task DeleteAdvertisementAsync(Guid Id);
-        Task<AdvertisementsWithPageToEndDTO> GetFilterAdvertismentsAsync(string parameter, string type, int page, string text="");
+        Task<AdvertisementsWithPageToEndDTO> GetFilterAdvertismentsAsync
+            (string parameter, string type, int page, string text="");
         Task UpdateMessageAsync(Guid sender, Guid recipient, string text);
         Task<IEnumerable<ListConversations>> GetConversationListAsync(Guid Id);
         Task<IEnumerable<MessagesDTO>> GetMessagesAsync(Guid Sender, Guid Recipient);
