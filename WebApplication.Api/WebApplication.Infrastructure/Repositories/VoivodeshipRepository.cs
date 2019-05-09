@@ -30,19 +30,7 @@ namespace WebApplication.Infrastructure.Repositories
             => await Task.FromResult(await _context.Cities.ToListAsync());
 
         public async Task<IEnumerable<City>> GetCitiesInVoivodeship(int Id)
-            => await Task.FromResult(await _context.Cities.Where(x => x.Voivodeship_Id == Id).ToListAsync());
-
-        public async Task<string> GetNameVoivodeship(int Id)
-        {
-            City city = await _context.Cities.SingleOrDefaultAsync(x => x.Id == Id);
-            Voivodeship voivodeship = await _context.Voivodeships.SingleOrDefaultAsync(x => x.Id == city.Voivodeship_Id);
-            return await Task.FromResult(voivodeship.Name);
-        }
-
-        public async Task<string> GetNameCity(int Id)
-        {
-            City city = await _context.Cities.SingleOrDefaultAsync(x => x.Id == Id);
-            return await Task.FromResult(city.Name);
-        }
+            => await Task.FromResult(await _context.Cities.Where(x => x.Voivodeship_Id == Id)
+                .Include(x => x.Voivodeship).ToListAsync());
     }
 }

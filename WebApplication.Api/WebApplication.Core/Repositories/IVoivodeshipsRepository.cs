@@ -11,7 +11,5 @@ namespace WebApplication.Core.Repositories
         Task<City> GetCityAsync(int Id);
         Task<IEnumerable<City>> GetAllCitiesAsync();
         Task<IEnumerable<City>> GetCitiesInVoivodeship(int Id);
-        Task<string> GetNameVoivodeship(int Id);
-        Task<string> GetNameCity(int Id);
     }
 }

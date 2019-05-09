@@ -20,22 +20,13 @@ namespace WebApplication.Infrastructure.Repositories
         }
 
         public async Task<User> GetAsync(Guid Id)
-        {
-            User user = await _context.Users.SingleOrDefaultAsync(x => x.Id == Id);
-            return await Task.FromResult(user);
-        }
+            => await _context.Users.SingleOrDefaultAsync(x => x.Id == Id);
 
         public async Task<User> GetAsync(string Email)
-        {
-            User user = await _context.Users.SingleOrDefaultAsync(x => x.Email == Email);
-            return await Task.FromResult(user);
-        }
+            => await _context.Users.SingleOrDefaultAsync(x => x.Email == Email);
 
         public async Task<User> GetByPhoneAsync(string Phone)
-        {
-            User user = await _context.Users.SingleOrDefaultAsync(x => x.PhoneNumber == Phone);
-            return await Task.FromResult(user);
-        }
+            => await _context.Users.SingleOrDefaultAsync(x => x.PhoneNumber == Phone);
 
         public async Task AddAsync(User User)
         {
