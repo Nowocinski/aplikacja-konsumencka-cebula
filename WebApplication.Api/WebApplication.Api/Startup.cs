@@ -17,6 +17,7 @@ using WebApplication.Infrastructure.Services.User.JwtToken;
 using WebApplication.Infrastructure.Services.Voivodeship;
 using WebApplication.Infrastructure.Settings;
 using WebApplication.Api.Hubs;
+using WebApplication.Infrastructure.Services.Admin;
 
 namespace WebApplication.Api
 {
@@ -38,6 +39,10 @@ namespace WebApplication.Api
             services.AddScoped<IJwtHandler, JwtHandler>();
             services.AddScoped<IVoivodeshipRepository, VoivodeshipRepository>();
             services.AddScoped<IVoivodeshipService, VoivodeshipService>();
+
+            services.AddScoped<IAdminRepository, AdminRepository>();
+            services.AddScoped<IAdminService, AdminService>();
+
             services.AddDbContext<DataBaseContext>(options => options
                 .UseLazyLoadingProxies()
                 .UseSqlServer(Configuration.GetConnectionString("DevConnection"), b => 
