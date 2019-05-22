@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using WebApplication.Core.Models;
 using WebApplication.Infrastructure.Commands;
@@ -42,7 +43,14 @@ namespace WebApplication.Api.Controllers
         // POST: api/users/login
         [HttpPost("login")]
         public async Task<ActionResult<LoginDTO>> Login([FromBody] Login command)
-            => Json(await _userService.LoginAsync(command.Email, command.Password));
+        {
+            var user = await _userService.LoginAsync(command.Email, command.Password);
+            if (user != null)
+            {
+                return Json(user);
+            }
+            return StatusCode(400, new {Sent = "Invalid Credentials"});
+        }
 
         // PUT: api/users/id
         [HttpPut("{Id}")]

@@ -50,9 +50,9 @@ namespace WebApplication.Infrastructure.Services.User
         {
             Core.Domain.User user = await _userRepository.GetAsync(Email);
             if (user == null)
-                throw new Exception("Invalid credentials.");
+                return null;
             if (user.Password != Password.Hash())
-                throw new Exception("Invalid credentials.");
+                return null;
             string token = _jwtHandler.CreateToken(user.Id);
 
             return new LoginDTO
