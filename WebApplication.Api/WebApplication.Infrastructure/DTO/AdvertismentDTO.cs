@@ -5,6 +5,7 @@ namespace WebApplication.Infrastructure.DTO
     public class AdvertismentDTO
     {
         public Guid Id { get; set; }
+        public bool Verification { get; private set; }
         public string Title { get; set; }
         public string City { get; set; }
         public string Street { get; set; }
