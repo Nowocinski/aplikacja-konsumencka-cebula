@@ -133,7 +133,15 @@ namespace WebApplication.Core.Domain
 
         public void ChangeSatusVerification()
         {
-            Verification = true;
+            if(Verification == false)
+            {
+                Verification = true;
+            }
+
+            else if(Verification == true)
+            {
+                Verification = true;
+            }
         }
     }
 }
