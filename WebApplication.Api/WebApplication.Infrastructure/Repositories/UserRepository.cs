@@ -68,7 +68,7 @@ namespace WebApplication.Infrastructure.Repositories
                 .Include(x => x.Images)
                 .Include(x => x.User)
                 .Include(x => x.City)
-                .SingleOrDefaultAsync(x => x.Id == Id && x.Verification == true);
+                .SingleOrDefaultAsync(x => x.Id == Id);
 
             return await Task.FromResult(advertisement);
         }
