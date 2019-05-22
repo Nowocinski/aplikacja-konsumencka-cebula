@@ -103,7 +103,7 @@ namespace WebApplication.Core.Domain
                 Blocked = true;
             }
 
-            else
+            else if(Blocked == true)
             {
                 Blocked = false;
             }

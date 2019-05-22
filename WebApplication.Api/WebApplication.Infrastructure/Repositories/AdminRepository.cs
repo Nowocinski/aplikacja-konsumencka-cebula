@@ -17,8 +17,8 @@ namespace WebApplication.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<User> GetUserAsync(Guid id)
-            => await _context.Users.SingleOrDefaultAsync(x => x.Id == id);
+        public async Task<User> GetUserAsync(Guid Id)
+            => await _context.Users.SingleOrDefaultAsync(x => x.Id == Id);
 
         public async Task<IEnumerable<User>> GetUsersAsync()
             => await _context.Users.ToListAsync();
