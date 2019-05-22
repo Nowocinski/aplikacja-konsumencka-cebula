@@ -57,7 +57,7 @@ namespace WebApplication.Infrastructure.Repositories
                 .Include(x => x.User)
                 .Include(x => x.City)
                     .ThenInclude(x => x.Voivodeship)
-                .Where(x => x.User_Id == Id).ToListAsync();
+                .Where(x => x.User_Id == Id && x.Verification == true).ToListAsync();
 
             return await Task.FromResult(advertisements);
         }
@@ -68,7 +68,7 @@ namespace WebApplication.Infrastructure.Repositories
                 .Include(x => x.Images)
                 .Include(x => x.User)
                 .Include(x => x.City)
-                .SingleOrDefaultAsync(x => x.Id == Id);
+                .SingleOrDefaultAsync(x => x.Id == Id && x.Verification == true);
 
             return await Task.FromResult(advertisement);
         }
@@ -77,7 +77,7 @@ namespace WebApplication.Infrastructure.Repositories
             (string parameter, string type, int number_page, string text = "")
         {
             List<Advertisement> advertisements = await _context.Advertisements
-                .Where(x => x.Title.ToLower().Contains(text.ToLower()))
+                .Where(x => x.Title.ToLower().Contains(text.ToLower()) && x.Verification == true)
                 .Include(x => x.Images)
                 .Include(x => x.City)
                 .ToListAsync();
