@@ -14,10 +14,12 @@ namespace WebApplication.Api.Controllers
     public class AdminController : ApiControllerBase
     {
         private readonly IAdminService _adminService;
+        private readonly IUserService _userService;
 
-        public AdminController(IAdminService adminService)
+        public AdminController(IAdminService adminService, IUserService userService)
         {
             _adminService = adminService;
+            _userService = userService;
         }
 
         // GET: api/admin/users
@@ -43,6 +45,19 @@ namespace WebApplication.Api.Controllers
         public async Task<ActionResult<IEnumerable<AccountDTO>>> ChangeStatusAdvertisements(Guid id)
         {
             await _adminService.ChangeOfAdvertismentStatus(id);
+            return NoContent();
+        }
+
+        // DELETE: api/admin/advertisements/id
+        [HttpDelete("advertisements/{id}")]
+        public async Task<ActionResult<IEnumerable<AccountDTO>>> DeleteAdvertisements(Guid id)
+        {
+            AdvertisementDetailsDTO advertisement = await _userService.GetAdvertisementAsync(id);
+            if (advertisement == null)
+            {
+                return NotFound();
+            }
+            await _userService.DeleteAdvertisementAsync(id);
             return NoContent();
         }
     }

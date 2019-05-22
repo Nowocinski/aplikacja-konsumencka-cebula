@@ -140,7 +140,7 @@ namespace WebApplication.Core.Domain
 
             else if(Verification == true)
             {
-                Verification = true;
+                Verification = false;
             }
         }
     }
