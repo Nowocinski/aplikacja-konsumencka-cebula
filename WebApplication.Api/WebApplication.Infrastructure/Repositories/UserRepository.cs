@@ -7,6 +7,7 @@ using WebApplication.Core.Domain;
 using WebApplication.Core.Domain.Context;
 using WebApplication.Core.Repositories;
 using WebApplication.Core.Models;
+using System.Reflection;
 
 namespace WebApplication.Infrastructure.Repositories
 {
@@ -72,7 +73,8 @@ namespace WebApplication.Infrastructure.Repositories
             return await Task.FromResult(advertisement);
         }
 
-        public async Task<IEnumerable<Advertisement>> GetFilterAdvertismentsAsync(string parameter, string type, int number_page, string text = "")
+        public async Task<IEnumerable<Advertisement>> GetFilterAdvertismentsAsync
+            (string parameter, string type, int number_page, string text = "")
         {
             List<Advertisement> advertisements = await _context.Advertisements
                 .Where(x => x.Title.ToLower().Contains(text.ToLower()))
@@ -80,7 +82,7 @@ namespace WebApplication.Infrastructure.Repositories
                 .Include(x => x.City)
                 .ToListAsync();
 
-            var property_to_sort = typeof(Advertisement).GetProperty(parameter);
+            PropertyInfo property_to_sort = typeof(Advertisement).GetProperty(parameter);
 
             if (type == "desc")
             {
@@ -148,7 +150,7 @@ namespace WebApplication.Infrastructure.Repositories
         public async Task<IEnumerable<ListConversations>> GetConversationListAsync(Guid Id)
         {
             List<ListConversations> senders = await _context.Messages
-                .Where(x => x.Recipient_Id == Id && x.Sender_Id != null)
+                .Where(x => x.Recipient_Id == Id)
                 .Include(x => x.Sender)
                 .Select(x => new ListConversations
                 {
@@ -160,7 +162,7 @@ namespace WebApplication.Infrastructure.Repositories
                 .ToListAsync();
 
             List<ListConversations> recipients = await _context.Messages
-                .Where(x => x.Sender_Id == Id && x.Recipient_Id != null)
+                .Where(x => x.Sender_Id == Id)
                 .Include(x => x.Recipient)
                 .Select(x => new ListConversations
                 {
