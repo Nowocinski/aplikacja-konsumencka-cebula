@@ -53,6 +53,10 @@ namespace WebApplication.Infrastructure.Services.User
                 throw new Exception("Invalid credentials.");
             if (user.Password != Password.Hash())
                 throw new Exception("Invalid credentials.");
+
+            if(user.Blocked == true)
+                throw new Exception("Blocked account.");
+
             string token = _jwtHandler.CreateToken(user.Id);
 
             return new LoginDTO
