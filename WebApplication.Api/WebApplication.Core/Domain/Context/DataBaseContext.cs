@@ -28,7 +28,10 @@ namespace WebApplication.Core.Domain.Context
                 column.Property(name => name.Password)
                       .HasColumnType("nvarchar(100)")
                       .IsRequired(true);
-                column.Property(name => name.blocked)
+                column.Property(name => name.Role)
+                      .HasColumnType("nvarchar(20)")
+                      .IsRequired(true);
+                column.Property(name => name.Blocked)
                       .HasColumnType("bit")
                       .IsRequired(true);
 
