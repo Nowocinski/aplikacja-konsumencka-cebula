@@ -18,13 +18,14 @@ namespace WebApplication.Infrastructure.Services.User.JwtToken
             _jwtSettings = jwtSettings.Value;
         }
 
-        public string CreateToken(Guid UserId)
+        public string CreateToken(Guid UserId, string role)
         {
             DateTime now = DateTime.UtcNow;
             Claim[] claims = new Claim[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, UserId.ToString()),
                 new Claim(JwtRegisteredClaimNames.UniqueName, UserId.ToString()),
+                new Claim(ClaimTypes.Role, role),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, now.ToTimestamp().ToString())
             };

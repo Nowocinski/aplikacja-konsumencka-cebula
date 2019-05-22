@@ -5,10 +5,12 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebApplication.Infrastructure.DTO;
 using WebApplication.Infrastructure.Services.User;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApplication.Api.Controllers
 {
     [EnableCors("Origins")]
+    [Authorize(Policy = "HasAdminRole")]
     public class AdminController : ApiControllerBase
     {
         private readonly IAdminService _adminService;
