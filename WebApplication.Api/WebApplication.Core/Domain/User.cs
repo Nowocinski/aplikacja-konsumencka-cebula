@@ -11,6 +11,7 @@ namespace WebApplication.Core.Domain
         public string PhoneNumber { get; private set; }
         public string Email { get; private set; }
         public string Password { get; private set; }
+        public bool blocked { get; private set; }
 
         private ISet<Advertisement> _advertisements = new HashSet<Advertisement>();
         public virtual IEnumerable<Advertisement> Advertisements => _advertisements;
@@ -28,6 +29,7 @@ namespace WebApplication.Core.Domain
             SetPhoneNumber(PhoneNumber);
             SetEmail(Email);
             SetPassword(Password);
+            blocked = false;
         }
 
         public Advertisement AddAdvertisement(Guid AdvId ,string Title, string Description, float Price,

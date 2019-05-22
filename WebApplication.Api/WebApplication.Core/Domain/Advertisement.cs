@@ -17,6 +17,7 @@ namespace WebApplication.Core.Domain
         public float Size { get; private set; }
         public string Category { get; private set; }
         public DateTime Date { get; private set; }
+        public bool Verification { get; private set; }
 
         private ISet<AdvertisementImage> _images = new HashSet<AdvertisementImage>();
         public virtual IEnumerable<AdvertisementImage> Images => _images;
@@ -40,6 +41,7 @@ namespace WebApplication.Core.Domain
             this.Floor = Floor;
             Date = DateTime.UtcNow;
             AddImages(Images, Id);
+            Verification = false;
         }
 
         private void AddImages(ISet<AdvertisementImage> Imgs, Guid Id)

@@ -28,6 +28,9 @@ namespace WebApplication.Core.Domain.Context
                 column.Property(name => name.Password)
                       .HasColumnType("nvarchar(100)")
                       .IsRequired(true);
+                column.Property(name => name.blocked)
+                      .HasColumnType("bit")
+                      .IsRequired(true);
 
             });
 
@@ -78,6 +81,9 @@ namespace WebApplication.Core.Domain.Context
                       .IsRequired(true);
                 column.Property(name => name.Date)
                       .HasColumnType("datetime")
+                      .IsRequired(true);
+                column.Property(name => name.Verification)
+                      .HasColumnType("bit")
                       .IsRequired(true);
             });
 
