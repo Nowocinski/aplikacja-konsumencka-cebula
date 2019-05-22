@@ -57,7 +57,7 @@ namespace WebApplication.Infrastructure.Services.User
             if(user.Blocked == true)
                 throw new Exception("Blocked account.");
 
-            string token = _jwtHandler.CreateToken(user.Id);
+            string token = _jwtHandler.CreateToken(user.Id, user.Role);
 
             return new LoginDTO
             {
