@@ -50,18 +50,18 @@ namespace WebApplication.Infrastructure.Services.User
         {
             Core.Domain.User user = await _userRepository.GetAsync(Email);
             if (user == null)
-                throw new Exception("Invalid credentials.");
+                return null;
+            // throw new Exception("Invalid credentials.");
             if (user.Password != Password.Hash())
-                throw new Exception("Invalid credentials.");
-
-            if(user.Blocked == true)
-                throw new Exception("Blocked account.");
+                return null;
+            // throw new Exception("Invalid credentials.");
 
             string token = _jwtHandler.CreateToken(user.Id, user.Role);
 
             return new LoginDTO
             {
                 Token = token,
+                Blocked = user.Blocked,
                 Id = user.Id,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
@@ -94,15 +94,15 @@ namespace WebApplication.Infrastructure.Services.User
             user = await _userRepository.GetByPhoneAsync(command.PhoneNumber);
             if (user != null && user != existUser)
                 throw new Exception($"Exception with this phone number: '{command.PhoneNumber}' already exists");
-            if(command.FirstName != null)
+            if (command.FirstName != null)
                 existUser.SetFirstName(command.FirstName);
-            if(command.LastName != null)
+            if (command.LastName != null)
                 existUser.SetLastName(command.LastName);
-            if(command.PhoneNumber != null)
+            if (command.PhoneNumber != null)
                 existUser.SetPhoneNumber(command.PhoneNumber);
-            if(command.Email != null)
+            if (command.Email != null)
                 existUser.SetEmail(command.Email);
-            if(command.Password != null)
+            if (command.Password != null)
                 existUser.SetPassword(command.Password.Hash());
             await _userRepository.UpdateAsync(existUser);
         }
@@ -152,7 +152,7 @@ namespace WebApplication.Infrastructure.Services.User
             Guid advertisement_id = Guid.NewGuid();
 
             ISet<AdvertisementImage> Images = new HashSet<AdvertisementImage>();
-            foreach(var Image in Command.Images)
+            foreach (var Image in Command.Images)
                 Images.Add(new AdvertisementImage(advertisement_id, Image.Image, Image.Name, Image.Description));
 
             Core.Domain.User user = await _userRepository.GetAsync(UserId);

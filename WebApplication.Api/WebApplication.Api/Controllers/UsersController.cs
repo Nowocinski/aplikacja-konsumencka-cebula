@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Security.Policy;
 using System.Threading.Tasks;
 using WebApplication.Core.Models;
 using WebApplication.Infrastructure.Commands;
@@ -42,7 +43,19 @@ namespace WebApplication.Api.Controllers
         // POST: api/users/login
         [HttpPost("login")]
         public async Task<ActionResult<LoginDTO>> Login([FromBody] Login command)
-            => Json(await _userService.LoginAsync(command.Email, command.Password));
+        {
+            LoginDTO user = await _userService.LoginAsync(command.Email, command.Password);
+            if (user == null)
+            {
+                return StatusCode(400, new { Sent = "Invalid Credentials" });
+            }
+            if (user.Blocked == true)
+            {
+                return StatusCode(403, new { Sent = "Blocked Account" });
+            }
+            
+            return Json(user);
+        }
 
         // PUT: api/users/id
         [HttpPut("{Id}")]

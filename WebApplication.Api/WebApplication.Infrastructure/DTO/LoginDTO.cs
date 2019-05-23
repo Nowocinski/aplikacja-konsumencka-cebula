@@ -6,6 +6,7 @@ namespace WebApplication.Infrastructure.DTO
     {
         public string Token { get; set; }
         public Guid Id { get; set; }
+        public bool Blocked { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
