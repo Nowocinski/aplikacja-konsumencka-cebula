@@ -33,21 +33,18 @@ namespace WebApplication.Infrastructure.Repositories
         {
             _context.Users.Add(User);
             await _context.SaveChangesAsync();
-            await Task.CompletedTask;
         }
 
         public async Task UpdateAsync(User User)
         {
             _context.Users.Update(User);
             await _context.SaveChangesAsync();
-            await Task.CompletedTask;
         }
 
         public async Task DeleteAsync(User User)
         {
             _context.Users.Remove(User);
             await _context.SaveChangesAsync();
-            await Task.CompletedTask;
         }
 
         public async Task<IEnumerable<Advertisement>> GetAdvertisementsUserAsync(Guid Id)
@@ -57,7 +54,7 @@ namespace WebApplication.Infrastructure.Repositories
                 .Include(x => x.User)
                 .Include(x => x.City)
                     .ThenInclude(x => x.Voivodeship)
-                .Where(x => x.User_Id == Id && x.Verification == true).ToListAsync();
+                .Where(x => x.User_Id == Id && x.Verification).ToListAsync();
 
             return await Task.FromResult(advertisements);
         }
@@ -124,15 +121,15 @@ namespace WebApplication.Infrastructure.Repositories
         {
             _context.Advertisements.Remove(Advertisement);
             await _context.SaveChangesAsync();
-            await Task.CompletedTask;
         }
 
         public async Task UpdateMessageAsync(IEnumerable<Message> messages)
         {
-            foreach(Message message in messages)
+            foreach (Message message in messages)
+            {
                 _context.Messages.Update(message);
+            }
             await _context.SaveChangesAsync();
-            await Task.CompletedTask;
         }
 
         public async Task<IEnumerable<Message>> GetMessagesAsync(Guid Sender, Guid Recipient)
@@ -144,7 +141,7 @@ namespace WebApplication.Infrastructure.Repositories
                 .OrderByDescending(x => x.Date)
                 .ToListAsync();
 
-            return await Task.FromResult(messages);
+            return messages;
         }
 
         public async Task<IEnumerable<ListConversations>> GetConversationListAsync(Guid Id)

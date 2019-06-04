@@ -14,22 +14,22 @@ namespace WebApplication.Core.Domain
         public string Role { get; private set; }
         public bool Blocked { get; private set; }
 
-        private ISet<Advertisement> _advertisements = new HashSet<Advertisement>();
+        private readonly ISet<Advertisement> _advertisements = new HashSet<Advertisement>();
         public virtual IEnumerable<Advertisement> Advertisements => _advertisements;
 
-        private ISet<Message> _messages = new HashSet<Message>();
+        private readonly ISet<Message> _messages = new HashSet<Message>();
         public virtual IEnumerable<Message> Messages => _messages;
 
-        public virtual IEnumerable<Message> Recipient { get; private set; }
+        public virtual IEnumerable<Message> Recipient { get; }
 
-        public User(string FirstName, string LastName, string PhoneNumber, string Email, string Password)
+        public User(string firstName, string lastName, string phoneNumber, string email, string password)
         {
             Id = Guid.NewGuid();
-            SetFirstName(FirstName);
-            SetLastName(LastName);
-            SetPhoneNumber(PhoneNumber);
-            SetEmail(Email);
-            SetPassword(Password);
+            SetFirstName(firstName);
+            SetLastName(lastName);
+            SetPhoneNumber(phoneNumber);
+            SetEmail(email);
+            SetPassword(password);
             Role = "user";
             Blocked = false;
         }
@@ -51,17 +51,27 @@ namespace WebApplication.Core.Domain
         public void SetFirstName(string FirstName)
         {
             if (string.IsNullOrWhiteSpace(FirstName))
+            {
                 throw new Exception($"User with id: '{Id}' can not have an empty first name.");
+            }
+
             if (FirstName.Length > 20)
+            {
                 throw new Exception($"User with id: '{Id}' first name can not have more than 20 characters.");
+            }
+
             this.FirstName = FirstName;
         }
 
         public void SetLastName(string LastName)
         {
             if (string.IsNullOrWhiteSpace(LastName))
+            {
                 throw new Exception($"User with id: '{Id}' can not have an empty last name.");
-            if (LastName.Length > 30)
+            }
+
+            const int maxLengthLastName = 30;
+            if (LastName.Length > maxLengthLastName)
                 throw new Exception($"User with id: '{Id}' last name can not have more than 30 characters.");
             this.LastName = LastName;
         }
@@ -71,10 +81,13 @@ namespace WebApplication.Core.Domain
             Regex syntax = new Regex("^[0-9a-zA-Z]+([.-]{1}[0-9a-zA-Z]+)*@[a-z]+([.-]{1}[0-9a-z]+)*.[a-z]*$");
             if (string.IsNullOrWhiteSpace(Email))
                 throw new Exception($"User with id: '{Id}' can not have an empty e-mail.");
+
             if (Email.Length > 40)
                 throw new Exception($"User with id: '{Id}' e-mail can not have more than 40 characters.");
+
             if (!syntax.IsMatch(Email))
                 throw new Exception($"User with id: '{Id}' the e-mail syntax is incorrect.");
+
             this.Email = Email;
         }
 
@@ -98,15 +111,7 @@ namespace WebApplication.Core.Domain
 
         public void ChangeStatus()
         {
-            if (Blocked == false)
-            {
-                Blocked = true;
-            }
-
-            else if(Blocked == true)
-            {
-                Blocked = false;
-            }
+            Blocked = !Blocked;
         }
     }
 }

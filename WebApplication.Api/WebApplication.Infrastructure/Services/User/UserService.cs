@@ -36,13 +36,14 @@ namespace WebApplication.Infrastructure.Services.User
         public async Task RegisterAsync(Register data)
         {
             Core.Domain.User user = await _userRepository.GetAsync(data.Email);
+
             if (user != null)
-                throw new Exception($"User e-mail: '{data.Email}' already exists.");
+            { throw new Exception($"User e-mail: '{data.Email}' already exists.");}
             user = await _userRepository.GetByPhoneAsync(data.PhoneNumber);
             if (user != null)
                 throw new Exception($"User phone number: '{data.PhoneNumber}' already exists.");
             user = new Core.Domain.User(data.FirstName, data.LastName, data.PhoneNumber, data.Email, data.Password.Hash());
-            SendEmailExtensions.SendEmail(data.Email);
+            SendEmailExtensions.SendEmail(data.Email); // !
             await _userRepository.AddAsync(user);
         }
 

@@ -34,31 +34,36 @@ namespace WebApplication.Core.Domain
             this.Title = Title;
             this.Description = Description;
             this.Price = Price;
-            this.City_id = City_Id;
+            City_id = City_Id;
             this.Street = Street;
             this.Size = Size;
             this.Category = Category;
             this.Floor = Floor;
             Date = DateTime.UtcNow;
             AddImages(Images, Id);
-            Verification = false;
         }
 
-        private void AddImages(ISet<AdvertisementImage> Imgs, Guid Id)
+        private void AddImages(ISet<AdvertisementImage> image, Guid Id)
         {
-            foreach (var I in Imgs)
+            foreach (var I in image)
+            {
                 _images.Add(new AdvertisementImage(Id, I.Image, I.Name, I.Description));
+            }
         }
 
-        public void SetTitle(string Title)
+        public void SetTitle(string title)
         {
-            if (string.IsNullOrWhiteSpace(Title))
-                throw new Exception($"Exception title: The title can not have an empty decription.");
+            if (string.IsNullOrWhiteSpace(title))
+            {
+                throw new Exception($"Exception title: The title can not have an empty description.");
+            }
 
-            if (Title.Length > 25)
-                throw new Exception($"Exception title {Title}: The title can be up to 25 characters long");
+            if (title.Length > 25)
+            {
+                throw new Exception($"Exception title {title}: The title can be up to 25 characters long");
+            }
 
-            this.Title = Title;
+            Title = title;
         }
 
         public void SetDescription(string Description)
@@ -133,14 +138,16 @@ namespace WebApplication.Core.Domain
 
         public void ChangeSatusVerification()
         {
-            if(Verification == false)
+            if (Verification != false)
+            {
+                if (Verification == true)
+                {
+                    Verification = false;
+                }
+            }
+            else
             {
                 Verification = true;
-            }
-
-            else if(Verification == true)
-            {
-                Verification = false;
             }
         }
     }

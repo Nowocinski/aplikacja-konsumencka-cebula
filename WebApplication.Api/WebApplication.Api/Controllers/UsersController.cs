@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Security.Policy;
 using System.Threading.Tasks;
 using WebApplication.Core.Models;
 using WebApplication.Infrastructure.Commands;
@@ -32,7 +31,7 @@ namespace WebApplication.Api.Controllers
         public async Task<ActionResult<IEnumerable<AdvertismentDTO>>> GetUserAdvs(Guid Id)
             => Json(await _userService.GetAdvertisementsUserAsync(Id));
 
-        // POST: api/users/registration
+        // api/users/registration
         [HttpPost("registration")]
         public async Task<ActionResult> Register([FromBody] Register data)
         {
@@ -49,7 +48,7 @@ namespace WebApplication.Api.Controllers
             {
                 return StatusCode(400, new { Sent = "Invalid Credentials" });
             }
-            if (user.Blocked == true)
+            if (user.Blocked)
             {
                 return StatusCode(403, new { Sent = "Blocked Account" });
             }
