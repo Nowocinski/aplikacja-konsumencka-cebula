@@ -8,6 +8,11 @@ namespace WebApplication.Core.Domain
         public string Image { get; private set; }
         public string Description { get; private set; }
         public string Name { get; private set; }
+
+        protected AdvertisementImage()
+        {
+
+        }
         public AdvertisementImage(Guid advertisementId, string image, string name, string description="")
         {
             Id = Guid.NewGuid();

@@ -8,6 +8,12 @@ namespace WebApplication.Core.Domain
         public virtual Voivodeship Voivodeship { get; private set; }
         public string Name { get; private set; }
         public int Voivodeship_Id { get; private set; }
+
+        protected City()
+        {
+
+        }
+
         public City(string name, int voivodeshipId)
         {
             Name = name;
