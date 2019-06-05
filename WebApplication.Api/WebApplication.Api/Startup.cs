@@ -18,6 +18,7 @@ using WebApplication.Infrastructure.Services.Voivodeship;
 using WebApplication.Infrastructure.Settings;
 using WebApplication.Api.Hubs;
 using WebApplication.Infrastructure.Services.Admin;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace WebApplication.Api
 {
@@ -87,6 +88,19 @@ namespace WebApplication.Api
             });
 
             services.AddSignalR();
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info
+                {
+                    Version = "v2",
+                    Title = "Serwis do wynajmu i kupna lokali",
+                    Description = "Serwis do wynajmu i kupna lokali",
+                    TermsOfService = "None",
+                    Contact = new Contact() { Name = "Talking Dotnet", Email = "contact@talkingdotnet.com", Url = "www.talkingdotnet.com" }
+                });
+                c.CustomSchemaIds(x => x.FullName);
+            });
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -108,6 +122,11 @@ namespace WebApplication.Api
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseMvc();
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
         }
     }
 }
