@@ -31,82 +31,103 @@ namespace WebApplication.Core.Domain
             SetEmail(email);
             SetPassword(password);
             Role = "user";
-            Blocked = false;
         }
 
-        public Advertisement AddAdvertisement(Guid AdvId ,string Title, string Description, float Price,
-            int City, string Street, float Size, string Category, ISet<AdvertisementImage> Images, int? Floor = null)
+        public Advertisement AddAdvertisement(Guid advertisementId ,string title, string description, float price,
+            int city, string street, float size, string category, ISet<AdvertisementImage> images, int? floor = null)
         {
-            var Adv = new Advertisement(AdvId, Id, Title, Description, Price, City, Street, Size, Category, Images, Floor);
-            _advertisements.Add(Adv);
-            return Adv;
+            Advertisement advertisement = new Advertisement(advertisementId, Id, title, description, price, city, street, size, category, images, floor);
+            _advertisements.Add(advertisement);
+            return advertisement;
         }
 
         public void AddMessage(Guid recipient, string text)
         {
-            var msg = new Message(Id, recipient, text);
-            _messages.Add(msg);
+            Message message = new Message(Id, recipient, text);
+            _messages.Add(message);
         }
 
-        public void SetFirstName(string FirstName)
+        public void SetFirstName(string firstName)
         {
-            if (string.IsNullOrWhiteSpace(FirstName))
+            if (string.IsNullOrWhiteSpace(firstName))
             {
                 throw new Exception($"User with id: '{Id}' can not have an empty first name.");
             }
 
-            if (FirstName.Length > 20)
+            const int firstNameMaxLength = 20;
+            if (firstName.Length > firstNameMaxLength)
             {
                 throw new Exception($"User with id: '{Id}' first name can not have more than 20 characters.");
             }
 
-            this.FirstName = FirstName;
+            FirstName = firstName;
         }
 
-        public void SetLastName(string LastName)
+        public void SetLastName(string lastName)
         {
-            if (string.IsNullOrWhiteSpace(LastName))
+            if (string.IsNullOrWhiteSpace(lastName))
             {
                 throw new Exception($"User with id: '{Id}' can not have an empty last name.");
             }
 
             const int maxLengthLastName = 30;
-            if (LastName.Length > maxLengthLastName)
+            if (lastName.Length > maxLengthLastName)
+            {
                 throw new Exception($"User with id: '{Id}' last name can not have more than 30 characters.");
-            this.LastName = LastName;
+            }
+
+            LastName = lastName;
         }
 
-        public void SetEmail(string Email)
+        public void SetEmail(string email)
         {
             Regex syntax = new Regex("^[0-9a-zA-Z]+([.-]{1}[0-9a-zA-Z]+)*@[a-z]+([.-]{1}[0-9a-z]+)*.[a-z]*$");
-            if (string.IsNullOrWhiteSpace(Email))
+            if (string.IsNullOrWhiteSpace(email))
+            {
                 throw new Exception($"User with id: '{Id}' can not have an empty e-mail.");
+            }
 
-            if (Email.Length > 40)
+            if (email.Length > 40)
+            {
                 throw new Exception($"User with id: '{Id}' e-mail can not have more than 40 characters.");
+            }
 
-            if (!syntax.IsMatch(Email))
+            if (!syntax.IsMatch(email))
+            {
                 throw new Exception($"User with id: '{Id}' the e-mail syntax is incorrect.");
+            }
 
-            this.Email = Email;
+            Email = email;
         }
 
-        public void SetPhoneNumber(string PhoneNumber)
+        public void SetPhoneNumber(string phoneNumber)
         {
-            if (string.IsNullOrWhiteSpace(PhoneNumber))
+            if (string.IsNullOrWhiteSpace(phoneNumber))
+            {
                 throw new Exception($"User with id: '{Id}' can not have an empty phone number.");
-            if (PhoneNumber.Length > 11)
-                 throw new Exception($"User with id: '{Id}' phone number can not have more than 11 characters.");
-            this.PhoneNumber = PhoneNumber;
+            }
+
+            if (phoneNumber.Length > 11)
+            {
+                throw new Exception($"User with id: '{Id}' phone number can not have more than 11 characters.");
+            }
+
+            PhoneNumber = phoneNumber;
         }
 
-        public void SetPassword(string Password)
+        public void SetPassword(string password)
         {
-            if (string.IsNullOrWhiteSpace(Password))
+            if (string.IsNullOrWhiteSpace(password))
+            {
                 throw new Exception($"User with id: '{Id}' can not have an empty password.");
-            if (Password.Length > 100)
+            }
+
+            if (password.Length > 100)
+            {
                 throw new Exception($"User with id: '{Id}' password can not have more than 100 characters.");
-            this.Password = Password;
+            }
+
+            Password = password;
         }
 
         public void ChangeStatus()

@@ -8,13 +8,13 @@ namespace WebApplication.Core.Domain
         public string Image { get; private set; }
         public string Description { get; private set; }
         public string Name { get; private set; }
-        public AdvertisementImage(Guid Advertisement_Id, string Image, string Name, string Description="")
+        public AdvertisementImage(Guid advertisementId, string image, string name, string description="")
         {
             Id = Guid.NewGuid();
-            this.Advertisement_Id = Advertisement_Id;
-            this.Image = Image;
-            this.Name = Name;
-            this.Description = Description;
+            Advertisement_Id = advertisementId;
+            Image = image;
+            Name = name;
+            Description = description;
         }
     }
 }

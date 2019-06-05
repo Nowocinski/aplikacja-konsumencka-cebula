@@ -14,12 +14,11 @@ namespace WebApplication.Core.Domain
         protected Message()
         {
         }
-        public Message(Guid Sender_Id, Guid Recipient_Id, string Contents)
+        public Message(Guid senderId, Guid recipientId, string contents)
         {
-            Id = null;
-            this.Sender_Id = Sender_Id;
-            this.Recipient_Id = Recipient_Id;
-            this.Contents = Contents;
+            Sender_Id = senderId;
+            Recipient_Id = recipientId;
+            Contents = contents;
             Date = DateTime.UtcNow;
         }
     }

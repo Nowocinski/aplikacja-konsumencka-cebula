@@ -8,11 +8,10 @@ namespace WebApplication.Core.Domain
         public virtual Voivodeship Voivodeship { get; private set; }
         public string Name { get; private set; }
         public int Voivodeship_Id { get; private set; }
-        public City(string Name, int Voivodeship_Id)
+        public City(string name, int voivodeshipId)
         {
-            Id = null;
-            this.Name = Name;
-            this.Voivodeship_Id = Voivodeship_Id;
+            Name = name;
+            Voivodeship_Id = voivodeshipId;
         }
         public virtual IEnumerable<Advertisement> Advertisement { get; set; }
     }

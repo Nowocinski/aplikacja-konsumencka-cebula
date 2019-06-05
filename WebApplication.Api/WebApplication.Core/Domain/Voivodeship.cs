@@ -6,10 +6,9 @@ namespace WebApplication.Core.Domain
     {
         public string Name { get; private set; }
 
-        public Voivodeship(string Name)
+        public Voivodeship(string name)
         {
-            Id = null;
-            this.Name = Name;
+            Name = name;
         }
     }
 }

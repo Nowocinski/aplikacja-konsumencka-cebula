@@ -26,28 +26,28 @@ namespace WebApplication.Core.Domain
         {
         }
 
-        public Advertisement(Guid Id, Guid User_Id, string Title, string Description, float Price,
-            int City_Id, string Street, float Size, string Category, ISet<AdvertisementImage> Images, int? Floor)
+        public Advertisement(Guid id, Guid user_id, string title, string description, float price,
+            int city_id, string street, float size, string category, ISet<AdvertisementImage> images, int? floor)
         {
-            this.Id = Id;
-            this.User_Id = User_Id;
-            this.Title = Title;
-            this.Description = Description;
-            this.Price = Price;
-            City_id = City_Id;
-            this.Street = Street;
-            this.Size = Size;
-            this.Category = Category;
-            this.Floor = Floor;
+            Id = id;
+            User_Id = user_id;
+            Title = title;
+            Description = description;
+            Price = price;
+            City_id = city_id;
+            Street = street;
+            Size = size;
+            Category = category;
+            Floor = floor;
             Date = DateTime.UtcNow;
-            AddImages(Images, Id);
+            AddImages(images, id);
         }
 
-        private void AddImages(ISet<AdvertisementImage> image, Guid Id)
+        private void AddImages(ISet<AdvertisementImage> images, Guid id)
         {
-            foreach (var I in image)
+            foreach (AdvertisementImage image in images)
             {
-                _images.Add(new AdvertisementImage(Id, I.Image, I.Name, I.Description));
+                _images.Add(new AdvertisementImage(id, image.Image, image.Name, image.Description));
             }
         }
 
@@ -58,7 +58,8 @@ namespace WebApplication.Core.Domain
                 throw new Exception($"Exception title: The title can not have an empty description.");
             }
 
-            if (title.Length > 25)
+            const int titleMaxLength = 25;
+            if (title.Length > titleMaxLength)
             {
                 throw new Exception($"Exception title {title}: The title can be up to 25 characters long");
             }
@@ -66,89 +67,105 @@ namespace WebApplication.Core.Domain
             Title = title;
         }
 
-        public void SetDescription(string Description)
+        public void SetDescription(string description)
         {
-            if (string.IsNullOrWhiteSpace(Description))
+            if (string.IsNullOrWhiteSpace(description))
+            {
                 throw new Exception($"Exception description: The description can not have an empty decription.");
+            }
 
-            if (Description.Length > 500)
-                throw new Exception($"Exception description '{Description}': The description can be up to 500 characters long");
+            const int descriptionMaxLength = 500;
+            if (description.Length > descriptionMaxLength)
+            {
+                throw new Exception($"Exception description '{description}': The description can be up to 500 characters long");
+            }
 
-            this.Description = Description;
+            Description = description;
         }
 
-        public void SetPrice(float Price)
+        public void SetPrice(float price)
         {
-            if (Price <= 0)
-                throw new Exception($"Exception price '{Price}': Price must be greater than zero");
+            const int minPrice = 0;
+            if (price < minPrice)
+            {
+                throw new Exception($"Exception price '{price}': Price must be greater than zero");
+            }
 
-            this.Price = Price;
+            Price = price;
         }
 
-        public void SetCity(int City_id)
+        public void SetCity(int city_id)
         {
-            if (City_id <= 0)
+            const int minCityId = 0;
+            if (city_id < minCityId)
+            {
                 throw new Exception($"Exception city's id '{City}': City's id must be greater than zero");
+            }
 
-            this.City_id = City_id;
+            City_id = city_id;
         }
 
-        public void SetStreet(string Street)
+        public void SetStreet(string street)
         {
-            if (string.IsNullOrWhiteSpace(Street))
-                throw new Exception($"Exception street: The street can not have an empty decription.");
+            if (string.IsNullOrWhiteSpace(street))
+            {
+                throw new Exception($"Exception street: The street can not have an empty description.");
+            }
 
-            if (Street.Length > 50)
-                throw new Exception($"Exception street '{Street}': The street can be up to 50 characters long");
+            const int streetNameMaxLength = 500;
+            if (street.Length > streetNameMaxLength)
+            {
+                throw new Exception($"Exception street '{street}': The street can be up to 50 characters long");
+            }
 
-            this.Street = Street;
+            Street = street;
         }
 
-        public void SetSize(float Size)
+        public void SetSize(float size)
         {
-            if (Size <= 0)
+            const int minSize = 0;
+            if (size <= minSize)
+            {
                 throw new Exception($"Exception size '{Size}': Size must be greater than zero");
+            }
 
-            this.Size = Size;
+            Size = size;
         }
 
-        public void SetCategory(string Category)
+        public void SetCategory(string category)
         {
-            if (string.IsNullOrWhiteSpace(Category))
-                throw new Exception($"Exception category: The category can not have an empty decription.");
+            if (string.IsNullOrWhiteSpace(category))
+            {
+                throw new Exception($"Exception category: The category can not have an empty description.");
+            }
 
-            if (Category.Length > 30)
-                throw new Exception($"Exception category '{Category}': The category can be up to 30 characters long");
+            const int categoryMinLength = 30;
+            if (category.Length > categoryMinLength)
+            {
+                throw new Exception($"Exception category '{category}': The category can be up to 30 characters long");
+            }
 
-            this.Category = Category;
+            Category = category;
         }
 
-        public void SetFloor(int? Floor)
+        public void SetFloor(int? floor)
         {
-            this.Floor = Floor;
+            Floor = floor;
         }
 
-        public void SetAddImages(ISet<AdvertisementImage> Images)
+        public void SetAddImages(ISet<AdvertisementImage> images)
         {
             _images.Clear();
 
-            foreach (var I in Images)
-                _images.Add(I);
+            foreach (AdvertisementImage image in images)
+            {
+                _images.Add(image);
+            }
         }
 
         public void ChangeSatusVerification()
         {
-            if (Verification != false)
-            {
-                if (Verification == true)
-                {
-                    Verification = false;
-                }
-            }
-            else
-            {
-                Verification = true;
-            }
+            Verification = !Verification;
         }
     }
 }
