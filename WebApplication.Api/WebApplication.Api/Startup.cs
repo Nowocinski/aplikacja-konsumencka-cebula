@@ -80,7 +80,7 @@ namespace WebApplication.Api
                 builder =>
                 {
                     builder
-                        .WithOrigins("http://localhost:4200")
+                        .WithOrigins("https://wojciechr7.github.io/aplikacja-konsumencka-web")
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .AllowCredentials();
